@@ -37,7 +37,7 @@ export const topics: Topic[] = [
         ],
       },
       {
-        heading: 'What a model actually is',
+        heading: 'What a model is, under the hood',
         paragraphs: [
           'Under the hood, a model is a giant pile of numbers, billions of little dials. Training a model means nudging those dials, over and over, until the model’s guesses about its examples stop being wrong. That tuning run takes months on warehouses full of computers, which is why building one costs so much.',
           'Once trained, a model doesn’t "look things up." Everything it knows is squeezed into those dials, like a student who read the whole library but walks into the exam with no notes.',

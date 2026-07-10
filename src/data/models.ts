@@ -2,7 +2,7 @@ import type { Model } from './types.ts'
 
 /**
  * Model facts researched 2026-07-09. Scores are provider-published evals
- * collected from public leaderboards/coverage — a missing score means no
+ * collected from public leaderboards/coverage. A missing score means no
  * reliable published number was found, not zero.
  * Sources are listed in src/data/README.md.
  */
