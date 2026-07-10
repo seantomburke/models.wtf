@@ -1,12 +1,11 @@
 import { Link } from 'react-router-dom'
 import { usePageMeta } from '../lib/meta.ts'
+import { metaFor } from '../lib/routeMeta.ts'
 import { models, providers } from '../data/index.ts'
 
 export function Home() {
-  usePageMeta(
-    'Models.fyi — Which AI model should I use?',
-    'Compare flagship AI models from OpenAI, Anthropic, Google, and xAI across benchmarks, cost, and capability — explained in plain language, no PhD required.',
-  )
+  const meta = metaFor('/')
+  usePageMeta(meta.title, meta.description)
 
   const openCount = models.filter((m) => m.openSource).length
 

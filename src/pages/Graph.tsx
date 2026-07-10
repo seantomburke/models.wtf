@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Chart } from '@opendata-ai/openchart-react'
 import { usePageMeta } from '../lib/meta.ts'
+import { metaFor } from '../lib/routeMeta.ts'
 import { axisOptions, buildGraphRows, buildGraphSpec } from '../lib/graph.ts'
 import type { GraphRow } from '../lib/graph.ts'
 
@@ -38,10 +39,8 @@ function AxisPicker({ label, value, onChange }: AxisPickerProps) {
 }
 
 export function Graph() {
-  usePageMeta(
-    'AI models on a graph — Models.fyi',
-    'Plot AI model performance against price on axes you choose. Compare GPT, Claude, Gemini, Grok, and open-source models visually.',
-  )
+  const meta = metaFor('/graph')
+  usePageMeta(meta.title, meta.description)
 
   const [xId, setXId] = useState('price-input')
   const [yId, setYId] = useState('swe-bench-pro')
