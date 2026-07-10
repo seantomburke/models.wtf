@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 import { Layout } from './components/Layout.tsx'
 import { Home } from './pages/Home.tsx'
 import { Compare } from './pages/Compare.tsx'
+import { Quiz } from './pages/Quiz.tsx'
 import { Placeholder } from './pages/Placeholder.tsx'
 
 // The graph page pulls in the charting library — keep it off the main bundle.
@@ -22,16 +23,7 @@ function App() {
             </Suspense>
           }
         />
-        <Route
-          path="quiz"
-          element={
-            <Placeholder
-              title="Which model should I use?"
-              metaTitle="Which AI model should I use? — Models.fyi"
-              description="Answer a few plain-language questions and get an AI model recommendation with the reasoning spelled out."
-            />
-          }
-        />
+        <Route path="quiz" element={<Quiz />} />
         <Route
           path="learn"
           element={
