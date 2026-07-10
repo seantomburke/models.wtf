@@ -48,24 +48,31 @@ const providerName = new Map(providers.map((p) => [p.id, p.name]))
 const providerColorByName = new Map(providers.map((p) => [p.name, p.color]))
 
 /**
- * Brand colors ordered to match openchart's nominal color domain, which sorts
- * category values ascending. Feed this to `theme.colors.categorical`.
+ * Brand colors ordered to match openchart's nominal color domain.
+ * Verified empirically (headless-browser QA, issue #18): the engine assigns
+ * categorical palette entries in FIRST-APPEARANCE order of the color field in
+ * the data, not alphabetical order. Feed this to `theme.colors.categorical`.
  */
 export function paletteFor(rows: GraphRow[]): string[] {
-  const names = [...new Set(rows.map((r) => r.provider))].sort()
+  const names = [...new Set(rows.map((r) => r.provider))]
   return names.map((n) => providerColorByName.get(n) ?? '#78716c')
 }
 
 /** Scatter spec for the chosen axes. Kept here so tests can validate it against the engine. */
 export function buildGraphSpec(xAxis: AxisOption, yAxis: AxisOption, rows: GraphRow[]): ChartSpec<GraphRow> {
   return {
-    mark: 'point',
+    mark: { type: 'point', tooltip: true },
     data: rows,
     encoding: {
       x: { field: 'x', type: 'quantitative', title: xAxis.axisTitle, axis: { title: xAxis.axisTitle } },
       y: { field: 'y', type: 'quantitative', title: yAxis.axisTitle, axis: { title: yAxis.axisTitle } },
       color: { field: 'provider', type: 'nominal', title: 'Company' },
       detail: { field: 'model', type: 'nominal' },
+      tooltip: [
+        { field: 'model', type: 'nominal', title: 'Model' },
+        { field: 'x', type: 'quantitative', title: xAxis.label },
+        { field: 'y', type: 'quantitative', title: yAxis.label },
+      ],
     },
     theme: { colors: { categorical: paletteFor(rows) } },
     watermark: false,
