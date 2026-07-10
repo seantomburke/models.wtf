@@ -68,7 +68,7 @@ test('reverse flow produces a profile for every model', () => {
 test('non-reasoning models carry a reasoning caveat', () => {
   const llama = models.find((m) => m.id === 'llama-4-maverick')!
   const profile = profileModel(llama)
-  expect(profile.caveats.join(' ')).toMatch(/not a reasoning model/i)
+  expect(profile.caveats.join(' ')).toMatch(/without a thinking phase/i)
 })
 
 test('precision roles (legal, finance, researcher) mention accuracy focus in why', () => {

@@ -156,7 +156,7 @@ export function recommend(role: Role, task: Task, budget: Budget, pref: CompanyP
     const openPool = pool.filter((m) => m.openSource)
     if (openPool.length > 0) {
       pool = openPool
-      why.push('“Free” means open-source models you can run yourself — no per-token bills.')
+      why.push('“Free” means open-source models you can run yourself, with no per-token bills.')
     } else {
       why.push(
         'That company has no open-source models, so this is its cheapest option instead of a free one.',
@@ -176,7 +176,7 @@ export function recommend(role: Role, task: Task, budget: Budget, pref: CompanyP
     } else {
       pool = models.filter((m) => m.internetAccess)
       why.push(
-        'Heads up: open-source models you run yourself can’t search the web out of the box, and this task needs live information — so we picked an affordable connected model instead.',
+        'Heads up: open-source models you run yourself can’t search the web out of the box, and this task needs live information, so we picked an affordable connected model instead.',
       )
     }
   }
@@ -189,7 +189,7 @@ export function recommend(role: Role, task: Task, budget: Budget, pref: CompanyP
     const cutoff = Math.max(2, Math.ceil(sorted.length / 2))
     pool = sorted.slice(0, cutoff)
     why.push(
-      'Long writing and big documents need a big context window — the model’s “working memory” for text.',
+      'Long writing and big documents need a big context window, the model’s “working memory” for text.',
     )
   }
 
@@ -235,7 +235,7 @@ export function recommend(role: Role, task: Task, budget: Budget, pref: CompanyP
   }
   if (needs.simple) {
     why.push(
-      `Simple tasks don’t need a premium model — ${pick.name} is fast and costs a fraction of the flagships.`,
+      `Simple tasks don’t need a premium model. ${pick.name} is fast and costs a fraction of the flagships.`,
     )
   }
   if (pick.reasoning && (needs.coding || needs.science || needs.agentic)) {
@@ -244,7 +244,7 @@ export function recommend(role: Role, task: Task, budget: Budget, pref: CompanyP
     )
   } else if (!pick.reasoning) {
     why.push(
-      `It’s not a “reasoning” model (no step-by-step thinking phase), which keeps it fast — fine for this kind of task.`,
+      `It answers directly without a step-by-step thinking phase, which keeps it fast and works fine for this kind of task.`,
     )
   }
   if (budget === 'premium' && !needs.simple) {
@@ -280,7 +280,7 @@ export function profileModel(m: Model): ModelProfile {
     goodFor.push('Agent work: multi-step tasks it completes on its own')
   }
   if ((m.contextWindowTokens ?? 0) >= 2_000_000) {
-    goodFor.push('Huge documents — its context window fits several books at once')
+    goodFor.push('Huge documents, since its context window fits several books at once')
     audience.push('Anyone working with long documents')
   }
   if (m.tier === 'fast') {
@@ -291,19 +291,19 @@ export function profileModel(m: Model): ModelProfile {
     goodFor.push('Demanding general-purpose work')
   }
   if (m.tier === 'balanced' && goodFor.length === 0) {
-    goodFor.push('Everyday work at a sensible price — most of the flagship ability for much less')
+    goodFor.push('Everyday work at a sensible price, with most of the flagship ability for much less')
     audience.push('Most people, most of the time')
   }
   if (m.openSource) {
     goodFor.push('Running privately on your own hardware, free of per-token costs')
     audience.push('Developers and companies that want control')
-    caveats.push('No built-in web access when self-hosted — it only knows its training data.')
+    caveats.push('No built-in web access when self-hosted. It only knows its training data.')
   }
   if (!m.reasoning) {
-    caveats.push('Not a reasoning model: answers directly without a thinking phase, so very hard multi-step problems aren’t its strength.')
+    caveats.push('Answers directly without a thinking phase, so very hard multi-step problems aren’t its strength.')
   }
   if ((m.inputPricePerMTok ?? 0) >= 5) {
-    caveats.push('Premium pricing — overkill for simple everyday tasks.')
+    caveats.push('Premium pricing. Overkill for simple everyday tasks.')
   }
   if (audience.length === 0) {
     audience.push('General users')
