@@ -7,18 +7,18 @@ All model and benchmark data is static and hardcoded here. This is deliberate
 
 | File | Contents |
 |---|---|
-| `types.ts` | The schema — start here |
+| `types.ts` | The schema. Start here. |
 | `providers.ts` | AI companies / open-source orgs |
 | `benchmarks.ts` | Benchmarks with plain-language (ELI5) descriptions |
 | `models.ts` | The models: pricing, context windows, capabilities, scores |
-| `index.ts` | Public entry point — import from here only |
+| `index.ts` | Public entry point. Import from here only. |
 
 ## Rules
 
 - **Never write facts from memory.** Every price, context window, and score
   must come from a source checked at refresh time (provider docs, leaderboards).
 - **Missing beats fabricated.** If no reliable published score exists, omit the
-  key from `scores` — the UI renders it as "—".
+  key from `scores`. The UI renders it as "—".
 - Prices are USD per 1M tokens, list price (ignore short-term intro discounts).
 - Open-source models have `null` prices (hosting cost varies by vendor).
 

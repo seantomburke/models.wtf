@@ -49,8 +49,8 @@ export function Layout() {
       <footer className="border-t border-line">
         <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-2 px-4 py-6 text-xs text-fg-muted sm:px-6">
           <p>
-            Model data researched {dataSourcedAt}. Benchmarks are provider-published evals —
-            treat small differences with healthy skepticism.
+            Model data researched {dataSourcedAt}. Benchmarks are provider-published evals.
+            Treat small differences with healthy skepticism.
           </p>
           <a
             href="https://github.com/seantomburke/models.fyi"
