@@ -48,12 +48,12 @@ test('every non-empty axis combination produces a spec the chart engine accepts'
   expect(validated).toBeGreaterThan(20) // most combos should be plottable
 })
 
-test('palette matches the alphabetically sorted provider domain', () => {
+test('palette matches the first-appearance provider order (the engine domain order)', () => {
   const { rows } = buildGraphRows(byId('price-input'), byId('price-output'))
   const palette = paletteFor(rows)
-  const sortedNames = [...new Set(rows.map((r) => r.provider))].sort()
-  expect(palette).toHaveLength(sortedNames.length)
-  sortedNames.forEach((name, i) => {
+  const namesInOrder = [...new Set(rows.map((r) => r.provider))]
+  expect(palette).toHaveLength(namesInOrder.length)
+  namesInOrder.forEach((name, i) => {
     const provider = providers.find((p) => p.name === name)
     expect(palette[i]).toBe(provider?.color)
   })
