@@ -1,0 +1,260 @@
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { usePageMeta } from '../lib/meta.ts'
+import { formatPrice, formatTokens } from '../lib/format.ts'
+import {
+  budgets,
+  companyPrefs,
+  profileModel,
+  recommend,
+  roles,
+  tasks,
+} from '../lib/quiz.ts'
+import type { Budget, CompanyPref, Role, Task } from '../lib/quiz.ts'
+import { models, providers } from '../data/index.ts'
+import type { Model } from '../data/index.ts'
+
+type Mode = 'forward' | 'reverse'
+
+function Chip({
+  selected,
+  onClick,
+  children,
+}: {
+  selected?: boolean
+  onClick: () => void
+  children: React.ReactNode
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={selected}
+      className={`rounded-lg px-4 py-2.5 text-left text-sm transition-colors duration-150 ${
+        selected
+          ? 'bg-accent-soft font-medium text-accent-deep'
+          : 'border border-line bg-surface-raised text-fg-secondary hover:border-line-strong hover:text-fg'
+      }`}
+    >
+      {children}
+    </button>
+  )
+}
+
+function StepHeading({ step, children }: { step: number; children: React.ReactNode }) {
+  return (
+    <h2 className="text-lg font-semibold tracking-tight">
+      <span className="mr-2 text-fg-faint">{step}.</span>
+      {children}
+    </h2>
+  )
+}
+
+function ResultCard({ role, task, budget, pref }: { role: Role; task: Task; budget: Budget; pref: CompanyPref }) {
+  const { pick, runnerUp, why } = recommend(task, budget, pref)
+  const provider = providers.find((p) => p.id === pick.providerId)
+  return (
+    <div className="space-y-4">
+      <div className="rounded-xl border border-line bg-accent-soft/60 p-6">
+        <p className="text-xs font-medium uppercase tracking-wide text-accent-deep">
+          Our pick for a {role.label.toLowerCase()} who wants to {task.label.toLowerCase()}
+        </p>
+        <h2 className="mt-2 text-2xl font-semibold tracking-tight">{pick.name}</h2>
+        <p className="mt-1 text-sm text-fg-secondary">
+          by {provider?.name} · {formatPrice(pick.inputPricePerMTok)}/
+          {formatPrice(pick.outputPricePerMTok)} per 1M tokens · {formatTokens(pick.contextWindowTokens)}{' '}
+          context
+        </p>
+        <p className="mt-3 max-w-xl text-sm leading-relaxed text-fg-secondary">{pick.blurb}</p>
+      </div>
+
+      <div className="rounded-xl border border-line bg-surface-raised p-6">
+        <h3 className="text-sm font-semibold">Why this one?</h3>
+        <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-fg-secondary">
+          {why.map((reason) => (
+            <li key={reason}>{reason}</li>
+          ))}
+        </ul>
+        {runnerUp && (
+          <p className="mt-4 border-t border-line pt-3 text-sm text-fg-muted">
+            Close second: <span className="font-medium text-fg-secondary">{runnerUp.name}</span> —{' '}
+            {runnerUp.blurb}
+          </p>
+        )}
+      </div>
+
+      <p className="text-sm text-fg-muted">
+        See how it stacks up on the <Link className="text-accent-deep underline underline-offset-2" to="/compare">comparison table</Link>{' '}
+        or the <Link className="text-accent-deep underline underline-offset-2" to="/graph">graph</Link>.
+      </p>
+    </div>
+  )
+}
+
+function ReverseFlow() {
+  const [selected, setSelected] = useState<Model | null>(null)
+  const profile = selected ? profileModel(selected) : null
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-wrap gap-1.5">
+        {models.map((m) => (
+          <Chip key={m.id} selected={selected?.id === m.id} onClick={() => setSelected(m)}>
+            {m.name}
+          </Chip>
+        ))}
+      </div>
+      {selected && profile && (
+        <div className="rounded-xl border border-line bg-surface-raised p-6">
+          <h2 className="text-xl font-semibold tracking-tight">{selected.name}</h2>
+          <p className="mt-1 text-sm leading-relaxed text-fg-secondary">{selected.blurb}</p>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <div>
+              <h3 className="text-xs font-medium uppercase tracking-wide text-fg-muted">
+                Great for
+              </h3>
+              <ul className="mt-1.5 list-disc space-y-1 pl-5 text-sm text-fg-secondary">
+                {profile.goodFor.map((g) => (
+                  <li key={g}>{g}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-xs font-medium uppercase tracking-wide text-fg-muted">
+                Best suited to
+              </h3>
+              <ul className="mt-1.5 list-disc space-y-1 pl-5 text-sm text-fg-secondary">
+                {profile.audience.map((a) => (
+                  <li key={a}>{a}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          {profile.caveats.length > 0 && (
+            <div className="mt-4 border-t border-line pt-3">
+              <h3 className="text-xs font-medium uppercase tracking-wide text-fg-muted">
+                Worth knowing
+              </h3>
+              <ul className="mt-1.5 list-disc space-y-1 pl-5 text-sm text-fg-secondary">
+                {profile.caveats.map((c) => (
+                  <li key={c}>{c}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
+export function Quiz() {
+  usePageMeta(
+    'Which AI model should I use? — Models.fyi',
+    'Answer a few plain-language questions — who you are, what you want to do, and your budget — and get an AI model recommendation with the reasoning spelled out.',
+  )
+
+  const [mode, setMode] = useState<Mode>('forward')
+  const [role, setRole] = useState<Role | null>(null)
+  const [task, setTask] = useState<Task | null>(null)
+  const [budget, setBudget] = useState<Budget | null>(null)
+  const [pref, setPref] = useState<CompanyPref | null>(null)
+
+  const reset = () => {
+    setRole(null)
+    setTask(null)
+    setBudget(null)
+    setPref(null)
+  }
+
+  const done = role && task && budget && pref
+
+  return (
+    <div className="space-y-8">
+      <div className="max-w-2xl">
+        <h1 className="text-3xl font-semibold tracking-tight">Which model should I use?</h1>
+        <p className="mt-3 leading-relaxed text-fg-secondary">
+          Four quick questions, one recommendation — with the reasoning spelled out.
+        </p>
+      </div>
+
+      <div className="flex gap-1.5" role="group" aria-label="Quiz direction">
+        <Chip selected={mode === 'forward'} onClick={() => setMode('forward')}>
+          Find me a model
+        </Chip>
+        <Chip selected={mode === 'reverse'} onClick={() => setMode('reverse')}>
+          Start from a model
+        </Chip>
+      </div>
+
+      {mode === 'reverse' ? (
+        <ReverseFlow />
+      ) : (
+        <div className="space-y-8">
+          <section className="space-y-3">
+            <StepHeading step={1}>Who are you?</StepHeading>
+            <div className="flex flex-wrap gap-1.5">
+              {roles.map((r) => (
+                <Chip key={r.id} selected={role?.id === r.id} onClick={() => setRole(r)}>
+                  {r.emoji} {r.label}
+                </Chip>
+              ))}
+            </div>
+          </section>
+
+          {role && (
+            <section className="space-y-3">
+              <StepHeading step={2}>What do you want to do?</StepHeading>
+              <div className="flex flex-wrap gap-1.5">
+                {tasks.map((t) => (
+                  <Chip key={t.id} selected={task?.id === t.id} onClick={() => setTask(t)}>
+                    {t.emoji} {t.label}
+                  </Chip>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {role && task && (
+            <section className="space-y-3">
+              <StepHeading step={3}>What do you want to spend?</StepHeading>
+              <div className="flex flex-wrap gap-1.5">
+                {budgets.map((b) => (
+                  <Chip key={b.id} selected={budget === b.id} onClick={() => setBudget(b.id)}>
+                    <span className="font-medium">{b.label}</span>
+                    <span className="ml-1.5 text-fg-muted">{b.blurb}</span>
+                  </Chip>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {role && task && budget && (
+            <section className="space-y-3">
+              <StepHeading step={4}>Any company preference?</StepHeading>
+              <div className="flex flex-wrap gap-1.5">
+                {companyPrefs.map((c) => (
+                  <Chip key={c.id} selected={pref === c.id} onClick={() => setPref(c.id)}>
+                    {c.label}
+                  </Chip>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {done && (
+            <>
+              <ResultCard role={role} task={task} budget={budget} pref={pref} />
+              <button
+                type="button"
+                onClick={reset}
+                className="rounded-lg border border-line px-4 py-2 text-sm text-fg-secondary transition-colors duration-150 hover:border-line-strong hover:text-fg"
+              >
+                Start over
+              </button>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
