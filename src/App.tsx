@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import { Layout } from './components/Layout.tsx'
 import { Home } from './pages/Home.tsx'
+import { Compare } from './pages/Compare.tsx'
 import { Placeholder } from './pages/Placeholder.tsx'
 
 function App() {
@@ -8,16 +9,7 @@ function App() {
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<Home />} />
-        <Route
-          path="compare"
-          element={
-            <Placeholder
-              title="Compare models"
-              metaTitle="Compare AI models — Models.fyi"
-              description="Every flagship AI model side by side: benchmark scores, prices, and context windows, explained in plain language."
-            />
-          }
-        />
+        <Route path="compare" element={<Compare />} />
         <Route
           path="graph"
           element={
