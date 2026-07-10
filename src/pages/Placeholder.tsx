@@ -14,7 +14,7 @@ export function Placeholder({ title, metaTitle, description }: PlaceholderProps)
       <h1 className="text-3xl font-semibold tracking-tight">{title}</h1>
       <p className="mt-4 leading-relaxed text-fg-secondary">{description}</p>
       <p className="mt-6 rounded-lg border border-line bg-surface-raised px-4 py-3 text-sm text-fg-muted">
-        This page is under construction — it's coming in an upcoming release.
+        This page is under construction. It's coming in an upcoming release.
       </p>
     </div>
   )

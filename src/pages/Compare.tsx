@@ -45,13 +45,13 @@ export function Compare() {
         <h1 className="text-3xl font-semibold tracking-tight">Compare models</h1>
         <p className="mt-3 leading-relaxed text-fg-secondary">
           Higher is better on every test, and the <span className="font-medium text-accent-deep">best published score</span>{' '}
-          in each column is highlighted. A “—” means no reliable published score — not a zero.
+          in each column is highlighted. A "—" means no score has been published yet, not that the model scored zero.
         </p>
       </div>
 
       <details className="rounded-xl border border-line bg-surface-raised">
         <summary className="cursor-pointer select-none px-4 py-3 text-sm font-medium text-fg-secondary transition-colors duration-150 hover:text-fg">
-          What do these tests actually measure?
+          What do these tests measure?
         </summary>
         <dl className="space-y-3 border-t border-line px-4 py-4">
           {benchmarks.map((b) => (
