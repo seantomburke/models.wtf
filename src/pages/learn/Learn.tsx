@@ -1,12 +1,11 @@
 import { Link } from 'react-router-dom'
 import { usePageMeta } from '../../lib/meta.ts'
+import { metaFor } from '../../lib/routeMeta.ts'
 import { topics } from './topics.ts'
 
 export function Learn() {
-  usePageMeta(
-    'Learn the basics of AI models — Models.fyi',
-    'What is an AI model? What is an LLM, GPT, or a context window? The basics of AI, explained in plain language with simple analogies.',
-  )
+  const meta = metaFor('/learn')
+  usePageMeta(meta.title, meta.description)
   return (
     <div className="space-y-8">
       <div className="max-w-2xl">

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { usePageMeta } from '../lib/meta.ts'
+import { metaFor } from '../lib/routeMeta.ts'
 import { formatPrice, formatTokens } from '../lib/format.ts'
 import {
   budgets,
@@ -148,10 +149,8 @@ function ReverseFlow() {
 }
 
 export function Quiz() {
-  usePageMeta(
-    'Which AI model should I use? — Models.fyi',
-    'Answer a few plain-language questions — who you are, what you want to do, and your budget — and get an AI model recommendation with the reasoning spelled out.',
-  )
+  const meta = metaFor('/quiz')
+  usePageMeta(meta.title, meta.description)
 
   const [mode, setMode] = useState<Mode>('forward')
   const [role, setRole] = useState<Role | null>(null)

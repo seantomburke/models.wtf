@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { usePageMeta } from '../lib/meta.ts'
+import { metaFor } from '../lib/routeMeta.ts'
 import { formatPrice, formatTokens } from '../lib/format.ts'
 import { benchmarks, models, providers, dataSourcedAt } from '../data/index.ts'
 import type { ProviderId } from '../data/index.ts'
@@ -9,10 +10,8 @@ type Filter = 'all' | 'open-source' | ProviderId
 const providerById = new Map(providers.map((p) => [p.id, p]))
 
 export function Compare() {
-  usePageMeta(
-    'Compare AI models — Models.fyi',
-    'Every flagship AI model side by side: benchmark scores, prices, and context windows from OpenAI, Anthropic, Google, xAI, and open source — explained in plain language.',
-  )
+  const meta = metaFor('/compare')
+  usePageMeta(meta.title, meta.description)
 
   const [filter, setFilter] = useState<Filter>('all')
 
