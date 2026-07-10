@@ -19,8 +19,8 @@ export function Home() {
         </h1>
         <p className="mt-4 text-lg leading-relaxed text-fg-secondary">
           New AI models launch every month, each claiming to be the best. We track{' '}
-          {models.length} models from {providers.length} companies — including {openCount} you
-          can run yourself for free — and explain what the numbers actually mean.
+          {models.length} models from {providers.length} companies, including {openCount} you
+          can run yourself for free, and explain what the numbers mean.
         </p>
       </section>
 
@@ -36,8 +36,8 @@ export function Home() {
             Which model should I use? →
           </h2>
           <p className="mt-1 text-sm leading-relaxed text-fg-secondary">
-            Answer a few plain-language questions — who you are, what you're doing, what you
-            want to spend — and get a recommendation with the reasoning spelled out.
+            Answer a few plain-language questions, like who you are, what you're doing, and what you
+            want to spend, and get a recommendation with the reasoning spelled out.
           </p>
         </Link>
 
@@ -73,8 +73,8 @@ export function Home() {
           New to all this?
         </h2>
         <p className="mt-1 max-w-xl text-sm leading-relaxed text-fg-secondary">
-          What's an LLM? What does GPT stand for? What's a context window, and why do some
-          models "think" before answering? Start with the basics.
+          Learn what an LLM is, what GPT stands for, what a context window means, and why some
+          models "think" before answering.
         </p>
         <Link
           to="/learn"

@@ -78,7 +78,7 @@ function ResultCard({ role, task, budget, pref }: { role: Role; task: Task; budg
         </ul>
         {runnerUp && (
           <p className="mt-4 border-t border-line pt-3 text-sm text-fg-muted">
-            Close second: <span className="font-medium text-fg-secondary">{runnerUp.name}</span> —{' '}
+            Close second: <span className="font-medium text-fg-secondary">{runnerUp.name}</span>.{' '}
             {runnerUp.blurb}
           </p>
         )}
@@ -172,7 +172,7 @@ export function Quiz() {
       <div className="max-w-2xl">
         <h1 className="text-3xl font-semibold tracking-tight">Which model should I use?</h1>
         <p className="mt-3 leading-relaxed text-fg-secondary">
-          Four quick questions, one recommendation — with the reasoning spelled out.
+          Four quick questions, one recommendation, with the reasoning spelled out.
         </p>
       </div>
 

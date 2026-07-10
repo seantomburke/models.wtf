@@ -57,7 +57,7 @@ export function Graph() {
       <div className="max-w-2xl">
         <h1 className="text-3xl font-semibold tracking-tight">See it on a graph</h1>
         <p className="mt-3 leading-relaxed text-fg-secondary">
-          Pick what each axis shows, then look for models in the sweet spot — usually{' '}
+          Pick what each axis shows, then look for models in the sweet spot, usually{' '}
           <span className="font-medium text-fg">high on performance, low on price</span>. Hover a
           point to see which model it is.
         </p>
@@ -75,7 +75,7 @@ export function Graph() {
           </div>
         ) : (
           <p className="py-16 text-center text-sm text-fg-muted">
-            No models have published data on both of those axes yet — try a different combination.
+            No models have published data on both of those axes yet. Try a different combination.
           </p>
         )}
       </div>
