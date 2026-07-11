@@ -8,6 +8,8 @@ export interface AxisOption {
   /** Short axis title shown on the chart. */
   axisTitle: string
   getValue: (m: Model) => number | undefined
+  /** Upper bound the padded domain must not exceed (100 for % benchmarks). */
+  domainCap?: number
 }
 
 export const axisOptions: AxisOption[] = [
@@ -16,6 +18,7 @@ export const axisOptions: AxisOption[] = [
     label: b.name,
     axisTitle: `${b.name} (%)`,
     getValue: (m: Model) => m.scores[b.id],
+    domainCap: 100,
   })),
   {
     id: 'price-input',
@@ -78,14 +81,39 @@ export function defaultYAxisId(): string {
   return bestId
 }
 
+/**
+ * Domain with headroom above the data so points never sit on the plot edge,
+ * clamped to `cap` when given (percentage axes must not read past 100).
+ */
+export function paddedDomain(values: number[], cap?: number): [number, number] {
+  if (values.length === 0) return [0, cap ?? 1]
+  const padded = Math.max(...values) * 1.08
+  return [0, cap === undefined ? padded : Math.min(padded, cap)]
+}
+
 /** Scatter spec for the chosen axes. Kept here so tests can validate it against the engine. */
 export function buildGraphSpec(xAxis: AxisOption, yAxis: AxisOption, rows: GraphRow[]): ChartSpec<GraphRow> {
   return {
-    mark: { type: 'point', tooltip: true },
+    // No trendline: a regression line on price-vs-benchmark scatter would
+    // imply a relationship claim the site doesn't make.
+    mark: { type: 'point', tooltip: true, trendline: false },
     data: rows,
+    legend: { position: 'top', maxRows: 2 },
     encoding: {
-      x: { field: 'x', type: 'quantitative', title: xAxis.axisTitle, axis: { title: xAxis.axisTitle } },
-      y: { field: 'y', type: 'quantitative', title: yAxis.axisTitle, axis: { title: yAxis.axisTitle } },
+      x: {
+        field: 'x',
+        type: 'quantitative',
+        title: xAxis.axisTitle,
+        axis: { title: xAxis.axisTitle },
+        scale: { domain: paddedDomain(rows.map((r) => r.x), xAxis.domainCap), nice: true, zero: true },
+      },
+      y: {
+        field: 'y',
+        type: 'quantitative',
+        title: yAxis.axisTitle,
+        axis: { title: yAxis.axisTitle },
+        scale: { domain: paddedDomain(rows.map((r) => r.y), yAxis.domainCap), nice: true, zero: true },
+      },
       color: { field: 'provider', type: 'nominal', title: 'Company' },
       detail: { field: 'model', type: 'nominal' },
       tooltip: [

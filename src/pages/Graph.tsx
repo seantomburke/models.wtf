@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Chart } from '@opendata-ai/openchart-react'
+import '@opendata-ai/openchart-react/styles.css'
 import { usePageMeta } from '../lib/meta.ts'
 import { metaFor } from '../lib/routeMeta.ts'
 import { axisOptions, buildGraphRows, buildGraphSpec, defaultYAxisId } from '../lib/graph.ts'

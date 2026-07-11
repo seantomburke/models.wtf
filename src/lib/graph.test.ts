@@ -1,5 +1,5 @@
 import { validateSpec } from '@opendata-ai/openchart-react'
-import { axisOptions, buildGraphRows, buildGraphSpec, defaultYAxisId, paletteFor } from './graph'
+import { axisOptions, buildGraphRows, buildGraphSpec, defaultYAxisId, paddedDomain, paletteFor } from './graph'
 import { benchmarks, models, providers } from '../data/index.ts'
 
 const byId = (id: string) => axisOptions.find((o) => o.id === id)!
@@ -59,6 +59,27 @@ test('every non-empty axis combination produces a spec the chart engine accepts'
     }
   }
   expect(validated).toBeGreaterThan(20) // most combos should be plottable
+})
+
+test('paddedDomain gives headroom above the data but respects the cap', () => {
+  expect(paddedDomain([10, 50])).toEqual([0, 54])
+  expect(paddedDomain([95], 100)).toEqual([0, 100]) // 95 * 1.08 = 102.6, capped
+  expect(paddedDomain([50], 100)).toEqual([0, 54]) // under the cap, pad applies
+  expect(paddedDomain([], 100)).toEqual([0, 100])
+})
+
+test('spec pads both domains past the data, pins the legend on top, and draws no trendline', () => {
+  const x = byId('price-input')
+  const y = byId('swe-bench-pro')
+  const { rows } = buildGraphRows(x, y)
+  const spec = buildGraphSpec(x, y, rows)
+  expect(spec.mark).toMatchObject({ trendline: false })
+  expect(spec.legend).toMatchObject({ position: 'top' })
+  const xDomain = spec.encoding.x?.scale?.domain as [number, number]
+  const yDomain = spec.encoding.y?.scale?.domain as [number, number]
+  expect(xDomain[1]).toBeGreaterThan(Math.max(...rows.map((r) => r.x)))
+  expect(yDomain[1]).toBeGreaterThanOrEqual(Math.max(...rows.map((r) => r.y)))
+  expect(yDomain[1]).toBeLessThanOrEqual(100) // percentage axis never reads past 100
 })
 
 test('palette matches the first-appearance provider order (the engine domain order)', () => {
