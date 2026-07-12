@@ -9,6 +9,18 @@ type Filter = 'all' | 'open-source' | ProviderId
 
 const providerById = new Map(providers.map((p) => [p.id, p]))
 
+/** Visible-word capability tag; hover title carries the fuller explanation. */
+function CapabilityBadge({ label, title }: { label: string; title: string }) {
+  return (
+    <span
+      title={title}
+      className="rounded border border-line px-1 py-0.5 text-[10px] font-medium text-fg-muted"
+    >
+      {label}
+    </span>
+  )
+}
+
 export function Compare() {
   const meta = metaFor('/compare')
   usePageMeta(meta.title, meta.description)
@@ -122,14 +134,16 @@ export function Compare() {
                       />
                       {provider?.name}
                       {m.reasoning && (
-                        <span title="Reasoning model: thinks before answering" aria-label="Reasoning model">
-                          🧠
-                        </span>
+                        <CapabilityBadge
+                          label="reasoning"
+                          title="Reasoning model: thinks step by step before answering"
+                        />
                       )}
                       {m.internetAccess && (
-                        <span title="Assistant has live web access" aria-label="Internet access">
-                          🌐
-                        </span>
+                        <CapabilityBadge
+                          label="web"
+                          title="The provider's assistant can search the live internet"
+                        />
                       )}
                       {m.openSource && (
                         <span className="rounded bg-accent-soft px-1 py-0.5 text-[10px] font-medium text-accent-deep">
@@ -152,7 +166,14 @@ export function Compare() {
                               : 'text-fg-secondary'
                         }`}
                       >
-                        {score === undefined ? '—' : `${score.toFixed(1)}%`}
+                        {score === undefined ? (
+                          <>
+                            <span aria-hidden>—</span>
+                            <span className="sr-only">no published score</span>
+                          </>
+                        ) : (
+                          `${score.toFixed(1)}%`
+                        )}
                       </td>
                     )
                   })}
@@ -171,7 +192,9 @@ export function Compare() {
 
       <p className="text-xs text-fg-muted">
         *Open-source models are free to download and run yourself; hosted-API pricing varies by
-        vendor. Scores are provider-published evals collected {dataSourcedAt}.
+        vendor. Scores are provider-published evals collected {dataSourcedAt}. "reasoning" means
+        the model thinks step by step before answering; "web" means the provider's assistant can
+        search the live internet.
       </p>
     </div>
   )
