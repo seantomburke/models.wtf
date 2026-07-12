@@ -75,7 +75,7 @@ export const tasks: Task[] = [
 export type Budget = 'free' | 'value' | 'premium'
 
 export const budgets: Array<{ id: Budget; label: string; blurb: string }> = [
-  { id: 'free', label: 'Free', blurb: 'Open source I can run myself' },
+  { id: 'free', label: 'Free / open source', blurb: 'Models I can download and run myself' },
   { id: 'value', label: 'Good value', blurb: 'Cheap but capable' },
   { id: 'premium', label: 'Best possible', blurb: 'Cost is not the concern' },
 ]
@@ -156,7 +156,7 @@ export function recommend(role: Role, task: Task, budget: Budget, pref: CompanyP
     const openPool = pool.filter((m) => m.openSource)
     if (openPool.length > 0) {
       pool = openPool
-      why.push('“Free” means open-source models you can run yourself, with no per-token bills.')
+      why.push('“Free / open source” means models you download and run yourself, with no per-token bills.')
     } else {
       why.push(
         'That company has no open-source models, so this is its cheapest option instead of a free one.',
