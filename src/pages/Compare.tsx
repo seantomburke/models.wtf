@@ -2,12 +2,23 @@ import { useMemo, useState } from 'react'
 import { usePageMeta } from '../lib/meta.ts'
 import { metaFor } from '../lib/routeMeta.ts'
 import { formatPrice, formatTokens } from '../lib/format.ts'
-import { benchmarks, models, providers, dataSourcedAt } from '../data/index.ts'
+import { benchmarks, models, providers, providerById, dataSourcedAt } from '../data/index.ts'
 import type { ProviderId } from '../data/index.ts'
+import { ProviderLogo } from '../components/ProviderLogo.tsx'
 
 type Filter = 'all' | 'open-source' | ProviderId
 
-const providerById = new Map(providers.map((p) => [p.id, p]))
+/** Visible-word capability tag; hover title carries the fuller explanation. */
+function CapabilityBadge({ label, title }: { label: string; title: string }) {
+  return (
+    <span
+      title={title}
+      className="rounded border border-line px-1 py-0.5 text-[10px] font-medium text-fg-muted"
+    >
+      {label}
+    </span>
+  )
+}
 
 export function Compare() {
   const meta = metaFor('/compare')
@@ -72,12 +83,15 @@ export function Compare() {
             type="button"
             onClick={() => setFilter(id)}
             aria-pressed={filter === id}
-            className={`rounded-lg px-3 py-1.5 text-sm transition-colors duration-150 ${
+            className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm transition-colors duration-150 ${
               filter === id
                 ? 'bg-accent-soft font-medium text-accent-deep'
                 : 'border border-line text-fg-secondary hover:border-line-strong hover:text-fg'
             }`}
           >
+            {providerById.has(id as ProviderId) && (
+              <ProviderLogo providerId={id as ProviderId} size={12} />
+            )}
             {label}
           </button>
         ))}
@@ -115,21 +129,19 @@ export function Compare() {
                   <td className="sticky left-0 bg-surface-raised px-4 py-3">
                     <div className="font-medium text-fg">{m.name}</div>
                     <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-fg-muted">
-                      <span
-                        className="inline-block h-2 w-2 rounded-full"
-                        style={{ backgroundColor: provider?.color }}
-                        aria-hidden
-                      />
+                      <ProviderLogo providerId={m.providerId} size={12} className="shrink-0" />
                       {provider?.name}
                       {m.reasoning && (
-                        <span title="Reasoning model: thinks before answering" aria-label="Reasoning model">
-                          🧠
-                        </span>
+                        <CapabilityBadge
+                          label="reasoning"
+                          title="Reasoning model: thinks step by step before answering"
+                        />
                       )}
                       {m.internetAccess && (
-                        <span title="Assistant has live web access" aria-label="Internet access">
-                          🌐
-                        </span>
+                        <CapabilityBadge
+                          label="web"
+                          title="The provider's assistant can search the live internet"
+                        />
                       )}
                       {m.openSource && (
                         <span className="rounded bg-accent-soft px-1 py-0.5 text-[10px] font-medium text-accent-deep">
@@ -152,7 +164,14 @@ export function Compare() {
                               : 'text-fg-secondary'
                         }`}
                       >
-                        {score === undefined ? '—' : `${score.toFixed(1)}%`}
+                        {score === undefined ? (
+                          <>
+                            <span aria-hidden>—</span>
+                            <span className="sr-only">no published score</span>
+                          </>
+                        ) : (
+                          `${score.toFixed(1)}%`
+                        )}
                       </td>
                     )
                   })}
@@ -171,7 +190,9 @@ export function Compare() {
 
       <p className="text-xs text-fg-muted">
         *Open-source models are free to download and run yourself; hosted-API pricing varies by
-        vendor. Scores are provider-published evals collected {dataSourcedAt}.
+        vendor. Scores are provider-published evals where available, otherwise independent
+        leaderboard runs, collected {dataSourcedAt}. “reasoning” means the model thinks step by
+        step before answering; “web” means the provider's assistant can search the live internet.
       </p>
     </div>
   )

@@ -2,7 +2,7 @@ import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { Compare } from './Compare'
-import { models } from '../data/index.ts'
+import { benchmarks, models } from '../data/index.ts'
 import { formatPrice, formatTokens } from '../lib/format.ts'
 
 function renderCompare() {
@@ -44,8 +44,36 @@ test('best score per benchmark is highlighted', () => {
   const best = Math.max(
     ...models.map((m) => m.scores['swe-bench-verified'] ?? -Infinity),
   )
-  const cell = screen.getByText(`${best.toFixed(1)}%`)
-  expect(cell.className).toContain('text-accent-deep')
+  // Another column can legitimately display the same value; at least one
+  // cell with this text must carry the highlight.
+  const cells = screen.getAllByText(`${best.toFixed(1)}%`)
+  expect(cells.some((c) => c.className.includes('text-accent-deep'))).toBe(true)
+})
+
+test('every model row carries its company logo', () => {
+  renderCompare()
+  const table = screen.getByRole('table')
+  const nameCell = within(table).getByText('Claude Opus 4.8').closest('td')!
+  expect(nameCell.querySelector('svg[aria-hidden="true"]')).toBeInTheDocument()
+})
+
+test('capability badges are visible text, one per capable model', () => {
+  renderCompare()
+  const table = screen.getByRole('table')
+  const reasoningCount = models.filter((m) => m.reasoning).length
+  const webCount = models.filter((m) => m.internetAccess).length
+  expect(within(table).getAllByText('reasoning')).toHaveLength(reasoningCount)
+  expect(within(table).getAllByText('web')).toHaveLength(webCount)
+})
+
+test('missing scores tell screen readers there is no published score', () => {
+  renderCompare()
+  const table = screen.getByRole('table')
+  const missingCount = models.reduce(
+    (n, m) => n + benchmarks.filter((b) => m.scores[b.id] === undefined).length,
+    0,
+  )
+  expect(within(table).getAllByText('no published score')).toHaveLength(missingCount)
 })
 
 test('formatters produce friendly units', () => {

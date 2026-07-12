@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { usePageMeta } from '../lib/meta.ts'
 import { metaFor } from '../lib/routeMeta.ts'
-import { formatPrice, formatTokens } from '../lib/format.ts'
+import { describePricing, formatTokens, withArticle } from '../lib/format.ts'
 import {
   budgets,
   companyPrefs,
@@ -12,8 +12,9 @@ import {
   tasks,
 } from '../lib/quiz.ts'
 import type { Budget, CompanyPref, Role, Task } from '../lib/quiz.ts'
-import { models, providers } from '../data/index.ts'
+import { models, providerById } from '../data/index.ts'
 import type { Model } from '../data/index.ts'
+import { ProviderLogo } from '../components/ProviderLogo.tsx'
 
 type Mode = 'forward' | 'reverse'
 
@@ -51,22 +52,36 @@ function StepHeading({ step, children }: { step: number; children: React.ReactNo
   )
 }
 
+/** Where to dig deeper, shared by both quiz directions. */
+function SeeAlsoLinks({ name }: { name: string }) {
+  return (
+    <p className="text-sm text-fg-muted">
+      See how {name} stacks up on the{' '}
+      <Link className="text-accent-deep underline underline-offset-2" to="/compare">comparison table</Link>{' '}
+      or the <Link className="text-accent-deep underline underline-offset-2" to="/graph">graph</Link>.
+    </p>
+  )
+}
+
 function ResultCard({ role, task, budget, pref }: { role: Role; task: Task; budget: Budget; pref: CompanyPref }) {
   const { pick, runnerUp, why } = recommend(role, task, budget, pref)
-  const provider = providers.find((p) => p.id === pick.providerId)
+  const provider = providerById.get(pick.providerId)
   return (
     <div className="space-y-4">
       <div className="rounded-xl border border-line bg-accent-soft/60 p-6">
         <p className="text-xs font-medium uppercase tracking-wide text-accent-deep">
-          Our pick for a {role.label.toLowerCase()} who wants to {task.label.toLowerCase()}
+          Our pick for {withArticle(role.person)} who wants to {task.label.toLowerCase()}
         </p>
         <h2 className="mt-2 text-2xl font-semibold tracking-tight">{pick.name}</h2>
-        <p className="mt-1 text-sm text-fg-secondary">
-          by {provider?.name} · {formatPrice(pick.inputPricePerMTok)}/
-          {formatPrice(pick.outputPricePerMTok)} per 1M tokens · {formatTokens(pick.contextWindowTokens)}{' '}
-          context
+        <p className="mt-1 flex items-center gap-1.5 text-sm text-fg-secondary">
+          by <ProviderLogo providerId={pick.providerId} size={13} /> {provider?.name}
         </p>
         <p className="mt-3 max-w-xl text-sm leading-relaxed text-fg-secondary">{pick.blurb}</p>
+        <p className="mt-2 max-w-xl text-sm leading-relaxed text-fg-secondary">
+          {describePricing(pick.inputPricePerMTok, pick.outputPricePerMTok)}
+          {pick.contextWindowTokens !== null &&
+            ` It can consider about ${formatTokens(pick.contextWindowTokens)} tokens at once, its working memory for text.`}
+        </p>
       </div>
 
       <div className="rounded-xl border border-line bg-surface-raised p-6">
@@ -84,10 +99,7 @@ function ResultCard({ role, task, budget, pref }: { role: Role; task: Task; budg
         )}
       </div>
 
-      <p className="text-sm text-fg-muted">
-        See how it stacks up on the <Link className="text-accent-deep underline underline-offset-2" to="/compare">comparison table</Link>{' '}
-        or the <Link className="text-accent-deep underline underline-offset-2" to="/graph">graph</Link>.
-      </p>
+      <SeeAlsoLinks name={pick.name} />
     </div>
   )
 }
@@ -95,6 +107,7 @@ function ResultCard({ role, task, budget, pref }: { role: Role; task: Task; budg
 function ReverseFlow() {
   const [selected, setSelected] = useState<Model | null>(null)
   const profile = selected ? profileModel(selected) : null
+  const provider = selected ? providerById.get(selected.providerId) : null
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap gap-1.5">
@@ -107,7 +120,13 @@ function ReverseFlow() {
       {selected && profile && (
         <div className="rounded-xl border border-line bg-surface-raised p-6">
           <h2 className="text-xl font-semibold tracking-tight">{selected.name}</h2>
-          <p className="mt-1 text-sm leading-relaxed text-fg-secondary">{selected.blurb}</p>
+          <p className="mt-1 flex items-center gap-1.5 text-sm text-fg-muted">
+            by <ProviderLogo providerId={selected.providerId} size={13} /> {provider?.name}
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-fg-secondary">{selected.blurb}</p>
+          <p className="mt-2 text-sm leading-relaxed text-fg-secondary">
+            {describePricing(selected.inputPricePerMTok, selected.outputPricePerMTok)}
+          </p>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <div>
               <h3 className="text-xs font-medium uppercase tracking-wide text-fg-muted">
@@ -144,6 +163,7 @@ function ReverseFlow() {
           )}
         </div>
       )}
+      {selected && <SeeAlsoLinks name={selected.name} />}
     </div>
   )
 }
@@ -167,12 +187,25 @@ export function Quiz() {
 
   const done = role && task && budget && pref
 
+  const resultRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (!done) return
+    const reduceMotion =
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    resultRef.current?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' })
+    // Land keyboard/screen-reader focus on the result, not the last answer chip.
+    resultRef.current?.focus({ preventScroll: true })
+  }, [done])
+
   return (
     <div className="space-y-8">
       <div className="max-w-2xl">
         <h1 className="text-3xl font-semibold tracking-tight">Which model should I use?</h1>
         <p className="mt-3 leading-relaxed text-fg-secondary">
-          Four quick questions, one recommendation, with the reasoning spelled out.
+          {mode === 'forward'
+            ? 'Four quick questions, one recommendation, with the reasoning spelled out.'
+            : "Pick a model and we'll tell you what it's actually good at."}
         </p>
       </div>
 
@@ -241,7 +274,7 @@ export function Quiz() {
           )}
 
           {done && (
-            <>
+            <div ref={resultRef} tabIndex={-1} className="scroll-mt-6 space-y-8 outline-none">
               <ResultCard role={role} task={task} budget={budget} pref={pref} />
               <button
                 type="button"
@@ -250,7 +283,7 @@ export function Quiz() {
               >
                 Start over
               </button>
-            </>
+            </div>
           )}
         </div>
       )}
