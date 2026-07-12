@@ -30,7 +30,11 @@ test('completing the quiz shows a result with correct grammar, plain pricing, an
   await user.click(screen.getByRole('button', { name: 'No preference' }))
 
   // "an everyday", not "a everyday".
-  expect(screen.getByText(/our pick for an everyday curious person/i)).toBeInTheDocument()
+  const heading = screen.getByText(/our pick for an everyday curious person/i)
+  expect(heading).toBeInTheDocument()
+  // The provider line carries the company logo.
+  const card = heading.closest('div')!
+  expect(card.querySelector('svg[aria-hidden="true"]')).toBeInTheDocument()
   // The price line speaks plain language, with rates in a parenthetical.
   expect(screen.getByText(/cheap to run/i)).toBeInTheDocument()
   expect(screen.queryByText(/per 1M tokens ·/)).not.toBeInTheDocument()
@@ -44,7 +48,7 @@ test('reverse mode shows provider, pricing, and links for the chosen model', asy
   await user.click(screen.getByRole('button', { name: 'Start from a model' }))
   await user.click(screen.getByRole('button', { name: 'GLM-5.2' }))
 
-  expect(screen.getByText('by Z.ai (GLM)')).toBeInTheDocument()
+  expect(screen.getByText(/by\s+Z\.ai \(GLM\)/)).toBeInTheDocument()
   expect(screen.getByText(/free to download and run on your own computer/i)).toBeInTheDocument()
   expect(screen.getByRole('link', { name: /comparison table/i })).toHaveAttribute('href', '/compare')
   expect(screen.getByRole('link', { name: /graph/i })).toHaveAttribute('href', '/graph')

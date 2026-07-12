@@ -48,6 +48,13 @@ test('best score per benchmark is highlighted', () => {
   expect(cell.className).toContain('text-accent-deep')
 })
 
+test('every model row carries its company logo', () => {
+  renderCompare()
+  const table = screen.getByRole('table')
+  const nameCell = within(table).getByText('Claude Opus 4.8').closest('td')!
+  expect(nameCell.querySelector('svg[aria-hidden="true"]')).toBeInTheDocument()
+})
+
 test('capability badges are visible text, one per capable model', () => {
   renderCompare()
   const table = screen.getByRole('table')

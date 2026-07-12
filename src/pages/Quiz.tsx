@@ -14,6 +14,7 @@ import {
 import type { Budget, CompanyPref, Role, Task } from '../lib/quiz.ts'
 import { models, providers } from '../data/index.ts'
 import type { Model } from '../data/index.ts'
+import { ProviderLogo } from '../components/ProviderLogo.tsx'
 
 type Mode = 'forward' | 'reverse'
 
@@ -72,7 +73,9 @@ function ResultCard({ role, task, budget, pref }: { role: Role; task: Task; budg
           Our pick for {withArticle(role.label)} who wants to {task.label.toLowerCase()}
         </p>
         <h2 className="mt-2 text-2xl font-semibold tracking-tight">{pick.name}</h2>
-        <p className="mt-1 text-sm text-fg-secondary">by {provider?.name}</p>
+        <p className="mt-1 flex items-center gap-1.5 text-sm text-fg-secondary">
+          by <ProviderLogo providerId={pick.providerId} size={13} /> {provider?.name}
+        </p>
         <p className="mt-3 max-w-xl text-sm leading-relaxed text-fg-secondary">{pick.blurb}</p>
         <p className="mt-2 max-w-xl text-sm leading-relaxed text-fg-secondary">
           {describePricing(pick.inputPricePerMTok, pick.outputPricePerMTok)}
@@ -117,7 +120,9 @@ function ReverseFlow() {
       {selected && profile && (
         <div className="rounded-xl border border-line bg-surface-raised p-6">
           <h2 className="text-xl font-semibold tracking-tight">{selected.name}</h2>
-          <p className="mt-1 text-sm text-fg-muted">by {provider?.name}</p>
+          <p className="mt-1 flex items-center gap-1.5 text-sm text-fg-muted">
+            by <ProviderLogo providerId={selected.providerId} size={13} /> {provider?.name}
+          </p>
           <p className="mt-2 text-sm leading-relaxed text-fg-secondary">{selected.blurb}</p>
           <p className="mt-2 text-sm leading-relaxed text-fg-secondary">
             {describePricing(selected.inputPricePerMTok, selected.outputPricePerMTok)}

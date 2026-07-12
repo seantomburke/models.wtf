@@ -4,6 +4,7 @@ import { metaFor } from '../lib/routeMeta.ts'
 import { formatPrice, formatTokens } from '../lib/format.ts'
 import { benchmarks, models, providers, dataSourcedAt } from '../data/index.ts'
 import type { ProviderId } from '../data/index.ts'
+import { ProviderLogo } from '../components/ProviderLogo.tsx'
 
 type Filter = 'all' | 'open-source' | ProviderId
 
@@ -84,12 +85,15 @@ export function Compare() {
             type="button"
             onClick={() => setFilter(id)}
             aria-pressed={filter === id}
-            className={`rounded-lg px-3 py-1.5 text-sm transition-colors duration-150 ${
+            className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm transition-colors duration-150 ${
               filter === id
                 ? 'bg-accent-soft font-medium text-accent-deep'
                 : 'border border-line text-fg-secondary hover:border-line-strong hover:text-fg'
             }`}
           >
+            {providerById.has(id as ProviderId) && (
+              <ProviderLogo providerId={id as ProviderId} size={12} />
+            )}
             {label}
           </button>
         ))}
@@ -127,11 +131,7 @@ export function Compare() {
                   <td className="sticky left-0 bg-surface-raised px-4 py-3">
                     <div className="font-medium text-fg">{m.name}</div>
                     <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-fg-muted">
-                      <span
-                        className="inline-block h-2 w-2 rounded-full"
-                        style={{ backgroundColor: provider?.color }}
-                        aria-hidden
-                      />
+                      <ProviderLogo providerId={m.providerId} size={12} className="shrink-0" />
                       {provider?.name}
                       {m.reasoning && (
                         <CapabilityBadge
