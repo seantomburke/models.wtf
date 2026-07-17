@@ -3,6 +3,7 @@ import { usePostHog } from '@posthog/react'
 import { usePageMeta } from '../lib/meta.ts'
 import { metaFor } from '../lib/routeMeta.ts'
 import { formatPrice, formatTokens } from '../lib/format.ts'
+import { exportComparison } from '../lib/export.ts'
 import { benchmarks, models, providers, providerById, dataSourcedAt } from '../data/index.ts'
 import type { ProviderId } from '../data/index.ts'
 import { sortModels, toggleSort, type SortConfig } from '../lib/sort.ts'
@@ -61,6 +62,11 @@ export function Compare() {
   const visible = useMemo(() => {
     return sortModels(filtered, sort)
   }, [filtered, sort])
+
+  const handleExport = () => {
+    exportComparison(visible)
+    posthog?.capture('compare_table_exported', { model_count: visible.length })
+  }
 
   // Best published score per benchmark among the visible models.
   const bestScores = useMemo(() => {
@@ -137,8 +143,18 @@ export function Compare() {
             </button>
           )}
         </div>
-        <div className="text-sm text-fg-muted">
-          Showing {visible.length} of {models.length} models
+        <div className="flex items-center justify-between gap-4">
+          <div className="text-sm text-fg-muted">
+            Showing {visible.length} of {models.length} models
+          </div>
+          <button
+            type="button"
+            onClick={handleExport}
+            className="rounded-lg bg-accent-soft px-3 py-1.5 text-sm font-medium text-accent-deep transition-colors duration-150 hover:bg-accent-soft/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-deep print:hidden"
+            aria-label="Export comparison table as CSV"
+          >
+            Export CSV
+          </button>
         </div>
       </div>
 
