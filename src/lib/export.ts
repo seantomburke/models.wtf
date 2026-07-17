@@ -1,4 +1,4 @@
-import { benchmarks, models, providerById, dataSourcedAt } from '../data/index.ts'
+import { benchmarks, providerById, dataSourcedAt } from '../data/index.ts'
 import type { Model, BenchmarkId } from '../data/index.ts'
 import { formatPrice, formatTokens } from './format.ts'
 
