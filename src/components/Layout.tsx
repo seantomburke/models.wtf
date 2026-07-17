@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { NavLink, Outlet, Link } from 'react-router-dom'
 import { dataSourcedAt } from '../data/index.ts'
 import { DarkModeToggle } from './DarkModeToggle'
+import { ErrorBoundary } from './ErrorBoundary.tsx'
 
 const navItems = [
   { to: '/compare', label: 'Compare' },
@@ -18,6 +19,12 @@ export function Layout() {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:z-50 focus:absolute focus:top-0 focus:left-0 focus:p-4 focus:bg-accent-deep focus:text-white"
+      >
+        Skip to main content
+      </a>
       <header className="border-b border-line bg-surface-raised/80 backdrop-blur">
         <nav
           aria-label="Main"
@@ -105,8 +112,12 @@ export function Layout() {
         )}
       </header>
 
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10 sm:px-6">
-        <Outlet />
+      <main id="main" className="mx-auto w-full max-w-5xl flex-1 px-4 py-10 sm:px-6">
+        <ErrorBoundary>
+          <Suspense fallback={<p className="text-sm text-fg-muted">Loading…</p>}>
+            <Outlet />
+          </Suspense>
+        </ErrorBoundary>
       </main>
 
       <footer className="border-t border-line">

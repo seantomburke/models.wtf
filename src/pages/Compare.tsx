@@ -29,6 +29,7 @@ export function Compare() {
     description: meta.description,
     image: meta.image,
     type: meta.type,
+    pathname: '/compare',
   })
 
   const [filter, setFilter] = useState<Filter>('all')
@@ -140,6 +141,14 @@ export function Compare() {
                 <tr key={m.id}>
                   <td className="sticky left-0 bg-surface-raised px-4 py-3">
                     <div className="font-medium text-fg">{m.name}</div>
+                    {m.releaseDate && (
+                      <div className="mt-0.5 text-xs text-fg-faint">
+                        {new Date(m.releaseDate).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'short',
+                        })}
+                      </div>
+                    )}
                     <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-fg-muted">
                       <ProviderLogo providerId={m.providerId} size={12} className="shrink-0" />
                       {provider?.name}
@@ -156,7 +165,10 @@ export function Compare() {
                         />
                       )}
                       {m.openSource && (
-                        <span className="rounded bg-accent-soft px-1 py-0.5 text-[10px] font-medium text-accent-deep">
+                        <span
+                          title={m.license ? `License: ${m.license}` : undefined}
+                          className="rounded bg-accent-soft px-1 py-0.5 text-[10px] font-medium text-accent-deep"
+                        >
                           open
                         </span>
                       )}

@@ -10,6 +10,7 @@ export function Home() {
     description: meta.description,
     image: meta.image,
     type: meta.type,
+    pathname: '/',
     structuredData: organizationSchema(),
   })
 

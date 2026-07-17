@@ -24,6 +24,7 @@ export function LearnTopic() {
     description: topic?.metaDescription ?? "That explainer doesn't exist.",
     image: baseMeta.image,
     type: baseMeta.type,
+    pathname: slug ? `/learn/${slug}` : undefined,
     structuredData: topic
       ? faqSchema([
           {

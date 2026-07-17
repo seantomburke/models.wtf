@@ -1,5 +1,6 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
+import { BrowserRouter } from 'react-router-dom'
 import { ErrorBoundary } from './ErrorBoundary'
 
 // Suppress console errors during error boundary tests
@@ -27,9 +28,11 @@ function NormalComponent() {
 describe('ErrorBoundary', () => {
   test('renders children when there is no error', () => {
     render(
-      <ErrorBoundary>
-        <NormalComponent />
-      </ErrorBoundary>,
+      <BrowserRouter>
+        <ErrorBoundary>
+          <NormalComponent />
+        </ErrorBoundary>
+      </BrowserRouter>,
     )
 
     expect(screen.getByText('Normal content')).toBeInTheDocument()
@@ -37,9 +40,11 @@ describe('ErrorBoundary', () => {
 
   test('displays fallback UI when an error is caught', () => {
     render(
-      <ErrorBoundary>
-        <ThrowError />
-      </ErrorBoundary>,
+      <BrowserRouter>
+        <ErrorBoundary>
+          <ThrowError />
+        </ErrorBoundary>
+      </BrowserRouter>,
     )
 
     expect(screen.getByText('Something went wrong')).toBeInTheDocument()
@@ -50,9 +55,11 @@ describe('ErrorBoundary', () => {
 
   test('displays "Try again" button', () => {
     render(
-      <ErrorBoundary>
-        <ThrowError />
-      </ErrorBoundary>,
+      <BrowserRouter>
+        <ErrorBoundary>
+          <ThrowError />
+        </ErrorBoundary>
+      </BrowserRouter>,
     )
 
     const button = screen.getByRole('button', { name: /try again/i })
@@ -61,9 +68,11 @@ describe('ErrorBoundary', () => {
 
   test('"Try again" button is clickable and calls handler', () => {
     render(
-      <ErrorBoundary>
-        <ThrowError />
-      </ErrorBoundary>,
+      <BrowserRouter>
+        <ErrorBoundary>
+          <ThrowError />
+        </ErrorBoundary>
+      </BrowserRouter>,
     )
 
     const button = screen.getByRole('button', { name: /try again/i })
@@ -77,9 +86,11 @@ describe('ErrorBoundary', () => {
     // For development mode check, since we can't easily mock process.env.NODE_ENV
     // we'll just verify the component renders and has the error message
     render(
-      <ErrorBoundary>
-        <ThrowError />
-      </ErrorBoundary>,
+      <BrowserRouter>
+        <ErrorBoundary>
+          <ThrowError />
+        </ErrorBoundary>
+      </BrowserRouter>,
     )
 
     // In development mode, the error message should be visible

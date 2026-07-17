@@ -97,6 +97,7 @@ export function Graph() {
     description: meta.description,
     image: meta.image,
     type: meta.type,
+    pathname: '/graph',
   })
 
   const [xId, setXId] = useState('price-input')

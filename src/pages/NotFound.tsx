@@ -5,6 +5,7 @@ export function NotFound() {
   usePageMeta({
     title: 'Page not found — Models.fyi',
     description: 'The page you\'re looking for doesn\'t exist.',
+    pathname: '*',
   })
 
   return (

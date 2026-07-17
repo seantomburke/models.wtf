@@ -1,20 +1,23 @@
 import { useEffect } from 'react'
 
+const BASE_URL = 'https://seantomburke.github.io/models.fyi'
+
 export interface PageMetaOptions {
   title: string
   description: string
   image?: string
   type?: 'website' | 'article'
   structuredData?: Record<string, unknown>
+  pathname?: string
 }
 
 /**
  * Sets the document title and meta description for a page.
  * Every route must call this — SEO is a product requirement.
  */
-export function usePageMeta(title: string, description: string)
+export function usePageMeta(title: string, description: string): void
 export function usePageMeta(options: PageMetaOptions): void
-export function usePageMeta(titleOrOptions: string | PageMetaOptions, description?: string) {
+export function usePageMeta(titleOrOptions: string | PageMetaOptions, description?: string): void {
   const options: PageMetaOptions =
     typeof titleOrOptions === 'string'
       ? { title: titleOrOptions, description: description || '' }
@@ -53,7 +56,7 @@ export function usePageMeta(titleOrOptions: string | PageMetaOptions, descriptio
 
     // Set structured data (JSON-LD)
     if (options.structuredData) {
-      let script = document.querySelector('script[type="application/ld+json"]')
+      let script = document.querySelector<HTMLScriptElement>('script[type="application/ld+json"]')
       if (!script) {
         script = document.createElement('script')
         script.type = 'application/ld+json'
@@ -61,12 +64,28 @@ export function usePageMeta(titleOrOptions: string | PageMetaOptions, descriptio
       }
       script.textContent = JSON.stringify(options.structuredData)
     }
+
+    // Set canonical URL
+    if (options.pathname) {
+      const canonicalUrl = options.pathname === '/' ? BASE_URL : `${BASE_URL}${options.pathname}`
+      let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]')
+      if (!canonical) {
+        canonical = document.createElement('link')
+        canonical.rel = 'canonical'
+        document.head.appendChild(canonical)
+      }
+      canonical.href = canonicalUrl
+
+      // Add og:url
+      setMetaTag('property', 'og:url', canonicalUrl)
+    }
   }, [
     options.title,
     options.description,
     options.image,
     options.type,
     options.structuredData,
+    options.pathname,
   ])
 }
 

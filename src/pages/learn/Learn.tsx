@@ -10,6 +10,7 @@ export function Learn() {
     description: meta.description,
     image: meta.image,
     type: meta.type,
+    pathname: '/learn',
   })
   return (
     <div className="space-y-8">
