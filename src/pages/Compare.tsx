@@ -137,18 +137,8 @@ export function Compare() {
             </button>
           )}
         </div>
-        <div className="flex items-center justify-between gap-4">
-          <div className="text-sm text-fg-muted">
-            Showing {visible.length} of {models.length} models
-          </div>
-          <button
-            type="button"
-            onClick={handleExport}
-            className="rounded-lg bg-accent-soft px-3 py-1.5 text-sm font-medium text-accent-deep transition-colors duration-150 hover:bg-accent-soft/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-deep print:hidden"
-            aria-label="Export comparison table as CSV"
-          >
-            Export CSV
-          </button>
+        <div className="text-sm text-fg-muted">
+          Showing {visible.length} of {models.length} models
         </div>
       </div>
 

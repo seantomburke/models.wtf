@@ -85,3 +85,84 @@ test('formatters produce friendly units', () => {
   expect(formatPrice(2.5)).toBe('$2.50')
   expect(formatPrice(null)).toBe('Free*')
 })
+
+test('displays model count "Showing X of Y models"', () => {
+  renderCompare()
+  expect(screen.getByText(`Showing ${models.length} of ${models.length} models`)).toBeInTheDocument()
+})
+
+test('clear filter button appears only when filter is not "all"', async () => {
+  const user = userEvent.setup()
+  renderCompare()
+  // Initially, "Clear filter" should not be in the document
+  expect(screen.queryByRole('button', { name: 'Clear filter' })).not.toBeInTheDocument()
+  // After clicking a filter, "Clear filter" should appear
+  await user.click(screen.getByRole('button', { name: 'Anthropic' }))
+  expect(screen.getByRole('button', { name: 'Clear filter' })).toBeInTheDocument()
+})
+
+test('clear filter button resets to "all" and shows all models', async () => {
+  const user = userEvent.setup()
+  renderCompare()
+  // Filter to Anthropic
+  await user.click(screen.getByRole('button', { name: 'Anthropic' }))
+  const initialText = screen.getByText(/Showing \d+ of \d+ models/)
+  expect(initialText.textContent).toMatch(/Showing \d+ of \d+ models/)
+  const [shown, total] = initialText.textContent!.match(/Showing (\d+) of (\d+) models/)!.slice(1).map(Number)
+  expect(shown).toBeLessThan(total)
+  // Click clear
+  await user.click(screen.getByRole('button', { name: 'Clear filter' }))
+  // All models should show
+  expect(screen.getByText(`Showing ${models.length} of ${models.length} models`)).toBeInTheDocument()
+  expect(screen.queryByRole('button', { name: 'Clear filter' })).not.toBeInTheDocument()
+})
+
+test('table headers are clickable and show sort direction', async () => {
+  const user = userEvent.setup()
+  renderCompare()
+  const modelHeader = screen.getByRole('button', { name: 'Model' })
+  expect(modelHeader).toBeInTheDocument()
+  // Initial state: no sort indicator
+  expect(modelHeader.textContent).not.toMatch(/[↑↓]/)
+  // Click to sort ascending
+  await user.click(modelHeader)
+  expect(modelHeader.textContent).toMatch(/↑/)
+  // Click again to sort descending
+  await user.click(modelHeader)
+  expect(modelHeader.textContent).toMatch(/↓/)
+})
+
+test('sorting by name reorders models alphabetically', async () => {
+  const user = userEvent.setup()
+  renderCompare()
+  const modelHeader = screen.getByRole('button', { name: /^Model/ })
+  await user.click(modelHeader)
+  const table = screen.getByRole('table')
+  const rows = within(table).getAllByRole('row')
+  // Skip header row, get model names from first column
+  const names = rows.slice(1).map((row) => {
+    const cells = within(row).getAllByRole('cell')
+    const firstCellText = cells[0]?.textContent || ''
+    // Extract first line (model name)
+    return firstCellText.split('\n')[0] || ''
+  })
+  // Verify alphabetical order
+  for (let i = 1; i < names.length; i++) {
+    if (names[i] && names[i - 1]) {
+      expect(names[i].toLowerCase() >= names[i - 1].toLowerCase()).toBe(true)
+    }
+  }
+})
+
+test('header has aria-sort attribute for accessibility', async () => {
+  const user = userEvent.setup()
+  renderCompare()
+  const modelHeader = screen.getByRole('button', { name: 'Model' })
+  // Initial state
+  expect(modelHeader).toHaveAttribute('aria-sort', 'none')
+  // After sorting
+  await user.click(modelHeader)
+  expect(modelHeader).toHaveAttribute('aria-sort', 'ascending')
+  await user.click(modelHeader)
+  expect(modelHeader).toHaveAttribute('aria-sort', 'descending')
+})
