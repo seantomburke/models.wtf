@@ -1,11 +1,17 @@
 import { Link } from 'react-router-dom'
 import { usePageMeta } from '../lib/meta.ts'
-import { metaFor } from '../lib/routeMeta.ts'
+import { metaFor, organizationSchema } from '../lib/routeMeta.ts'
 import { models, providers } from '../data/index.ts'
 
 export function Home() {
   const meta = metaFor('/')
-  usePageMeta(meta.title, meta.description)
+  usePageMeta({
+    title: meta.title,
+    description: meta.description,
+    image: meta.image,
+    type: meta.type,
+    structuredData: organizationSchema(),
+  })
 
   const openCount = models.filter((m) => m.openSource).length
 

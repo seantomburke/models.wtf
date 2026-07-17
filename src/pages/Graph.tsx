@@ -92,7 +92,12 @@ export function SelectedPoint({ row, xAxis, yAxis, onDismiss }: SelectedPointPro
 export function Graph() {
   const posthog = usePostHog()
   const meta = metaFor('/graph')
-  usePageMeta(meta.title, meta.description)
+  usePageMeta({
+    title: meta.title,
+    description: meta.description,
+    image: meta.image,
+    type: meta.type,
+  })
 
   const [xId, setXId] = useState('price-input')
   const [yId, setYId] = useState(defaultYAxisId)

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#ffffff"/>
+
+  <!-- Accent accent -->
+  <circle cx="100" cy="100" r="50" fill="#6c63ff" opacity="0.1"/>
+  <circle cx="1100" cy="530" r="70" fill="#6c63ff" opacity="0.1"/>
+
+  <!-- Main text -->
+  <text x="60" y="200" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="600" fill="#1a1a1a">
+    Pick the right
+  </text>
+  <text x="60" y="290" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="600" fill="#1a1a1a">
+    AI model,
+  </text>
+  <text x="60" y="380" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="600" fill="#6c63ff">
+    no PhD required.
+  </text>
+
+  <!-- Subtext -->
+  <text x="60" y="460" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#666666">
+    Compare 20+ AI models from OpenAI, Anthropic, Google, and more.
+  </text>
+
+  <!-- Logo/branding -->
+  <text x="60" y="570" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="600" fill="#1a1a1a">
+    models<tspan fill="#6c63ff">.fyi</tspan>
+  </text>
+</svg>

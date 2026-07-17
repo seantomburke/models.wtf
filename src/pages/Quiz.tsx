@@ -179,7 +179,12 @@ function ReverseFlow() {
 export function Quiz() {
   const posthog = usePostHog()
   const meta = metaFor('/quiz')
-  usePageMeta(meta.title, meta.description)
+  usePageMeta({
+    title: meta.title,
+    description: meta.description,
+    image: meta.image,
+    type: meta.type,
+  })
 
   const [mode, setMode] = useState<Mode>('forward')
   const [role, setRole] = useState<Role | null>(null)

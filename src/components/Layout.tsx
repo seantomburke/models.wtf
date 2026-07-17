@@ -110,14 +110,28 @@ export function Layout() {
       </main>
 
       <footer className="border-t border-line">
-        <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-2 px-4 py-6 text-xs text-fg-muted sm:px-6">
-          <p>
-            Model data researched {dataSourcedAt}. Benchmarks are provider-published evals.
-            Treat small differences with healthy skepticism.
-          </p>
+        <div className="mx-auto flex w-full max-w-5xl flex-col gap-3 px-4 py-6 text-xs text-fg-muted sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <div className="space-y-1">
+            <p>
+              <strong>Data refreshed:</strong> {new Date(dataSourcedAt).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </p>
+            <p className="text-fg-muted">
+              Benchmarks are provider-published evals. Treat small differences with healthy skepticism.
+              <a
+                href="https://github.com/seantomburke/models.fyi/tree/main/src/data"
+                className="ml-1 text-accent-deep underline underline-offset-1"
+              >
+                Data sources
+              </a>
+            </p>
+          </div>
           <a
             href="https://github.com/seantomburke/models.fyi"
-            className="underline decoration-line-strong underline-offset-2 transition-colors duration-150 hover:text-fg-secondary"
+            className="w-fit whitespace-nowrap rounded-lg bg-surface-raised px-3 py-2 underline decoration-line-strong underline-offset-2 transition-colors duration-150 hover:text-fg-secondary"
           >
             GitHub
           </a>

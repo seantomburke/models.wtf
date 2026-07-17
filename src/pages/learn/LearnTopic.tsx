@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { usePostHog } from '@posthog/react'
 import { usePageMeta } from '../../lib/meta.ts'
+import { metaFor, faqSchema } from '../../lib/routeMeta.ts'
 import { topics } from './topics.ts'
 
 const crossLinks = [
@@ -17,10 +18,21 @@ export function LearnTopic() {
   const topic = topics[index]
 
   // Hooks must run unconditionally; harmless values for the not-found case.
-  usePageMeta(
-    topic?.metaTitle ?? 'Not found — Models.fyi',
-    topic?.metaDescription ?? "That explainer doesn't exist.",
-  )
+  const baseMeta = topic ? metaFor(`/learn/${slug}`) : metaFor('/learn')
+  usePageMeta({
+    title: topic?.metaTitle ?? 'Not found — Models.fyi',
+    description: topic?.metaDescription ?? "That explainer doesn't exist.",
+    image: baseMeta.image,
+    type: baseMeta.type,
+    structuredData: topic
+      ? faqSchema([
+          {
+            question: topic.question,
+            answer: topic.hook + '\n\n' + topic.sections.map((s) => `${s.heading}\n${s.paragraphs.join('\n')}`).join('\n\n'),
+          },
+        ])
+      : undefined,
+  })
 
   useEffect(() => {
     if (!topic) return

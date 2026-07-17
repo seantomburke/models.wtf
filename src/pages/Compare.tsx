@@ -24,7 +24,12 @@ function CapabilityBadge({ label, title }: { label: string; title: string }) {
 export function Compare() {
   const posthog = usePostHog()
   const meta = metaFor('/compare')
-  usePageMeta(meta.title, meta.description)
+  usePageMeta({
+    title: meta.title,
+    description: meta.description,
+    image: meta.image,
+    type: meta.type,
+  })
 
   const [filter, setFilter] = useState<Filter>('all')
 

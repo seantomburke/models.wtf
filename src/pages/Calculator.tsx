@@ -158,7 +158,12 @@ interface CalculatorProps {
 export function Calculator({ debounceMs = 200 }: CalculatorProps) {
   const posthog = usePostHog()
   const meta = metaFor('/calculator')
-  usePageMeta(meta.title, meta.description)
+  usePageMeta({
+    title: meta.title,
+    description: meta.description,
+    image: meta.image,
+    type: meta.type,
+  })
 
   const [inputText, setInputText] = useState('')
   const [outputText, setOutputText] = useState(SAMPLE_OUTPUT)

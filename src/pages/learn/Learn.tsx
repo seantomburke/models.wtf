@@ -5,7 +5,12 @@ import { topics } from './topics.ts'
 
 export function Learn() {
   const meta = metaFor('/learn')
-  usePageMeta(meta.title, meta.description)
+  usePageMeta({
+    title: meta.title,
+    description: meta.description,
+    image: meta.image,
+    type: meta.type,
+  })
   return (
     <div className="space-y-8">
       <div className="max-w-2xl">

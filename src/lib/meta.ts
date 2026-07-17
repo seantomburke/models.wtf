@@ -1,18 +1,81 @@
 import { useEffect } from 'react'
 
+export interface PageMetaOptions {
+  title: string
+  description: string
+  image?: string
+  type?: 'website' | 'article'
+  structuredData?: Record<string, unknown>
+}
+
 /**
  * Sets the document title and meta description for a page.
  * Every route must call this — SEO is a product requirement.
  */
-export function usePageMeta(title: string, description: string) {
+export function usePageMeta(title: string, description: string)
+export function usePageMeta(options: PageMetaOptions): void
+export function usePageMeta(titleOrOptions: string | PageMetaOptions, description?: string) {
+  const options: PageMetaOptions =
+    typeof titleOrOptions === 'string'
+      ? { title: titleOrOptions, description: description || '' }
+      : titleOrOptions
+
   useEffect(() => {
-    document.title = title
+    // Set title
+    document.title = options.title
+
+    // Set meta description
     let tag = document.querySelector<HTMLMetaElement>('meta[name="description"]')
     if (!tag) {
       tag = document.createElement('meta')
       tag.name = 'description'
       document.head.appendChild(tag)
     }
-    tag.content = description
-  }, [title, description])
+    tag.content = options.description
+
+    // Set OG tags
+    setMetaTag('property', 'og:title', options.title)
+    setMetaTag('property', 'og:description', options.description)
+    if (options.image) {
+      setMetaTag('property', 'og:image', options.image)
+    }
+    if (options.type) {
+      setMetaTag('property', 'og:type', options.type)
+    }
+
+    // Set Twitter Card tags
+    setMetaTag('name', 'twitter:title', options.title)
+    setMetaTag('name', 'twitter:description', options.description)
+    if (options.image) {
+      setMetaTag('name', 'twitter:image', options.image)
+    }
+    setMetaTag('name', 'twitter:card', 'summary_large_image')
+
+    // Set structured data (JSON-LD)
+    if (options.structuredData) {
+      let script = document.querySelector('script[type="application/ld+json"]')
+      if (!script) {
+        script = document.createElement('script')
+        script.type = 'application/ld+json'
+        document.head.appendChild(script)
+      }
+      script.textContent = JSON.stringify(options.structuredData)
+    }
+  }, [
+    options.title,
+    options.description,
+    options.image,
+    options.type,
+    options.structuredData,
+  ])
+}
+
+function setMetaTag(attrName: 'name' | 'property', attrValue: string, content: string) {
+  let tag = document.querySelector<HTMLMetaElement>(`meta[${attrName}="${attrValue}"]`)
+  if (!tag) {
+    tag = document.createElement('meta')
+    tag.setAttribute(attrName, attrValue)
+    document.head.appendChild(tag)
+  }
+  tag.content = content
 }

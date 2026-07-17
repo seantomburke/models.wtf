@@ -2,7 +2,10 @@ import { Link } from 'react-router-dom'
 import { usePageMeta } from '../lib/meta.ts'
 
 export function NotFound() {
-  usePageMeta('Page not found — Models.fyi', 'The page you\'re looking for doesn\'t exist.')
+  usePageMeta({
+    title: 'Page not found — Models.fyi',
+    description: 'The page you\'re looking for doesn\'t exist.',
+  })
 
   return (
     <main className="space-y-8">
