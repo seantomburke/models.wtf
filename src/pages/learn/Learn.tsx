@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { usePageMeta } from '../../lib/meta.ts'
 import { metaFor } from '../../lib/routeMeta.ts'
 import { topics } from './topics.ts'
+import { Breadcrumb } from '../../components/Breadcrumb.tsx'
 
 export function Learn() {
   const meta = metaFor('/learn')
@@ -14,6 +15,13 @@ export function Learn() {
   })
   return (
     <div className="space-y-8">
+      <Breadcrumb
+        items={[
+          { name: 'Home', path: '/' },
+          { name: 'Learn' },
+        ]}
+        className="mb-4"
+      />
       <div className="max-w-2xl">
         <h1 className="text-3xl font-semibold tracking-tight">Learn the basics</h1>
         <p className="mt-3 leading-relaxed text-fg-secondary">

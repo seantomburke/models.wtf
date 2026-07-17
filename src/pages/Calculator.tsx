@@ -15,7 +15,13 @@ import {
 } from '../lib/priceChart.ts'
 import { estimateTokens, loadTokenizer } from '../lib/tokenize.ts'
 import type { TokenCounter } from '../lib/tokenize.ts'
+import {
+  captureCalculatorTextEntered,
+  captureCalculatorEffortChanged,
+  captureCalculatorSortChanged,
+} from '../lib/posthog-events.ts'
 import { ProviderLogo } from '../components/ProviderLogo.tsx'
+import { Breadcrumb } from '../components/Breadcrumb.tsx'
 
 /** Editable stand-in for a typical model reply, so the page shows real costs immediately. */
 export const SAMPLE_OUTPUT = `Here's a summary of the main trade-offs. Flagship models give you the best answers on hard problems, but you pay a premium for every token, and reasoning models quietly add "thinking" tokens on top of the reply you see. Balanced models handle most everyday work — drafting, summarizing, light coding — at a fraction of the price. Fast models are almost free and respond instantly, which makes them the right choice for high-volume tasks like tagging or extraction where a slightly rougher answer is fine.
@@ -174,14 +180,14 @@ export function Calculator({ debounceMs = 200 }: CalculatorProps) {
 
   const handleEffortChange = (id: EffortId) => {
     setEffort(id)
-    posthog?.capture('calculator_effort_changed', { effort: id })
+    captureCalculatorEffortChanged(posthog, id)
   }
 
   const handleInputTextChange = (value: string) => {
     setInputText(value)
     if (!inputEnteredRef.current && value.length > 0) {
       inputEnteredRef.current = true
-      posthog?.capture('calculator_text_entered', { field: 'input' })
+      captureCalculatorTextEntered(posthog, 'input')
     }
   }
 
@@ -220,10 +226,14 @@ export function Calculator({ debounceMs = 200 }: CalculatorProps) {
     return sort.dir === 'asc' ? sorted : sorted.reverse()
   }, [costRows, sort])
 
-  const toggleSort = (key: SortKey) =>
-    setSort((prev) =>
-      prev.key === key ? { key, dir: prev.dir === 'asc' ? 'desc' : 'asc' } : { key, dir: 'asc' },
-    )
+  const toggleSort = (key: SortKey) => {
+    const newSort = { key, dir: 'asc' as const }
+    if (key === sort.key) {
+      newSort.dir = sort.dir === 'asc' ? 'desc' : 'asc'
+    }
+    setSort(newSort)
+    captureCalculatorSortChanged(posthog, key, newSort.dir)
+  }
 
   const priceChart = useMemo(() => {
     const { rows } = buildPriceRows()
@@ -238,6 +248,13 @@ export function Calculator({ debounceMs = 200 }: CalculatorProps) {
 
   return (
     <div className="space-y-6">
+      <Breadcrumb
+        items={[
+          { name: 'Home', path: '/' },
+          { name: 'Calculator' },
+        ]}
+        className="mb-4"
+      />
       <div className="max-w-2xl">
         <h1 className="text-3xl font-semibold tracking-tight">What does a conversation cost?</h1>
         <p className="mt-3 leading-relaxed text-fg-secondary">

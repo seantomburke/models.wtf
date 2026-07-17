@@ -4,6 +4,7 @@ import { usePostHog } from '@posthog/react'
 import { usePageMeta } from '../../lib/meta.ts'
 import { metaFor, faqSchema } from '../../lib/routeMeta.ts'
 import { topics } from './topics.ts'
+import { Breadcrumb } from '../../components/Breadcrumb.tsx'
 
 const crossLinks = [
   { to: '/compare', label: 'Compare all models side by side' },
@@ -59,12 +60,14 @@ export function LearnTopic() {
 
   return (
     <article className="max-w-2xl">
-      <nav aria-label="Breadcrumb" className="text-sm text-fg-muted">
-        <Link to="/learn" className="transition-colors duration-150 hover:text-fg-secondary">
-          Learn
-        </Link>{' '}
-        / <span className="text-fg-secondary">{topic.question}</span>
-      </nav>
+      <Breadcrumb
+        items={[
+          { name: 'Home', path: '/' },
+          { name: 'Learn', path: '/learn' },
+          { name: topic.question },
+        ]}
+        className="mb-4"
+      />
       <h1 className="mt-3 text-3xl font-semibold tracking-tight">{topic.question}</h1>
       <p className="mt-3 text-lg leading-relaxed text-fg-secondary">{topic.hook}</p>
 

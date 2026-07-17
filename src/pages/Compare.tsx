@@ -7,8 +7,17 @@ import { exportComparison } from '../lib/export.ts'
 import { benchmarks, models, providers, providerById, dataSourcedAt } from '../data/index.ts'
 import type { ProviderId } from '../data/index.ts'
 import { sortModels, toggleSort, type SortConfig } from '../lib/sort.ts'
+import {
+  captureFilterChange,
+  captureFilterCleared,
+  captureSortChange,
+  captureExport,
+  captureExportFailed,
+} from '../lib/posthog-events.ts'
 import { ProviderLogo } from '../components/ProviderLogo.tsx'
 import { SortableHeader } from '../components/SortableHeader.tsx'
+import { Breadcrumb } from '../components/Breadcrumb.tsx'
+import { BenchmarkSourceLink } from '../components/BenchmarkSourceLink.tsx'
 
 type Filter = 'all' | 'open-source' | ProviderId
 
@@ -40,18 +49,18 @@ export function Compare() {
 
   const handleFilterChange = (id: Filter) => {
     setFilter(id)
-    posthog?.capture('compare_filter_changed', { filter: id })
+    captureFilterChange(posthog, id)
   }
 
   const handleClearFilter = () => {
     setFilter('all')
-    posthog?.capture('compare_filter_cleared')
+    captureFilterCleared(posthog)
   }
 
   const handleSortChange = (column: string) => {
     const newSort = toggleSort(sort, column)
     setSort(newSort)
-    posthog?.capture('compare_table_sorted', { column: newSort.column, direction: newSort.direction })
+    captureSortChange(posthog, newSort.column || '', newSort.direction)
   }
 
   const filtered = useMemo(() => {
@@ -67,13 +76,14 @@ export function Compare() {
   const handleExport = () => {
     try {
       exportComparison(visible)
-      posthog?.capture('compare_table_exported', { model_count: visible.length, success: true })
+      captureExport(posthog, visible.length)
     } catch (error) {
       console.error('Failed to export comparison table:', error)
-      posthog?.capture('compare_table_export_failed', {
-        model_count: visible.length,
-        error: error instanceof Error ? error.message : 'Unknown error',
-      })
+      captureExportFailed(
+        posthog,
+        visible.length,
+        error instanceof Error ? error.message : 'Unknown error',
+      )
       // Optionally show user feedback (could use a toast library here)
       alert('Failed to export table. Please try again.')
     }
@@ -99,6 +109,13 @@ export function Compare() {
 
   return (
     <div className="space-y-6">
+      <Breadcrumb
+        items={[
+          { name: 'Home', path: '/' },
+          { name: 'Compare' },
+        ]}
+        className="mb-4"
+      />
       <div className="max-w-2xl">
         <h1 className="text-3xl font-semibold tracking-tight">Compare models</h1>
         <p className="mt-3 leading-relaxed text-fg-secondary">
@@ -183,15 +200,23 @@ export function Compare() {
                 />
               </th>
               {benchmarks.map((b) => (
-                <SortableHeader
-                  key={b.id}
-                  column={b.id}
-                  label={b.name}
-                  title={b.eli5}
-                  sort={sort}
-                  onSort={handleSortChange}
-                  textAlign="right"
-                />
+                <th key={b.id} className="px-2 sm:px-3 py-3 text-right text-sm font-medium text-fg-muted">
+                  <button
+                    type="button"
+                    onClick={() => handleSortChange(b.id)}
+                    aria-pressed={sort.column === b.id}
+                    title={b.eli5}
+                    className="hover:text-fg transition-colors duration-150 w-full text-right"
+                  >
+                    {b.name}
+                    {sort.column === b.id && (
+                      <span aria-hidden className="ml-1">
+                        {sort.direction === 'asc' ? '↑' : '↓'}
+                      </span>
+                    )}
+                    <BenchmarkSourceLink sourceUrl={b.sourceUrl} benchmarkName={b.name} />
+                  </button>
+                </th>
               ))}
               <SortableHeader
                 column="inputPrice"

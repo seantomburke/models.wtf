@@ -1,7 +1,8 @@
-import { lazy, Suspense } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { lazy, Suspense, useState, useCallback } from 'react'
+import { Routes, Route, useNavigate } from 'react-router-dom'
 import { ErrorBoundary } from './components/ErrorBoundary.tsx'
 import { Layout } from './components/Layout.tsx'
+import { ShortcutsDialog } from './components/ShortcutsDialog.tsx'
 import { Home } from './pages/Home.tsx'
 import { Compare } from './pages/Compare.tsx'
 import { Quiz } from './pages/Quiz.tsx'
@@ -10,6 +11,8 @@ import { LearnTopic } from './pages/learn/LearnTopic.tsx'
 import { NotFound } from './pages/NotFound.tsx'
 import { GraphSkeleton } from './components/GraphSkeleton.tsx'
 import { CalculatorSkeleton } from './components/CalculatorSkeleton.tsx'
+import { useDarkMode } from './lib/darkMode'
+import { useKeyboardShortcuts, createDefaultShortcuts } from './lib/keyboard-shortcuts.ts'
 
 // These pages pull in the charting library (and the calculator a tokenizer) —
 // keep them off the main bundle.
@@ -19,8 +22,45 @@ const Calculator = lazy(() =>
 )
 
 function App() {
+  const navigate = useNavigate()
+  const [, setIsDark] = useDarkMode()
+  const [showShortcuts, setShowShortcuts] = useState(false)
+
+  const handleShowHelp = useCallback(() => {
+    setShowShortcuts(true)
+  }, [])
+
+  const handleToggleDarkMode = useCallback(() => {
+    setIsDark((prev: boolean) => !prev)
+  }, [setIsDark])
+
+  const shortcuts = createDefaultShortcuts({
+    showHelp: handleShowHelp,
+    showSearch: () => {
+      // TODO: Implement search functionality
+      console.log('Search not yet implemented')
+    },
+    goToCompare: () => navigate('/compare'),
+    goToGraph: () => navigate('/graph'),
+    goToCalculator: () => navigate('/calculator'),
+    goToQuiz: () => navigate('/quiz'),
+    goToLearn: () => navigate('/learn'),
+    toggleExport: () => {
+      // TODO: Implement export functionality
+      console.log('Export not yet implemented')
+    },
+    toggleDarkMode: handleToggleDarkMode,
+  })
+
+  useKeyboardShortcuts(shortcuts)
+
   return (
     <ErrorBoundary>
+      <ShortcutsDialog
+        isOpen={showShortcuts}
+        onClose={() => setShowShortcuts(false)}
+        shortcuts={shortcuts}
+      />
       <Routes>
       <Route element={<Layout />}>
         <Route index element={<Home />} />

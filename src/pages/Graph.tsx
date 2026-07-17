@@ -6,6 +6,8 @@ import { usePageMeta } from '../lib/meta.ts'
 import { metaFor } from '../lib/routeMeta.ts'
 import { axisOptions, buildGraphRows, buildGraphSpec, defaultYAxisId, providerColor } from '../lib/graph.ts'
 import type { AxisOption, GraphRow } from '../lib/graph.ts'
+import { captureGraphAxesChange, captureGraphPointSelected } from '../lib/posthog-events.ts'
+import { Breadcrumb } from '../components/Breadcrumb.tsx'
 
 interface AxisPickerProps {
   label: string
@@ -108,17 +110,17 @@ export function Graph() {
   const changeX = (id: string) => {
     setXId(id)
     setSelected(null)
-    posthog?.capture('graph_axes_changed', { axis: 'x', axis_id: id })
+    captureGraphAxesChange(posthog, 'x', id)
   }
   const changeY = (id: string) => {
     setYId(id)
     setSelected(null)
-    posthog?.capture('graph_axes_changed', { axis: 'y', axis_id: id })
+    captureGraphAxesChange(posthog, 'y', id)
   }
 
   const handlePointSelected = (row: GraphRow) => {
     setSelected(row)
-    posthog?.capture('graph_point_selected', { model: row.model, provider: row.provider, x: row.x, y: row.y })
+    captureGraphPointSelected(posthog, row.model, row.provider, row.x, row.y)
   }
 
   const xAxis = axisOptions.find((o) => o.id === xId)!
@@ -130,6 +132,13 @@ export function Graph() {
 
   return (
     <div className="space-y-6">
+      <Breadcrumb
+        items={[
+          { name: 'Home', path: '/' },
+          { name: 'Graph' },
+        ]}
+        className="mb-4"
+      />
       <div className="max-w-2xl">
         <h1 className="text-3xl font-semibold tracking-tight">See it on a graph</h1>
         <p className="mt-3 leading-relaxed text-fg-secondary">

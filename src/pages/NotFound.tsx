@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { usePageMeta } from '../lib/meta.ts'
+import { Breadcrumb } from '../components/Breadcrumb.tsx'
 
 export function NotFound() {
   usePageMeta({
@@ -10,6 +11,13 @@ export function NotFound() {
 
   return (
     <main className="space-y-8">
+      <Breadcrumb
+        items={[
+          { name: 'Home', path: '/' },
+          { name: '404 Not Found' },
+        ]}
+        className="mb-4"
+      />
       <section className="max-w-2xl">
         <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Page not found</h1>
         <p className="mt-4 text-lg leading-relaxed text-fg-secondary">

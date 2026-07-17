@@ -36,6 +36,8 @@ export interface Benchmark {
   eli5: string
   /** All current benchmarks are 0-100 percentages, higher = better. */
   unit: '%'
+  /** URL to the benchmark source or documentation. */
+  sourceUrl?: string
 }
 
 export type ModelTier = 'flagship' | 'balanced' | 'fast'

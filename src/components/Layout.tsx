@@ -32,7 +32,8 @@ export function Layout() {
         >
           <Link
             to="/"
-            className="mr-4 text-base font-semibold tracking-tight text-fg transition-colors duration-150 hover:text-accent-deep"
+            className="mr-4 text-base font-semibold tracking-tight text-fg transition-colors duration-150 hover:text-accent-deep focus:outline-none focus:ring-2 focus:ring-accent rounded-lg"
+            title="Home (go to compare)"
           >
             models<span className="text-accent">.fyi</span>
           </Link>
@@ -40,21 +41,31 @@ export function Layout() {
           {/* Desktop Navigation */}
           <div className="flex-1" />
           <div className="hidden gap-1 sm:flex">
-            {navItems.map(({ to, label }) => (
-              <NavLink
-                key={to}
-                to={to}
-                className={({ isActive }) =>
-                  `whitespace-nowrap rounded-lg px-3 py-1.5 text-sm transition-colors duration-150 ${
-                    isActive
-                      ? 'bg-accent-soft font-medium text-accent-deep'
-                      : 'text-fg-secondary hover:bg-black/[0.04] hover:text-fg'
-                  }`
-                }
-              >
-                {label}
-              </NavLink>
-            ))}
+            {navItems.map(({ to, label }) => {
+              const keyHints: Record<string, string> = {
+                '/compare': 'g c',
+                '/graph': 'g g',
+                '/calculator': 'g k',
+                '/quiz': 'g q',
+                '/learn': 'g l',
+              }
+              return (
+                <NavLink
+                  key={to}
+                  to={to}
+                  className={({ isActive }) =>
+                    `whitespace-nowrap rounded-lg px-3 py-1.5 text-sm transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-accent ${
+                      isActive
+                        ? 'bg-accent-soft font-medium text-accent-deep'
+                        : 'text-fg-secondary hover:bg-black/[0.04] hover:text-fg'
+                    }`
+                  }
+                  title={keyHints[to] ? `${label} (${keyHints[to]})` : label}
+                >
+                  {label}
+                </NavLink>
+              )
+            })}
           </div>
 
           {/* Dark Mode Toggle */}
@@ -120,21 +131,23 @@ export function Layout() {
         </ErrorBoundary>
       </main>
 
-      <footer className="border-t border-line">
+      <footer className="border-t border-line" role="contentinfo">
         <div className="mx-auto flex w-full max-w-5xl flex-col gap-3 px-4 py-6 text-xs text-fg-muted sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div className="space-y-1">
             <p>
-              <strong>Data refreshed:</strong> {new Date(dataSourcedAt).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
+              <strong>Data refreshed:</strong> <time dateTime={new Date(dataSourcedAt).toISOString()}>
+                {new Date(dataSourcedAt).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </time>
             </p>
             <p className="text-fg-muted">
               Benchmarks are provider-published evals. Treat small differences with healthy skepticism.
               <a
                 href="https://github.com/seantomburke/models.fyi/tree/main/src/data"
-                className="ml-1 text-accent-deep underline underline-offset-1"
+                className="ml-1 text-accent-deep underline underline-offset-1 focus:outline-none focus:ring-2 focus:ring-accent rounded-lg"
               >
                 Data sources
               </a>
@@ -142,7 +155,7 @@ export function Layout() {
           </div>
           <a
             href="https://github.com/seantomburke/models.fyi"
-            className="w-fit whitespace-nowrap rounded-lg bg-surface-raised px-3 py-2 underline decoration-line-strong underline-offset-2 transition-colors duration-150 hover:text-fg-secondary"
+            className="w-fit whitespace-nowrap rounded-lg bg-surface-raised px-3 py-2 underline decoration-line-strong underline-offset-2 transition-colors duration-150 hover:text-fg-secondary focus:outline-none focus:ring-2 focus:ring-accent"
           >
             GitHub
           </a>

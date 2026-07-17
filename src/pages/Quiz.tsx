@@ -15,7 +15,9 @@ import {
 import type { Budget, CompanyPref, Role, Task } from '../lib/quiz.ts'
 import { models, providerById } from '../data/index.ts'
 import type { Model } from '../data/index.ts'
+import { captureQuizStepAnswered, captureQuizCompleted, captureQuizReset } from '../lib/posthog-events.ts'
 import { ProviderLogo } from '../components/ProviderLogo.tsx'
+import { Breadcrumb } from '../components/Breadcrumb.tsx'
 
 type Mode = 'forward' | 'reverse'
 
@@ -201,18 +203,12 @@ export function Quiz() {
   const handlePrefSelect = (c: { id: CompanyPref; label: string }) => {
     setPref(c.id)
     const { pick } = recommend(role!, task!, budget!, c.id)
-    posthog?.capture('quiz_completed', {
-      role_id: role!.id,
-      task_id: task!.id,
-      budget,
-      pref: c.id,
-      recommended_model_id: pick.id,
-      recommended_model_name: pick.name,
-    })
+    captureQuizStepAnswered(posthog, 4, c.id)
+    captureQuizCompleted(posthog, pick.name)
   }
 
   const reset = () => {
-    posthog?.capture('quiz_restarted')
+    captureQuizReset(posthog)
     setRole(null)
     setTask(null)
     setBudget(null)
@@ -234,6 +230,13 @@ export function Quiz() {
 
   return (
     <div className="space-y-8">
+      <Breadcrumb
+        items={[
+          { name: 'Home', path: '/' },
+          { name: 'Quiz' },
+        ]}
+        className="mb-4"
+      />
       <div className="max-w-2xl">
         <h1 className="text-3xl font-semibold tracking-tight">Which model should I use?</h1>
         <p className="mt-3 leading-relaxed text-fg-secondary">
@@ -260,7 +263,14 @@ export function Quiz() {
             <StepHeading step={1}>Who are you?</StepHeading>
             <div className="flex flex-wrap gap-1.5">
               {roles.map((r) => (
-                <Chip key={r.id} selected={role?.id === r.id} onClick={() => setRole(r)}>
+                <Chip
+                  key={r.id}
+                  selected={role?.id === r.id}
+                  onClick={() => {
+                    setRole(r)
+                    captureQuizStepAnswered(posthog, 1, r.id)
+                  }}
+                >
                   {r.emoji} {r.label}
                 </Chip>
               ))}
@@ -272,7 +282,14 @@ export function Quiz() {
               <StepHeading step={2}>What do you want to do?</StepHeading>
               <div className="flex flex-wrap gap-1.5">
                 {tasks.map((t) => (
-                  <Chip key={t.id} selected={task?.id === t.id} onClick={() => setTask(t)}>
+                  <Chip
+                    key={t.id}
+                    selected={task?.id === t.id}
+                    onClick={() => {
+                      setTask(t)
+                      captureQuizStepAnswered(posthog, 2, t.id)
+                    }}
+                  >
                     {t.emoji} {t.label}
                   </Chip>
                 ))}
@@ -285,7 +302,14 @@ export function Quiz() {
               <StepHeading step={3}>What do you want to spend?</StepHeading>
               <div className="flex flex-wrap gap-1.5">
                 {budgets.map((b) => (
-                  <Chip key={b.id} selected={budget === b.id} onClick={() => setBudget(b.id)}>
+                  <Chip
+                    key={b.id}
+                    selected={budget === b.id}
+                    onClick={() => {
+                      setBudget(b.id)
+                      captureQuizStepAnswered(posthog, 3, b.id)
+                    }}
+                  >
                     <span className="font-medium">{b.label}</span>
                     <span className="ml-1.5 text-fg-muted">{b.blurb}</span>
                   </Chip>
