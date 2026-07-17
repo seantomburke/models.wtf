@@ -2,12 +2,13 @@ import { useMemo, useState } from 'react'
 import { usePostHog } from '@posthog/react'
 import { usePageMeta } from '../lib/meta.ts'
 import { metaFor } from '../lib/routeMeta.ts'
-import { formatPrice, formatTokens } from '../lib/format.ts'
+import { formatPrice, formatTokens, formatDateForDisplay } from '../lib/format.ts'
 import { exportComparison } from '../lib/export.ts'
 import { benchmarks, models, providers, providerById, dataSourcedAt } from '../data/index.ts'
 import type { ProviderId } from '../data/index.ts'
 import { sortModels, toggleSort, type SortConfig } from '../lib/sort.ts'
 import { ProviderLogo } from '../components/ProviderLogo.tsx'
+import { SortableHeader } from '../components/SortableHeader.tsx'
 
 type Filter = 'all' | 'open-source' | ProviderId
 
@@ -64,8 +65,18 @@ export function Compare() {
   }, [filtered, sort])
 
   const handleExport = () => {
-    exportComparison(visible)
-    posthog?.capture('compare_table_exported', { model_count: visible.length })
+    try {
+      exportComparison(visible)
+      posthog?.capture('compare_table_exported', { model_count: visible.length, success: true })
+    } catch (error) {
+      console.error('Failed to export comparison table:', error)
+      posthog?.capture('compare_table_export_failed', {
+        model_count: visible.length,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      })
+      // Optionally show user feedback (could use a toast library here)
+      alert('Failed to export table. Please try again.')
+    }
   }
 
   // Best published score per benchmark among the visible models.
@@ -163,73 +174,41 @@ export function Compare() {
           <thead className="sticky top-0 z-10 bg-surface-raised">
             <tr className="border-b border-line text-left">
               <th className="sticky left-0 z-20 bg-surface-raised px-3 sm:px-4 py-3 font-medium text-fg-muted">
-                <button
-                  type="button"
-                  onClick={() => handleSortChange('name')}
-                  className="flex cursor-pointer items-center gap-1 transition-colors hover:text-fg focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-accent-deep"
-                  aria-sort={sort.column === 'name' ? (sort.direction === 'asc' ? 'ascending' : 'descending') : 'none'}
-                >
-                  Model
-                  {sort.column === 'name' && (
-                    <span aria-hidden className="text-accent-deep">
-                      {sort.direction === 'asc' ? '↑' : '↓'}
-                    </span>
-                  )}
-                </button>
+                <SortableHeader
+                  column="name"
+                  label="Model"
+                  sort={sort}
+                  onSort={handleSortChange}
+                  className="sticky left-0"
+                />
               </th>
               {benchmarks.map((b) => (
-                <th
+                <SortableHeader
                   key={b.id}
+                  column={b.id}
+                  label={b.name}
                   title={b.eli5}
-                  className="px-2 sm:px-3 py-3 text-right font-medium text-fg-muted"
-                >
-                  <button
-                    type="button"
-                    onClick={() => handleSortChange(b.id)}
-                    className="flex cursor-pointer items-center justify-end gap-1 w-full transition-colors hover:text-fg focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-accent-deep"
-                    aria-sort={sort.column === b.id ? (sort.direction === 'asc' ? 'ascending' : 'descending') : 'none'}
-                  >
-                    {b.name}
-                    {sort.column === b.id && (
-                      <span aria-hidden className="text-accent-deep">
-                        {sort.direction === 'asc' ? '↑' : '↓'}
-                      </span>
-                    )}
-                  </button>
-                </th>
+                  sort={sort}
+                  onSort={handleSortChange}
+                  textAlign="right"
+                />
               ))}
-              <th className="px-2 sm:px-3 py-3 text-right font-medium text-fg-muted">
-                <button
-                  type="button"
-                  onClick={() => handleSortChange('inputPrice')}
-                  className="flex cursor-pointer items-center justify-end gap-1 w-full transition-colors hover:text-fg focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-accent-deep"
-                  title="USD per 1M input / output tokens"
-                  aria-sort={sort.column === 'inputPrice' ? (sort.direction === 'asc' ? 'ascending' : 'descending') : 'none'}
-                >
-                  Price in/out
-                  {sort.column === 'inputPrice' && (
-                    <span aria-hidden className="text-accent-deep">
-                      {sort.direction === 'asc' ? '↑' : '↓'}
-                    </span>
-                  )}
-                </button>
-              </th>
-              <th className="px-2 sm:px-3 py-3 text-right font-medium text-fg-muted">
-                <button
-                  type="button"
-                  onClick={() => handleSortChange('context')}
-                  className="flex cursor-pointer items-center justify-end gap-1 w-full transition-colors hover:text-fg focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-accent-deep"
-                  title="How much text the model can consider at once"
-                  aria-sort={sort.column === 'context' ? (sort.direction === 'asc' ? 'ascending' : 'descending') : 'none'}
-                >
-                  Context
-                  {sort.column === 'context' && (
-                    <span aria-hidden className="text-accent-deep">
-                      {sort.direction === 'asc' ? '↑' : '↓'}
-                    </span>
-                  )}
-                </button>
-              </th>
+              <SortableHeader
+                column="inputPrice"
+                label="Price in/out"
+                title="USD per 1M input / output tokens"
+                sort={sort}
+                onSort={handleSortChange}
+                textAlign="right"
+              />
+              <SortableHeader
+                column="context"
+                label="Context"
+                title="How much text the model can consider at once"
+                sort={sort}
+                onSort={handleSortChange}
+                textAlign="right"
+              />
             </tr>
           </thead>
           <tbody className="divide-y divide-line">
@@ -241,10 +220,7 @@ export function Compare() {
                     <div className="font-medium text-fg">{m.name}</div>
                     {m.releaseDate && (
                       <div className="mt-0.5 text-xs text-fg-faint">
-                        {new Date(m.releaseDate).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'short',
-                        })}
+                        {formatDateForDisplay(m.releaseDate)}
                       </div>
                     )}
                     <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-fg-muted">

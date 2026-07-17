@@ -10,41 +10,39 @@ export interface SortConfig {
 /**
  * Sorts models by the specified column, with undefined scores always sorted to the end.
  * Columns: 'name', 'inputPrice', 'outputPrice', 'context', or benchmark ID (e.g., 'swe-bench-verified')
+ *
+ * Pre-builds a getValue function outside the sort loop for O(n log n) instead of O(n log n * column checks).
  */
 export function sortModels(models: Model[], config: SortConfig): Model[] {
   if (!config.column) return models
 
   const sorted = [...models]
   const isAsc = config.direction === 'asc'
+  const column = config.column
 
-  sorted.sort((a, b) => {
-    let aVal: number | string | null | undefined
-    let bVal: number | string | null | undefined
-    let aUndefined = false
-    let bUndefined = false
-
-    // Determine which values to compare
-    if (config.column === 'name') {
-      aVal = a.name.toLowerCase()
-      bVal = b.name.toLowerCase()
-    } else if (config.column === 'inputPrice') {
-      aVal = a.inputPricePerMTok
-      bVal = b.inputPricePerMTok
-    } else if (config.column === 'outputPrice') {
-      aVal = a.outputPricePerMTok
-      bVal = b.outputPricePerMTok
-    } else if (config.column === 'context') {
-      aVal = a.contextWindowTokens
-      bVal = b.contextWindowTokens
+  // Build getValue function once, outside the sort loop
+  const getValue = (model: Model): number | string | null | undefined => {
+    if (column === 'name') {
+      return model.name.toLowerCase()
+    } else if (column === 'inputPrice') {
+      return model.inputPricePerMTok
+    } else if (column === 'outputPrice') {
+      return model.outputPricePerMTok
+    } else if (column === 'context') {
+      return model.contextWindowTokens
     } else {
       // Treat as benchmark score (BenchmarkId)
-      aVal = a.scores[config.column as BenchmarkId]
-      bVal = b.scores[config.column as BenchmarkId]
+      return model.scores[column as BenchmarkId]
     }
+  }
+
+  sorted.sort((a, b) => {
+    const aVal = getValue(a)
+    const bVal = getValue(b)
 
     // Undefined scores always sort to the end
-    aUndefined = aVal === undefined || aVal === null
-    bUndefined = bVal === undefined || bVal === null
+    const aUndefined = aVal === undefined || aVal === null
+    const bUndefined = bVal === undefined || bVal === null
 
     if (aUndefined && bUndefined) return 0
     if (aUndefined) return 1

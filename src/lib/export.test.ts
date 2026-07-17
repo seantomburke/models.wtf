@@ -182,8 +182,8 @@ describe('export.ts', () => {
 
     it('handles release date formatting', () => {
       const csv = generateComparisonCSV([mockModel])
-      // Should include formatted date: Jan 15, 2024 or similar
-      expect(csv).toMatch(/\d{1,2}\/\d{1,2}\/\d{4}/)
+      // Should include formatted date in ISO 8601 format: YYYY-MM-DD
+      expect(csv).toMatch(/\d{4}-\d{2}-\d{2}/)
     })
 
     it('returns empty string for missing context window', () => {

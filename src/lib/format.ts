@@ -1,3 +1,26 @@
+/**
+ * Format a release date for CSV export as YYYY-MM-DD (ISO 8601).
+ * Returns empty string for null/undefined dates.
+ */
+export function formatDateForCSV(date: string | null | undefined): string {
+  if (!date) return ''
+  const d = new Date(date)
+  return d.toISOString().split('T')[0]
+}
+
+/**
+ * Format a release date for display as "Jan 15, 2024" (abbreviated month, full year).
+ * Returns empty string for null/undefined dates.
+ */
+export function formatDateForDisplay(date: string | null | undefined): string {
+  if (!date) return ''
+  const d = new Date(date)
+  return d.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+  })
+}
+
 /** "1M", "200K", "10M" — context windows in friendly units. */
 export function formatTokens(tokens: number | null): string {
   if (tokens === null) return '—'

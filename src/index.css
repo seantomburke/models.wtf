@@ -43,14 +43,16 @@ html {
   }
 }
 
-/* Print styles */
+/* Print styles for optimized printing experience */
 @media print {
   /* Hide interactive elements */
   nav,
+  header,
   footer,
   [role="group"],
   button:not(.print-keep),
-  .print-hide {
+  .print-hide,
+  .print\:hidden {
     display: none !important;
   }
 
@@ -58,37 +60,13 @@ html {
   body {
     background-color: white;
     color: black;
+    margin: 0.5in;
+    padding: 0;
   }
 
-  /* Table optimization for print */
-  table {
-    page-break-inside: auto;
-  }
-
-  tr {
-    page-break-inside: avoid;
-  }
-
-  /* Print margins */
-  @page {
-    margin: 1cm;
-  }
-}
-
-/* Print styles for optimized printing experience */
-@media print {
-  /* Hide navigation and interactive elements */
-  nav,
-  header,
-  footer,
-  .print\:hidden {
-    display: none !important;
-  }
-
-  /* Optimize page layout */
-  body {
-    background-color: white;
-    color: black;
+  html {
+    margin: 0.5in;
+    padding: 0;
   }
 
   /* Ensure links are visible in print */
@@ -101,6 +79,7 @@ html {
   table {
     width: 100%;
     border-collapse: collapse;
+    page-break-inside: auto;
   }
 
   /* Prevent table rows from splitting across pages */
@@ -147,10 +126,8 @@ html {
     text-shadow: none !important;
   }
 
-  /* Ensure proper margins for print */
-  body,
-  html {
-    margin: 0.5in;
-    padding: 0;
+  /* Print margins */
+  @page {
+    margin: 1cm;
   }
 }

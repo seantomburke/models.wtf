@@ -1,14 +1,21 @@
 import { benchmarks, providerById, dataSourcedAt } from '../data/index.ts'
 import type { Model, BenchmarkId } from '../data/index.ts'
-import { formatPrice, formatTokens } from './format.ts'
+import { formatPrice, formatTokens, formatDateForCSV } from './format.ts'
 
 /**
  * Escape a string for CSV export per RFC 4180.
- * Enclose in quotes if the value contains comma, quote, or newline.
- * Double any internal quotes.
+ * Enclose in quotes if the value contains comma, quote, newline, carriage return,
+ * or leading/trailing whitespace. Double any internal quotes.
  */
 function escapeCSV(value: string): string {
-  if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+  const needsEscaping =
+    value.includes(',') ||
+    value.includes('"') ||
+    value.includes('\n') ||
+    value.includes('\r') ||
+    value !== value.trim()
+
+  if (needsEscaping) {
     return `"${value.replace(/"/g, '""')}"` // Escape quotes by doubling them
   }
   return value
@@ -35,6 +42,9 @@ export function generateComparisonCSV(visibleModels: Model[]): string {
   // Build header row
   const headerRow: string[] = ['Model', 'Provider', 'Tier', 'Release Date']
 
+  // Pre-build benchmark IDs array to avoid repeated array access
+  const benchmarkIds = benchmarks.map((b) => b.id as BenchmarkId)
+
   // Add benchmark headers
   for (const benchmark of benchmarks) {
     headerRow.push(benchmark.name)
@@ -55,12 +65,12 @@ export function generateComparisonCSV(visibleModels: Model[]): string {
       model.name,
       provider?.name || 'Unknown',
       model.tier,
-      model.releaseDate ? new Date(model.releaseDate).toLocaleDateString('en-US') : '',
+      formatDateForCSV(model.releaseDate),
     ]
 
-    // Add benchmark scores
-    for (const benchmark of benchmarks) {
-      row.push(formatScoreForCSV(model.scores[benchmark.id as BenchmarkId]))
+    // Add benchmark scores using pre-built benchmark IDs
+    for (const benchmarkId of benchmarkIds) {
+      row.push(formatScoreForCSV(model.scores[benchmarkId]))
     }
 
     // Add pricing
@@ -123,8 +133,10 @@ export function downloadCSV(csv: string, filename: string): void {
   link.click()
   document.body.removeChild(link)
 
-  // Clean up the object URL
-  URL.revokeObjectURL(url)
+  // Delay revocation to ensure download starts before URL is released
+  setTimeout(() => {
+    URL.revokeObjectURL(url)
+  }, 100)
 }
 
 /**
