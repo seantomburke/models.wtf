@@ -22,8 +22,9 @@ export function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
     return breadcrumbSchema(schemaItems)
   }, [items])
 
-  // Inject schema into head
+  // Inject schema into head (only in browser)
   useMemo(() => {
+    if (typeof document === 'undefined') return
     const id = 'breadcrumb-schema'
     let script = document.getElementById(id) as HTMLScriptElement | null
     if (!script) {

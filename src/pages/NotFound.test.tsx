@@ -18,8 +18,7 @@ test('displays all main page links', () => {
     </BrowserRouter>,
   )
 
-  // Check for all the main page links
-  expect(screen.getByText(/Home/)).toBeInTheDocument()
+  // Check for all the main page links in the grid section (not breadcrumb)
   expect(screen.getByText(/Which model should I use/)).toBeInTheDocument()
   expect(screen.getByText(/Compare models/)).toBeInTheDocument()
   expect(screen.getByText(/See it on a graph/)).toBeInTheDocument()
@@ -34,8 +33,10 @@ test('all links have correct href attributes', () => {
     </BrowserRouter>,
   )
 
-  // Check link destinations
-  const homeLink = screen.getByRole('link', { name: /Home/ })
+  // Check link destinations - filter the home link to the one in breadcrumb
+  const allLinks = screen.getAllByRole('link')
+  const homeLink = allLinks.find((link) => link.getAttribute('href') === '/')
+
   const quizLink = screen.getByRole('link', { name: /Which model should I use/ })
   const compareLink = screen.getByRole('link', { name: /Compare models/ })
   const graphLink = screen.getByRole('link', { name: /See it on a graph/ })

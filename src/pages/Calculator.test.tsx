@@ -1,4 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react'
+import { BrowserRouter } from 'react-router-dom'
 import userEvent from '@testing-library/user-event'
 import { Calculator, SAMPLE_OUTPUT } from './Calculator.tsx'
 import { models } from '../data/index.ts'
@@ -29,7 +30,11 @@ function totalsByModel(): Map<string, number> {
 }
 
 async function renderCalculator() {
-  render(<Calculator debounceMs={0} />)
+  render(
+    <BrowserRouter>
+      <Calculator debounceMs={0} />
+    </BrowserRouter>,
+  )
   // The mocked tokenizer resolves immediately; wait for the estimate label to clear.
   await waitFor(() => expect(screen.queryByText(/\(estimated\)/)).not.toBeInTheDocument())
 }
