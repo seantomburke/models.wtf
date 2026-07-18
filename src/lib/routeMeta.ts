@@ -81,6 +81,14 @@ export const routeMeta: RouteMeta[] = [
     type: 'website',
     image: ogImage,
   },
+  {
+    path: '/glossary',
+    title: 'Glossary — Models.fyi',
+    description:
+      'AI and model terminology explained in plain language. Search for terms like LLM, token, context window, hallucination, and more.',
+    type: 'website',
+    image: ogImage,
+  },
   ...topics.map((t) => ({
     path: `/learn/${t.slug}`,
     title: t.metaTitle,

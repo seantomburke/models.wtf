@@ -17,28 +17,10 @@
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { routeMeta } from '../dist-server/entry-server.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const projectRoot = path.resolve(__dirname, '..')
-
-/**
- * Read topic slugs from src/pages/learn/topics.ts
- */
-function readTopicSlugs() {
-  const topicsPath = path.resolve(projectRoot, 'src/pages/learn/topics.ts')
-  const content = fs.readFileSync(topicsPath, 'utf-8')
-
-  // Extract slug values from the topics array
-  // Regex matches: slug: 'string-value'
-  const slugMatches = content.match(/slug:\s*['"]([^'"]+)['"]/g)
-
-  if (!slugMatches) {
-    console.warn('No topic slugs found in topics.ts, using empty array')
-    return []
-  }
-
-  return slugMatches.map(match => match.replace(/slug:\s*['"]([^'"]+)['"]/, '$1'))
-}
 
 /**
  * Build the complete sitemap XML.
@@ -48,20 +30,16 @@ function generateSitemap() {
   const basePath = '/models.fyi' // GitHub Pages project path
   const buildDate = new Date().toISOString().split('T')[0] // YYYY-MM-DD
 
-  const topicSlugs = readTopicSlugs()
+  // Use routeMeta to get all routes dynamically
+  // Define changefreq based on route type
+  const getChangefreq = (path) => {
+    if (path === '/') return 'weekly'
+    if (path.startsWith('/learn/')) return 'monthly'
+    return 'monthly'
+  }
 
-  // Define all routes: [path, changefreq]
-  const routes = [
-    ['/', 'weekly'],
-    ['/search', 'monthly'],
-    ['/compare', 'monthly'],
-    ['/graph', 'monthly'],
-    ['/calculator', 'monthly'],
-    ['/quiz', 'monthly'],
-    ['/learn', 'monthly'],
-    ['/faq', 'monthly'],
-    ...topicSlugs.map(slug => [`/learn/${slug}`, 'monthly']),
-  ]
+  // Define all routes from routeMeta: [path, changefreq]
+  const routes = routeMeta.map(r => [r.path, getChangefreq(r.path)])
 
   // Build XML entries
   const urlEntries = routes.map(([path, changefreq]) => {

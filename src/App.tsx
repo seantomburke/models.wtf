@@ -9,6 +9,7 @@ import { Quiz } from './pages/Quiz.tsx'
 import { Learn } from './pages/learn/Learn.tsx'
 import { LearnTopic } from './pages/learn/LearnTopic.tsx'
 import { FAQ } from './pages/FAQ.tsx'
+import { Glossary } from './pages/Glossary.tsx'
 import { Search } from './pages/Search.tsx'
 import { NotFound } from './pages/NotFound.tsx'
 import { GraphSkeleton } from './components/GraphSkeleton.tsx'
@@ -89,6 +90,7 @@ function App() {
         <Route path="learn" element={<Learn />} />
         <Route path="learn/:slug" element={<LearnTopic />} />
         <Route path="faq" element={<FAQ />} />
+        <Route path="glossary" element={<Glossary />} />
         <Route path="*" element={<NotFound />} />
       </Route>
       </Routes>

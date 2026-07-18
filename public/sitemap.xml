@@ -6,11 +6,6 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://seantomburke.github.io/models.fyi/search</loc>
-    <lastmod>2026-07-18</lastmod>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
     <loc>https://seantomburke.github.io/models.fyi/compare</loc>
     <lastmod>2026-07-18</lastmod>
     <changefreq>monthly</changefreq>
@@ -31,12 +26,22 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://seantomburke.github.io/models.fyi/search</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://seantomburke.github.io/models.fyi/learn</loc>
     <lastmod>2026-07-18</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.fyi/faq</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://seantomburke.github.io/models.fyi/glossary</loc>
     <lastmod>2026-07-18</lastmod>
     <changefreq>monthly</changefreq>
   </url>

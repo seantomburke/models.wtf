@@ -154,6 +154,21 @@ export function Layout() {
                 Data sources
               </a>
             </p>
+            <p className="text-fg-muted">
+              <Link
+                to="/glossary"
+                className="text-accent-deep underline underline-offset-1 focus:outline-none focus:ring-2 focus:ring-accent rounded-lg"
+              >
+                Glossary
+              </Link>
+              {' · '}
+              <Link
+                to="/learn"
+                className="text-accent-deep underline underline-offset-1 focus:outline-none focus:ring-2 focus:ring-accent rounded-lg"
+              >
+                Learn more
+              </Link>
+            </p>
           </div>
           <a
             href="https://github.com/seantomburke/models.fyi"
