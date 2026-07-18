@@ -98,4 +98,12 @@ export interface Model {
   scores: Partial<Record<BenchmarkId, number>>
   /** One-sentence plain-language description. */
   blurb: string
+  /** Typical use cases for this model (e.g., "coding", "writing", "research"). */
+  useCases?: string[]
+  /** Why this model stands out: 1-2 paragraphs explaining strengths. */
+  whyChooseThis?: string
+  /** Strengths vs competitors: "vs GPT-5": "...", "vs Gemini": "..." */
+  prosVsCompetitors?: Record<string, string>
+  /** Related model IDs for "you might also like" recommendations. */
+  relatedModelIds?: string[]
 }

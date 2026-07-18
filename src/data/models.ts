@@ -30,6 +30,14 @@ export const models: Model[] = [
     },
     blurb:
       "Anthropic's most capable model. Built for the hardest reasoning and long autonomous work, at a premium price.",
+    useCases: ['coding', 'research', 'debugging'],
+    whyChooseThis:
+      'Fable 5 is the strongest pure reasoning model on the market. If your task requires solving novel problems, multi-step planning, or deep scientific reasoning, Fable 5 consistently delivers. The 1M token context lets you work with entire codebases or research papers in a single request.',
+    prosVsCompetitors: {
+      'GPT-5.6 Sol': 'Fable 5 excels at complex multi-step reasoning and debugging. Sol is faster for immediate responses.',
+      'Gemini 3.1 Pro': 'Fable 5 edges out on reasoning-heavy tasks; Gemini wins on long-context retrieval and speed.',
+    },
+    relatedModelIds: ['claude-opus-4-8', 'gpt-5-6-sol'],
   },
   {
     id: 'claude-opus-4-8',
@@ -53,6 +61,14 @@ export const models: Model[] = [
     },
     blurb:
       'A coding workhorse. Near the top of the toughest coding benchmarks at half the price of Fable 5.',
+    useCases: ['coding', 'debugging', 'analysis'],
+    whyChooseThis:
+      'Opus 4.8 is the sweet spot for professional developers. It scores near the top on coding benchmarks at half the cost of Fable 5, and it maintains the full 1M token context for working with large projects. The best balance of power and price.',
+    prosVsCompetitors: {
+      'Claude Sonnet 5': 'Opus is stronger on complex code; Sonnet is faster and cheaper for simpler tasks.',
+      'GPT-5.6 Sol': 'Opus leads on SWE-Bench coding; Sol has a slight edge on reasoning-heavy problems.',
+    },
+    relatedModelIds: ['claude-fable-5', 'claude-sonnet-5'],
   },
   {
     id: 'claude-sonnet-5',
@@ -77,6 +93,14 @@ export const models: Model[] = [
     },
     blurb:
       'The most agentic Sonnet yet, released June 30. Can make plans and run tools autonomously. Best value for daily work, now at intro pricing.',
+    useCases: ['writing', 'analysis', 'coding'],
+    whyChooseThis:
+      'Sonnet 5 is the best all-rounder for teams on a budget. It can plan and execute multi-step workflows autonomously, reason through complex problems, and maintain 1M-token context. At intro pricing ($2/$10), it\'s unbeatable value.',
+    prosVsCompetitors: {
+      'Claude Haiku 4.5': 'Sonnet is significantly more capable; Haiku is 5x cheaper and better for simple tasks.',
+      'GPT-5.6 Terra': 'Sonnet now costs less at intro pricing; Terra is strong but Sonnet edges it on autonomy.',
+    },
+    relatedModelIds: ['claude-opus-4-8', 'claude-haiku-4-5'],
   },
   {
     id: 'claude-haiku-4-5',
@@ -96,6 +120,14 @@ export const models: Model[] = [
     },
     blurb:
       "Anthropic's fastest and cheapest model. Great for quick answers and simple tasks in high volume.",
+    useCases: ['summarization', 'translation', 'brainstorming'],
+    whyChooseThis:
+      'Haiku is perfect for high-volume, cost-conscious applications. At $1/$5, it\'s one of the cheapest frontier models available. Despite its speed, it still supports reasoning and web search, making it surprisingly versatile.',
+    prosVsCompetitors: {
+      'Claude Sonnet 5': 'Haiku is 5x cheaper but less capable; Sonnet is the all-rounder.',
+      'GPT-5.6 Luna': 'Both are budget options; Haiku is cheaper, Luna has more context.',
+    },
+    relatedModelIds: ['claude-sonnet-5', 'gpt-5-6-luna'],
   },
 
   // ─── OpenAI ──────────────────────────────────────────────────
@@ -120,6 +152,14 @@ export const models: Model[] = [
     },
     blurb:
       "OpenAI's brand-new flagship. State of the art on autonomous terminal work, strong all-rounder.",
+    useCases: ['coding', 'research', 'debugging'],
+    whyChooseThis:
+      'Sol leads the market on autonomous terminal and DevOps tasks, executing shell commands and complex workflows better than any competitor. If you\'re automating infrastructure or running long-running agents, Sol is the benchmark.',
+    prosVsCompetitors: {
+      'Claude Fable 5': 'Sol is faster and stronger on terminal tasks; Fable edges it on pure reasoning.',
+      'Gemini 3.1 Pro': 'Sol excels at agentic work; Gemini is more aggressive on pricing.',
+    },
+    relatedModelIds: ['gpt-5-6-terra', 'claude-fable-5'],
   },
   {
     id: 'gpt-5-6-terra',
@@ -140,6 +180,14 @@ export const models: Model[] = [
     },
     blurb:
       'The balanced middle tier of the GPT-5.6 family. Most of Sol\'s ability at half the cost.',
+    useCases: ['coding', 'analysis', 'writing'],
+    whyChooseThis:
+      'Terra is the Goldilocks option in the GPT-5.6 lineup. It delivers most of Sol\'s capability at half the cost, with a balanced feature set. Great for teams who want OpenAI\'s capabilities without premium pricing.',
+    prosVsCompetitors: {
+      'GPT-5.6 Sol': 'Terra is half the cost; Sol is faster and better at agentic work.',
+      'Claude Sonnet 5': 'At intro pricing, Sonnet is cheaper; Terra has broader capabilities.',
+    },
+    relatedModelIds: ['gpt-5-6-sol', 'gpt-5-6-luna'],
   },
   {
     id: 'gpt-5-6-luna',
@@ -160,6 +208,14 @@ export const models: Model[] = [
     },
     blurb:
       'The fastest, most cost-efficient GPT-5.6 tier. Built for speed and high-volume simple tasks.',
+    useCases: ['summarization', 'translation', 'brainstorming'],
+    whyChooseThis:
+      'Luna is OpenAI\'s speed and efficiency tier. At $1/$6, it competes on price with Haiku while maintaining access to OpenAI\'s full feature set and 1M+ token context. Perfect for high-volume, cost-sensitive applications.',
+    prosVsCompetitors: {
+      'Claude Haiku 4.5': 'Luna is slightly more expensive but has more context; Haiku is simpler.',
+      'GPT-5.6 Terra': 'Luna is 2.5x cheaper; Terra is more capable.',
+    },
+    relatedModelIds: ['gpt-5-6-terra', 'claude-haiku-4-5'],
   },
 
   // ─── Google ──────────────────────────────────────────────────
@@ -182,6 +238,14 @@ export const models: Model[] = [
     },
     blurb:
       "Google's flagship. A top-tier reasoner with strong long-context skills at an aggressive price.",
+    useCases: ['research', 'analysis', 'coding'],
+    whyChooseThis:
+      'Gemini 3.1 Pro is Google\'s aggressive flagship. It competes on GPQA reasoning with the best models while underpricing competitors. The 1M context and web search make it excellent for research tasks.',
+    prosVsCompetitors: {
+      'Claude Fable 5': 'Gemini is cheaper and faster; Fable has a slight reasoning edge.',
+      'GPT-5.6 Sol': 'Gemini is more aggressive on pricing; Sol leads on terminal/agentic work.',
+    },
+    relatedModelIds: ['gemini-3-5-flash', 'claude-fable-5'],
   },
   {
     id: 'gemini-3-5-flash',
@@ -204,6 +268,14 @@ export const models: Model[] = [
     },
     blurb:
       'Google\'s speed tier that punches above its weight. Beats 3.1 Pro on coding at about 25% lower cost.',
+    useCases: ['coding', 'analysis', 'writing'],
+    whyChooseThis:
+      'Flash is the rare speed-tier model that doesn\'t sacrifice much. It beats even Gemini 3.1 Pro on some coding benchmarks while being 25% cheaper. Best for teams who want Google\'s capabilities at a mid-tier price.',
+    prosVsCompetitors: {
+      'Gemini 3.1 Pro': 'Flash is cheaper and often outperforms Pro on coding; Pro is more consistent.',
+      'Claude Sonnet 5': 'Flash is more aligned with Google services; Sonnet is cheaper at intro pricing.',
+    },
+    relatedModelIds: ['gemini-3-1-pro', 'claude-sonnet-5'],
   },
 
   // ─── xAI ─────────────────────────────────────────────────────
@@ -227,6 +299,14 @@ export const models: Model[] = [
     },
     blurb:
       "xAI's brand-new flagship. Strong terminal and coding chops at a mid-tier price, with live access to X (Twitter) data.",
+    useCases: ['coding', 'analysis', 'research'],
+    whyChooseThis:
+      'Grok 4.5 is xAI\'s newest flagship with strong terminal and coding performance. The unique advantage: real-time access to X (Twitter) data. If you need live social insights combined with top-tier reasoning, Grok is the only option.',
+    prosVsCompetitors: {
+      'GPT-5.6 Sol': 'Grok is cheaper and has X data access; Sol is stronger on terminal tasks.',
+      'Claude Opus 4.8': 'Grok has unique Twitter integration; Opus is stronger on pure reasoning.',
+    },
+    relatedModelIds: ['grok-4-1-fast', 'gpt-5-6-sol'],
   },
   {
     id: 'grok-4-1-fast',
@@ -245,6 +325,14 @@ export const models: Model[] = [
     },
     blurb:
       'A budget speedster with a huge 2M-token context window. One of the cheapest ways to process large amounts of text.',
+    useCases: ['summarization', 'analysis', 'coding'],
+    whyChooseThis:
+      'Grok 4.1 Fast is an absolute steal for bulk text processing. At $0.20/$0.50, it\'s the cheapest frontier model, and the 2M context is unmatched. Perfect for summarizing books, processing logs, or handling large datasets on a budget.',
+    prosVsCompetitors: {
+      'Claude Haiku 4.5': 'Grok Fast is 5x cheaper with 10x more context; Haiku is more capable.',
+      'Llama 4 Scout': 'Grok Fast is faster and more capable; Scout has slightly more context.',
+    },
+    relatedModelIds: ['grok-4-5', 'llama-4-scout'],
   },
 
   // ─── Meta ────────────────────────────────────────────────────
@@ -270,6 +358,14 @@ export const models: Model[] = [
     },
     blurb:
       "Meta's new flagship and its first paid, closed-weights model after the open Llama era. Built for agent work at an aggressive price.",
+    useCases: ['coding', 'analysis', 'writing'],
+    whyChooseThis:
+      'Muse Spark 1.1 is Meta\'s first foray into paid models, and it\'s aggressively priced at $1.25/$4.25. At that price, it\'s one of the cheapest frontier flagships. The 256K max output is exceptional for generating large documents.',
+    prosVsCompetitors: {
+      'Claude Sonnet 5': 'At intro pricing, Sonnet is cheaper; Spark is strong but less proven.',
+      'GPT-5.6 Terra': 'Spark is cheaper; Terra has broader adoption.',
+    },
+    relatedModelIds: ['llama-4-maverick', 'claude-sonnet-5'],
   },
 
   // ─── Open source ─────────────────────────────────────────────
@@ -292,6 +388,14 @@ export const models: Model[] = [
     },
     blurb:
       'The current #1 open-source model. Frontier-level science reasoning you can download and run yourself, MIT-licensed.',
+    useCases: ['research', 'coding', 'analysis'],
+    whyChooseThis:
+      'GLM-5.2 is the strongest open-source model available. It beats most closed-source competitors on GPQA reasoning and has respectable coding scores. MIT-licensed means you can use it anywhere, from your laptop to production servers.',
+    prosVsCompetitors: {
+      'DeepSeek V4 Pro': 'GLM-5.2 has better reasoning; DeepSeek is slightly cheaper to self-host.',
+      'Claude Opus 4.8': 'Opus is more capable but costs $5-25 per million tokens; GLM is free to run.',
+    },
+    relatedModelIds: ['deepseek-v4-pro', 'qwen-3-6'],
   },
   {
     id: 'deepseek-v4-pro',
@@ -314,6 +418,14 @@ export const models: Model[] = [
     },
     blurb:
       'An open-source powerhouse for code and math. Free to self-host under an MIT license.',
+    useCases: ['coding', 'research', 'debugging'],
+    whyChooseThis:
+      'DeepSeek V4 Pro excels at coding and mathematical reasoning in open-source form. It scores in the 80s on SWE-Bench coding tasks and competes with closed-source flagships. Perfect for teams who need frontier-level capability without vendor lock-in.',
+    prosVsCompetitors: {
+      'GLM-5.2': 'DeepSeek is slightly cheaper to compute; GLM-5.2 is slightly more capable.',
+      'Claude Opus 4.8': 'Opus is closed-source and costs $5-25 per million tokens; DeepSeek is free.',
+    },
+    relatedModelIds: ['glm-5-2', 'qwen-3-6'],
   },
   {
     id: 'qwen-3-6',
@@ -336,6 +448,14 @@ export const models: Model[] = [
     },
     blurb:
       'The leading open model for multilingual work, under the business-friendly Apache 2.0 license.',
+    useCases: ['writing', 'translation', 'analysis'],
+    whyChooseThis:
+      'Qwen 3.6 is the go-to open model for multilingual tasks and businesses that need liberal licensing. Apache 2.0 is friendly for commercial use, and Qwen is strong across 100+ languages. Great for global teams.',
+    prosVsCompetitors: {
+      'GLM-5.2': 'GLM is stronger on reasoning; Qwen is better for multilingual tasks.',
+      'Llama 4 Maverick': 'Qwen is more capable; Llama is more widely deployed.',
+    },
+    relatedModelIds: ['glm-5-2', 'deepseek-v4-pro'],
   },
   {
     id: 'llama-4-maverick',
@@ -354,6 +474,14 @@ export const models: Model[] = [
     },
     blurb:
       "Meta's general-purpose open model. Easy to run and widely supported, though newer open models beat it on hard reasoning.",
+    useCases: ['writing', 'analysis', 'summarization'],
+    whyChooseThis:
+      'Llama 4 Maverick is the most widely supported open model in the ecosystem. Thousands of tools integrate with it, and it runs efficiently on consumer hardware. If compatibility and ease-of-use matter more than peak performance, Llama is the safe choice.',
+    prosVsCompetitors: {
+      'GLM-5.2': 'GLM is more capable on reasoning; Llama has broader tool support.',
+      'Qwen 3.6': 'Qwen is stronger on multilingual; Llama is more universally compatible.',
+    },
+    relatedModelIds: ['llama-4-scout', 'muse-spark-1-1'],
   },
   {
     id: 'llama-4-scout',
@@ -372,5 +500,13 @@ export const models: Model[] = [
     },
     blurb:
       'The long-context champion. A 10-million-token window, enough to read hundreds of books at once.',
+    useCases: ['analysis', 'summarization', 'research'],
+    whyChooseThis:
+      'Scout has the largest context window of any model—10 million tokens. That\'s enough to load an entire codebase, hundreds of documents, or several books at once. Perfect for long-context retrieval and bulk processing tasks.',
+    prosVsCompetitors: {
+      'Llama 4 Maverick': 'Scout has 10x more context but is less capable on reasoning; Maverick is more general.',
+      'Grok 4.1 Fast': 'Scout is slightly longer (10M vs 2M) and more capable; Grok is cheaper.',
+    },
+    relatedModelIds: ['llama-4-maverick', 'grok-4-1-fast'],
   },
 ]

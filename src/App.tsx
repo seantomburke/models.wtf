@@ -11,6 +11,7 @@ import { LearnTopic } from './pages/learn/LearnTopic.tsx'
 import { FAQ } from './pages/FAQ.tsx'
 import { Glossary } from './pages/Glossary.tsx'
 import { Search } from './pages/Search.tsx'
+import { ModelDetail } from './pages/models/ModelDetail.tsx'
 import { NotFound } from './pages/NotFound.tsx'
 import { GraphSkeleton } from './components/GraphSkeleton.tsx'
 import { CalculatorSkeleton } from './components/CalculatorSkeleton.tsx'
@@ -91,6 +92,7 @@ function App() {
         <Route path="learn/:slug" element={<LearnTopic />} />
         <Route path="faq" element={<FAQ />} />
         <Route path="glossary" element={<Glossary />} />
+        <Route path="models/:id" element={<ModelDetail />} />
         <Route path="*" element={<NotFound />} />
       </Route>
       </Routes>
