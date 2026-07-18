@@ -276,6 +276,14 @@ export function Compare() {
                   {benchmarks.map((b) => {
                     const score = m.scores[b.id]
                     const isBest = score !== undefined && score === bestScores[b.id]
+                    const scoreContent = score === undefined ? (
+                      <>
+                        <span aria-hidden>—</span>
+                        <span className="sr-only">no published score</span>
+                      </>
+                    ) : (
+                      `${score.toFixed(1)}%`
+                    )
                     return (
                       <td
                         key={b.id}
@@ -287,13 +295,17 @@ export function Compare() {
                               : 'text-fg-secondary'
                         }`}
                       >
-                        {score === undefined ? (
-                          <>
-                            <span aria-hidden>—</span>
-                            <span className="sr-only">no published score</span>
-                          </>
+                        {score !== undefined && b.sourceUrl ? (
+                          <BenchmarkSourceLink
+                            sourceUrl={b.sourceUrl}
+                            benchmarkName={b.name}
+                            variant="wrapper"
+                            className={isBest ? 'text-accent-deep' : 'text-fg-secondary'}
+                          >
+                            {scoreContent}
+                          </BenchmarkSourceLink>
                         ) : (
-                          `${score.toFixed(1)}%`
+                          scoreContent
                         )}
                       </td>
                     )

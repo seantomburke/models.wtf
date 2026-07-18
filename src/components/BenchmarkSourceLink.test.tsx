@@ -9,7 +9,7 @@ describe('BenchmarkSourceLink', () => {
     expect(container.firstChild).toBeNull()
   })
 
-  it('renders link with source URL', () => {
+  it('renders link with source URL and utm_source parameter', () => {
     render(
       <BenchmarkSourceLink
         sourceUrl="https://github.com/princeton-nlp/SWE-bench"
@@ -18,7 +18,8 @@ describe('BenchmarkSourceLink', () => {
     )
 
     const link = screen.getByRole('link')
-    expect(link).toHaveAttribute('href', 'https://github.com/princeton-nlp/SWE-bench')
+    expect(link.getAttribute('href')).toContain('https://github.com/princeton-nlp/SWE-bench')
+    expect(link.getAttribute('href')).toContain('utm_source=www.models.fyi')
     expect(link).toHaveAttribute('target', '_blank')
     expect(link).toHaveAttribute('rel', 'noopener noreferrer')
   })
@@ -120,5 +121,58 @@ describe('BenchmarkSourceLink', () => {
     const arrow = container.querySelector('span')
     expect(arrow).toHaveTextContent('↗')
     expect(arrow).toHaveClass('text-[8px]')
+  })
+
+  it('renders as wrapper variant with children', () => {
+    render(
+      <BenchmarkSourceLink
+        sourceUrl="https://example.com"
+        benchmarkName="Test Bench"
+        variant="wrapper"
+      >
+        85.2%
+      </BenchmarkSourceLink>,
+    )
+
+    const link = screen.getByRole('link')
+    expect(link).toHaveTextContent('85.2%')
+    expect(link.getAttribute('href')).toContain('utm_source=www.models.fyi')
+  })
+
+  it('renders children with no sourceUrl when provided', () => {
+    render(
+      <BenchmarkSourceLink
+        benchmarkName="Test Bench"
+        variant="wrapper"
+      >
+        85.2%
+      </BenchmarkSourceLink>,
+    )
+
+    expect(screen.queryByRole('link')).not.toBeInTheDocument()
+    expect(screen.getByText('85.2%')).toBeInTheDocument()
+  })
+
+  it('adds utm_source parameter to various source URLs', () => {
+    const { rerender } = render(
+      <BenchmarkSourceLink
+        sourceUrl="https://github.com/test"
+        benchmarkName="Test"
+      />,
+    )
+
+    let link = screen.getByRole('link')
+    expect(link.getAttribute('href')).toContain('utm_source=www.models.fyi')
+
+    rerender(
+      <BenchmarkSourceLink
+        sourceUrl="https://example.com/page?param=value"
+        benchmarkName="Test"
+      />,
+    )
+
+    link = screen.getByRole('link')
+    expect(link.getAttribute('href')).toContain('utm_source=www.models.fyi')
+    expect(link.getAttribute('href')).toContain('param=value')
   })
 })
