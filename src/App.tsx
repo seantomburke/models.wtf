@@ -8,6 +8,7 @@ import { Compare } from './pages/Compare.tsx'
 import { Quiz } from './pages/Quiz.tsx'
 import { Learn } from './pages/learn/Learn.tsx'
 import { LearnTopic } from './pages/learn/LearnTopic.tsx'
+import { Search } from './pages/Search.tsx'
 import { NotFound } from './pages/NotFound.tsx'
 import { GraphSkeleton } from './components/GraphSkeleton.tsx'
 import { CalculatorSkeleton } from './components/CalculatorSkeleton.tsx'
@@ -37,10 +38,7 @@ function App() {
 
   const shortcuts = createDefaultShortcuts({
     showHelp: handleShowHelp,
-    showSearch: () => {
-      // TODO: Implement search functionality
-      console.log('Search not yet implemented')
-    },
+    showSearch: () => navigate('/search'),
     goToCompare: () => navigate('/compare'),
     goToGraph: () => navigate('/graph'),
     goToCalculator: () => navigate('/calculator'),
@@ -65,6 +63,7 @@ function App() {
       <Routes>
       <Route element={<Layout />}>
         <Route index element={<Home />} />
+        <Route path="search" element={<Search />} />
         <Route path="compare" element={<Compare />} />
         <Route
           path="graph"

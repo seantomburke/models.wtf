@@ -58,6 +58,14 @@ export const routeMeta: RouteMeta[] = [
     image: ogImage,
   },
   {
+    path: '/search',
+    title: 'Search AI models — Models.fyi',
+    description:
+      'Search and find AI models by name, provider, or capability. Quickly locate the model you\'re looking for from our comprehensive database.',
+    type: 'website',
+    image: ogImage,
+  },
+  {
     path: '/learn',
     title: 'Learn the basics of AI models — Models.fyi',
     description:

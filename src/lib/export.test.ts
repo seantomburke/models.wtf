@@ -1,5 +1,12 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { generateComparisonCSV, generateExportFilename, downloadCSV, exportComparison } from './export.ts'
+import {
+  generateComparisonCSV,
+  generateComparisonJSON,
+  generateComparisonMarkdown,
+  generateExportFilename,
+  downloadCSV,
+  exportComparison,
+} from './export.ts'
 import type { Model } from '../data/index.ts'
 
 // Mock model for testing
@@ -294,6 +301,101 @@ describe('export.ts', () => {
     })
   })
 
+  describe('generateComparisonJSON', () => {
+    it('generates valid JSON structure', () => {
+      const json = generateComparisonJSON([mockModel])
+      const data = JSON.parse(json)
+
+      expect(data).toHaveProperty('metadata')
+      expect(data).toHaveProperty('models')
+      expect(data).toHaveProperty('benchmarks')
+    })
+
+    it('includes model data in JSON', () => {
+      const json = generateComparisonJSON([mockModel])
+      const data = JSON.parse(json)
+
+      expect(data.models).toHaveLength(1)
+      expect(data.models[0].name).toBe('Test Model')
+      expect(data.models[0].provider).toBe('Anthropic')
+    })
+
+    it('includes benchmark data', () => {
+      const json = generateComparisonJSON([mockModel])
+      const data = JSON.parse(json)
+
+      expect(data.benchmarks.length).toBeGreaterThan(0)
+      expect(data.benchmarks[0]).toHaveProperty('id')
+      expect(data.benchmarks[0]).toHaveProperty('name')
+    })
+
+    it('formats pricing correctly in JSON', () => {
+      const json = generateComparisonJSON([mockModel])
+      const data = JSON.parse(json)
+
+      expect(data.models[0].pricing.input).toBe(3.0)
+      expect(data.models[0].pricing.output).toBe(15.0)
+    })
+
+    it('includes capabilities in JSON', () => {
+      const json = generateComparisonJSON([mockModel])
+      const data = JSON.parse(json)
+
+      expect(data.models[0].capabilities).toHaveProperty('reasoning')
+      expect(data.models[0].capabilities).toHaveProperty('internetAccess')
+      expect(data.models[0].capabilities).toHaveProperty('openSource')
+    })
+  })
+
+  describe('generateComparisonMarkdown', () => {
+    it('generates valid markdown structure', () => {
+      const markdown = generateComparisonMarkdown([mockModel])
+
+      expect(markdown).toContain('# AI Model Comparison')
+      expect(markdown).toContain('## Models')
+      expect(markdown).toContain('## Benchmark Scores')
+      expect(markdown).toContain('## Capabilities')
+    })
+
+    it('includes model data in markdown tables', () => {
+      const markdown = generateComparisonMarkdown([mockModel])
+
+      expect(markdown).toContain('Test Model')
+      expect(markdown).toContain('Anthropic')
+      expect(markdown).toContain('flagship')
+    })
+
+    it('formats pricing in markdown', () => {
+      const markdown = generateComparisonMarkdown([mockModel])
+
+      expect(markdown).toContain('$3')
+      expect(markdown).toContain('$15')
+    })
+
+    it('includes benchmark scores in markdown', () => {
+      const markdown = generateComparisonMarkdown([mockModel])
+
+      expect(markdown).toContain('SWE-bench Verified')
+      expect(markdown).toContain('GPQA Diamond')
+      expect(markdown).toContain('85.5')
+      expect(markdown).toContain('92.3')
+    })
+
+    it('includes capabilities with checkmarks', () => {
+      const markdown = generateComparisonMarkdown([mockModel])
+
+      expect(markdown).toContain('✓') // For reasoning: true
+      expect(markdown).toContain('-') // For internetAccess: false
+    })
+
+    it('includes export metadata', () => {
+      const markdown = generateComparisonMarkdown([mockModel])
+
+      expect(markdown).toContain('Exported:')
+      expect(markdown).toContain('Data sourced:')
+    })
+  })
+
   describe('exportComparison', () => {
     beforeEach(() => {
       // Mock document.createElement to avoid actual download behavior
@@ -311,7 +413,7 @@ describe('export.ts', () => {
       vi.restoreAllMocks()
     })
 
-    it('generates and downloads CSV with visible models', () => {
+    it('generates and downloads CSV by default', () => {
       const mockLink = {
         click: vi.fn(),
         setAttribute: vi.fn(),
@@ -321,9 +423,36 @@ describe('export.ts', () => {
       vi.spyOn(document.body, 'appendChild').mockImplementationOnce(() => mockLink as any)
       vi.spyOn(document.body, 'removeChild').mockImplementationOnce(() => mockLink as any)
 
-      // Should not throw
       exportComparison([mockModel])
       expect(mockLink.click).toHaveBeenCalled()
+    })
+
+    it('exports as JSON when format is specified', () => {
+      const mockLink = {
+        click: vi.fn(),
+        setAttribute: vi.fn(),
+        style: {},
+      }
+      vi.spyOn(document, 'createElement').mockReturnValue(mockLink as any)
+      vi.spyOn(document.body, 'appendChild').mockImplementationOnce(() => mockLink as any)
+      vi.spyOn(document.body, 'removeChild').mockImplementationOnce(() => mockLink as any)
+
+      exportComparison([mockModel], 'json')
+      expect(mockLink.setAttribute).toHaveBeenCalledWith('download', expect.stringContaining('.json'))
+    })
+
+    it('exports as Markdown when format is specified', () => {
+      const mockLink = {
+        click: vi.fn(),
+        setAttribute: vi.fn(),
+        style: {},
+      }
+      vi.spyOn(document, 'createElement').mockReturnValue(mockLink as any)
+      vi.spyOn(document.body, 'appendChild').mockImplementationOnce(() => mockLink as any)
+      vi.spyOn(document.body, 'removeChild').mockImplementationOnce(() => mockLink as any)
+
+      exportComparison([mockModel], 'markdown')
+      expect(mockLink.setAttribute).toHaveBeenCalledWith('download', expect.stringContaining('.md'))
     })
 
     it('uses today\'s date in filename', () => {

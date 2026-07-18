@@ -140,13 +140,164 @@ export function downloadCSV(csv: string, filename: string): void {
 }
 
 /**
- * Export the comparison table as a CSV file.
- * This is the main entry point for the export functionality.
+ * Generate JSON content for the comparison table.
+ * Returns structured data suitable for programmatic use.
+ */
+export function generateComparisonJSON(visibleModels: Model[]): string {
+  const data = {
+    metadata: {
+      exportedAt: new Date().toISOString(),
+      dataSourcedAt: dataSourcedAt,
+      modelCount: visibleModels.length,
+      benchmarkCount: benchmarks.length,
+    },
+    models: visibleModels.map((model) => ({
+      id: model.id,
+      name: model.name,
+      provider: providerById.get(model.providerId)?.name || 'Unknown',
+      tier: model.tier,
+      releaseDate: model.releaseDate,
+      pricing: {
+        input: model.inputPricePerMTok,
+        output: model.outputPricePerMTok,
+      },
+      contextWindow: model.contextWindowTokens,
+      capabilities: {
+        reasoning: model.reasoning,
+        internetAccess: model.internetAccess,
+        openSource: model.openSource,
+        license: model.license,
+      },
+      benchmarks: Object.fromEntries(
+        benchmarks
+          .map((b) => [b.id, model.scores[b.id as BenchmarkId]])
+          .filter(([, score]) => score !== undefined),
+      ),
+    })),
+    benchmarks: benchmarks.map((b) => ({
+      id: b.id,
+      name: b.name,
+      eli5: b.eli5,
+    })),
+  }
+  return JSON.stringify(data, null, 2)
+}
+
+/**
+ * Generate Markdown content for the comparison table.
+ * Returns a markdown table suitable for documentation and blogs.
+ */
+export function generateComparisonMarkdown(visibleModels: Model[]): string {
+  const lines: string[] = []
+
+  lines.push('# AI Model Comparison')
+  lines.push(`*Exported: ${new Date().toLocaleString()}*`)
+  lines.push(`*Data sourced: ${dataSourcedAt}*`)
+  lines.push('')
+
+  // Models table
+  lines.push('## Models')
+  lines.push('')
+
+  const headers = ['Model', 'Provider', 'Tier', 'Input Price', 'Output Price', 'Context Window']
+  lines.push(`| ${headers.join(' | ')} |`)
+  lines.push(`| ${headers.map(() => '---').join(' | ')} |`)
+
+  for (const model of visibleModels) {
+    const provider = providerById.get(model.providerId)
+    lines.push(
+      `| **${model.name}** | ${provider?.name || 'Unknown'} | ${model.tier} | $${formatPrice(model.inputPricePerMTok)} | $${formatPrice(model.outputPricePerMTok)} | ${formatTokens(model.contextWindowTokens)} |`,
+    )
+  }
+
+  lines.push('')
+
+  // Benchmark scores
+  lines.push('## Benchmark Scores')
+  lines.push('')
+
+  const benchmarkHeaders = ['Model', ...benchmarks.map((b) => b.name)]
+  lines.push(`| ${benchmarkHeaders.join(' | ')} |`)
+  lines.push(`| ${benchmarkHeaders.map(() => '---').join(' | ')} |`)
+
+  for (const model of visibleModels) {
+    const scores = benchmarks
+      .map((b) => {
+        const score = model.scores[b.id as BenchmarkId]
+        return score !== undefined ? score.toFixed(1) : '-'
+      })
+    lines.push(`| **${model.name}** | ${scores.join(' | ')} |`)
+  }
+
+  lines.push('')
+
+  // Capabilities
+  lines.push('## Capabilities')
+  lines.push('')
+
+  const capabilityHeaders = ['Model', 'Reasoning', 'Web Access', 'Open Source']
+  lines.push(`| ${capabilityHeaders.join(' | ')} |`)
+  lines.push(`| ${capabilityHeaders.map(() => '---').join(' | ')} |`)
+
+  for (const model of visibleModels) {
+    lines.push(
+      `| **${model.name}** | ${model.reasoning ? '✓' : '-'} | ${model.internetAccess ? '✓' : '-'} | ${model.openSource ? '✓' : '-'} |`,
+    )
+  }
+
+  return lines.join('\n')
+}
+
+export type ExportFormat = 'csv' | 'json' | 'markdown'
+
+/**
+ * Export the comparison table in the specified format.
+ * Supports CSV, JSON, and Markdown formats.
  *
  * @param visibleModels - Models to include in the export
+ * @param format - Export format (csv, json, or markdown)
  */
-export function exportComparison(visibleModels: Model[]): void {
-  const csv = generateComparisonCSV(visibleModels)
-  const filename = generateExportFilename()
-  downloadCSV(csv, filename)
+export function exportComparison(visibleModels: Model[], format: ExportFormat = 'csv'): void {
+  let content: string
+  let mimeType: string
+  let extension: string
+  let baseFilename = generateExportFilename().replace('.csv', '')
+
+  switch (format) {
+    case 'json': {
+      content = generateComparisonJSON(visibleModels)
+      mimeType = 'application/json;charset=utf-8;'
+      extension = '.json'
+      break
+    }
+    case 'markdown': {
+      content = generateComparisonMarkdown(visibleModels)
+      mimeType = 'text/markdown;charset=utf-8;'
+      extension = '.md'
+      break
+    }
+    case 'csv':
+    default: {
+      content = generateComparisonCSV(visibleModels)
+      mimeType = 'text/csv;charset=utf-8;'
+      extension = '.csv'
+      break
+    }
+  }
+
+  const blob = new Blob([content], { type: mimeType })
+  const link = document.createElement('a')
+  const url = URL.createObjectURL(blob)
+
+  link.setAttribute('href', url)
+  link.setAttribute('download', baseFilename + extension)
+  link.style.visibility = 'hidden'
+
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+
+  setTimeout(() => {
+    URL.revokeObjectURL(url)
+  }, 100)
 }
