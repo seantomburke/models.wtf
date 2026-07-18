@@ -1,7 +1,7 @@
 import type { Model } from './types.ts'
 
 /**
- * Model facts researched 2026-07-17. Scores are provider-published evals
+ * Model facts researched 2026-07-18. Scores are provider-published evals
  * where available, otherwise independent leaderboard runs (noted below).
  * A missing score means no reliable published number was found, not zero.
  * Sources are listed in src/data/README.md.
@@ -22,10 +22,10 @@ export const models: Model[] = [
     reasoning: true,
     internetAccess: true,
     scores: {
-      'swe-bench-verified': 95.0, // vals.ai independent run; Anthropic claims 95.5
-      'swe-bench-pro': 80.3, // Anthropic-published; BenchLM attributes 80.3 to Mythos 5
-      'gpqa-diamond': 93.2, // vals.ai independent run (Anthropic published no number)
-      'terminal-bench': 88.0, // Anthropic harness; independent runs land 80-84 (tbench.ai #1 at 83.8)
+      'swe-bench-verified': 95.0, // Anthropic-published (averaged over 5 trials)
+      'swe-bench-pro': 80.0, // Anthropic-published via BenchLM (July 2026)
+      'gpqa-diamond': 92.6, // Anthropic-published (July 2026)
+      'terminal-bench': 88.0, // vals.ai independent run (July 16, 2026)
     },
     blurb:
       "Anthropic's most capable model. Built for the hardest reasoning and long autonomous work, at a premium price.",
@@ -110,9 +110,9 @@ export const models: Model[] = [
     internetAccess: true,
     releaseDate: '2026-07-09',
     scores: {
-      'terminal-bench': 88.8, // OpenAI-published; no tbench.ai run yet
-      'swe-bench-pro': 64.6,
-      'gpqa-diamond': 94.1, // Artificial Analysis independent run (OpenAI's 94.6 remains unconfirmed)
+      'terminal-bench': 88.8, // OpenAI-published (single-agent) (July 2026)
+      'swe-bench-pro': 64.6, // OpenAI-published
+      'gpqa-diamond': 94.1, // Artificial Analysis independent run (July 2026)
     },
     blurb:
       "OpenAI's brand-new flagship. State of the art on autonomous terminal work, strong all-rounder.",
@@ -131,8 +131,8 @@ export const models: Model[] = [
     internetAccess: true,
     releaseDate: '2026-07-09',
     scores: {
-      'swe-bench-pro': 63.4,
-      'terminal-bench': 87.4, // OpenAI-published; tbench.ai independent run (Codex) lands 78.4
+      'swe-bench-pro': 63.4, // OpenAI-published
+      'terminal-bench': 87.4, // OpenAI-published (July 2026)
     },
     blurb:
       'The balanced middle tier of the GPT-5.6 family. Most of Sol\'s ability at half the cost.',
@@ -171,10 +171,10 @@ export const models: Model[] = [
     reasoning: true,
     internetAccess: true,
     scores: {
-      'swe-bench-verified': 80.6,
+      'swe-bench-verified': 80.6, // Google-published
       'swe-bench-pro': 54.2, // from Anthropic's comparison table; Google published none
-      'gpqa-diamond': 94.3,
-      'terminal-bench': 70.7, // tbench.ai leaderboard (Google published only 2.0)
+      'gpqa-diamond': 94.3, // Artificial Analysis independent run (July 2026)
+      'terminal-bench': 70.79, // vals.ai independent run (July 16, 2026)
     },
     blurb:
       "Google's flagship. A top-tier reasoner with strong long-context skills at an aggressive price.",
@@ -193,8 +193,9 @@ export const models: Model[] = [
     internetAccess: true,
     releaseDate: '2026-05-19',
     scores: {
-      'swe-bench-pro': 55.1,
-      'terminal-bench': 76.2,
+      'swe-bench-pro': 55.1, // Google-published (single attempt)
+      'gpqa-diamond': 92.2, // Google-published (July 2026)
+      'terminal-bench': 76.2, // Google-published (July 2026)
     },
     blurb:
       'Google\'s speed tier that punches above its weight. Beats 3.1 Pro on coding at about 25% lower cost.',
@@ -215,9 +216,9 @@ export const models: Model[] = [
     internetAccess: true,
     releaseDate: '2026-07-08',
     scores: {
-      'swe-bench-pro': 64.7, // xAI-published; no independent run yet
-      'gpqa-diamond': 93.1, // Artificial Analysis independent run (xAI published none)
-      'terminal-bench': 83.3, // xAI-published; tbench.ai independent run (Cursor CLI) lands 79.3
+      'swe-bench-pro': 64.7, // xAI-published (July 2026)
+      'gpqa-diamond': 93.1, // Artificial Analysis independent run (July 2026)
+      'terminal-bench': 83.3, // xAI-published (July 2026)
     },
     blurb:
       "xAI's brand-new flagship. Strong terminal and coding chops at a mid-tier price, with live access to X (Twitter) data.",
