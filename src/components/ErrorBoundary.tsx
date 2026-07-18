@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
+import posthog from 'posthog-js'
 
 interface Props {
   children: ReactNode
@@ -23,6 +24,11 @@ export class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('ErrorBoundary caught:', error, errorInfo)
+    posthog.capture('error_boundary_caught', {
+      error_message: error.message,
+      error_stack: error.stack,
+      component_stack: errorInfo.componentStack,
+    })
   }
 
   resetError = () => {

@@ -14,6 +14,7 @@ import { GraphSkeleton } from './components/GraphSkeleton.tsx'
 import { CalculatorSkeleton } from './components/CalculatorSkeleton.tsx'
 import { useDarkMode } from './lib/darkMode'
 import { useKeyboardShortcuts, createDefaultShortcuts } from './lib/keyboard-shortcuts.ts'
+import { usePostHogPageView } from './hooks/usePostHogPageView'
 
 // These pages pull in the charting library (and the calculator a tokenizer) —
 // keep them off the main bundle.
@@ -23,6 +24,7 @@ const Calculator = lazy(() =>
 )
 
 function App() {
+  usePostHogPageView()
   const navigate = useNavigate()
   const [, setIsDark] = useDarkMode()
   const [showShortcuts, setShowShortcuts] = useState(false)

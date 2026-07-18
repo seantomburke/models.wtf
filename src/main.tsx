@@ -9,6 +9,13 @@ import App from './App.tsx'
 posthog.init(import.meta.env.VITE_POSTHOG_PROJECT_TOKEN, {
   api_host: import.meta.env.VITE_POSTHOG_HOST,
   defaults: '2026-05-30',
+
+  // Enable comprehensive tracking
+  capture_pageleave: true,
+  disable_session_recording: false,
+
+  // Enable debug mode in development
+  debug: import.meta.env.DEV,
 })
 
 // Routes are prerendered to static HTML for crawlers and first paint
