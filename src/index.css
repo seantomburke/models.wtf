@@ -17,16 +17,39 @@
   --shadow-subtle: 0 1px 3px rgb(0 0 0 / 0.08);
 }
 
+/* Dark mode — slate/zinc neutrals with teal accent */
+:where(.dark) {
+  --color-surface: #0f172a;
+  --color-surface-raised: #1e293b;
+  --color-fg: #f1f5f9;
+  --color-fg-secondary: #cbd5e1;
+  --color-fg-muted: #94a3b8;
+  --color-fg-faint: #64748b;
+  --color-accent: #14b8a6;
+  --color-accent-deep: #0f766e;
+  --color-accent-soft: #0f172a;
+  --color-line: rgb(248 250 252 / 0.08);
+  --color-line-strong: rgb(248 250 252 / 0.16);
+
+  --shadow-subtle: 0 1px 3px rgb(0 0 0 / 0.3);
+}
+
 body {
   background-color: var(--color-surface);
   color: var(--color-fg);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  transition: background-color 150ms ease-in-out, color 150ms ease-in-out;
 }
 
 /* Prevent horizontal scroll on body and html */
 html {
   overflow-x: hidden;
+}
+
+/* Smooth transitions when toggling dark mode */
+html.dark body {
+  transition: background-color 150ms ease-in-out, color 150ms ease-in-out;
 }
 
 /* Focus styles for keyboard navigation (WCAG 2.1 AA compliance) */
