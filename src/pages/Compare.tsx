@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { usePostHog } from '@posthog/react'
 import { usePageMeta } from '../lib/meta.ts'
 import { metaFor } from '../lib/routeMeta.ts'
@@ -18,8 +18,10 @@ import { ProviderLogo } from '../components/ProviderLogo.tsx'
 import { SortableHeader } from '../components/SortableHeader.tsx'
 import { Breadcrumb } from '../components/Breadcrumb.tsx'
 import { BenchmarkSourceLink } from '../components/BenchmarkSourceLink.tsx'
+import { BookmarkButton } from '../components/BookmarkButton.tsx'
+import { loadBookmarks, saveBookmarks, toggleBookmark, isBookmarked } from '../lib/bookmarks.ts'
 
-type Filter = 'all' | 'open-source' | ProviderId
+type Filter = 'all' | 'open-source' | 'bookmarked' | ProviderId
 
 /** Visible-word capability tag; hover title carries the fuller explanation. */
 function CapabilityBadge({ label, title }: { label: string; title: string }) {
@@ -46,6 +48,11 @@ export function Compare() {
 
   const [filter, setFilter] = useState<Filter>('all')
   const [sort, setSort] = useState<SortConfig>({ column: null, direction: 'asc' })
+  const [bookmarks, setBookmarks] = useState<Set<string>>(new Set())
+
+  useEffect(() => {
+    setBookmarks(loadBookmarks())
+  }, [])
 
   const handleFilterChange = (id: Filter) => {
     setFilter(id)
@@ -63,11 +70,18 @@ export function Compare() {
     captureSortChange(posthog, newSort.column || '', newSort.direction)
   }
 
+  const handleToggleBookmark = (modelId: string) => {
+    const updated = toggleBookmark(bookmarks, modelId)
+    setBookmarks(updated)
+    saveBookmarks(updated)
+  }
+
   const filtered = useMemo(() => {
     if (filter === 'all') return models
     if (filter === 'open-source') return models.filter((m) => m.openSource)
+    if (filter === 'bookmarked') return models.filter((m) => isBookmarked(bookmarks, m.id))
     return models.filter((m) => m.providerId === filter)
-  }, [filter])
+  }, [filter, bookmarks])
 
   const visible = useMemo(() => {
     return sortModels(filtered, sort)
@@ -105,6 +119,7 @@ export function Compare() {
       .filter((p) => !p.openSource)
       .map((p) => ({ id: p.id as Filter, label: p.name })),
     { id: 'open-source', label: 'Open source' },
+    ...(bookmarks.size > 0 ? [{ id: 'bookmarked' as Filter, label: `Bookmarked (${bookmarks.size})` }] : []),
   ]
 
   return (
@@ -242,7 +257,14 @@ export function Compare() {
               return (
                 <tr key={m.id}>
                   <td className="sticky left-0 z-10 bg-surface-raised px-3 sm:px-4 py-3">
-                    <div className="font-medium text-fg">{m.name}</div>
+                    <div className="flex items-center gap-2">
+                      <BookmarkButton
+                        isBookmarked={isBookmarked(bookmarks, m.id)}
+                        onClick={() => handleToggleBookmark(m.id)}
+                        aria={`Bookmark ${m.name}`}
+                      />
+                      <div className="font-medium text-fg">{m.name}</div>
+                    </div>
                     {m.releaseDate && (
                       <div className="mt-0.5 text-xs text-fg-faint">
                         {formatDateForDisplay(m.releaseDate)}
