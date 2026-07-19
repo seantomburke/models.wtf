@@ -1,55 +1,10 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
+import { GRID_SIZE, PIXEL_COUNT, classify, patternE, patternThree } from './pixelClassifierModel'
+import { WeightHeatmap } from './WeightHeatmap'
+import { PixelNetworkDiagram } from './PixelNetworkDiagram'
 
 export function PixelClassifier() {
-  // 8x8 pixel grid for drawing
-  const GRID_SIZE = 8
-  const [pixels, setPixels] = useState<boolean[]>(Array(GRID_SIZE * GRID_SIZE).fill(false))
-
-  // Pre-trained "weights" for the classifier (hardcoded for the demo)
-  // These are simple heuristics that classify 3 vs E
-  const classifyPixels = useCallback((pixelArray: boolean[]) => {
-    // Count pixels in different regions
-    const leftEdge = [] as boolean[]
-    const rightEdge = [] as boolean[]
-    const topMiddle = [] as boolean[]
-    const middleRow = [] as boolean[]
-    const bottomMiddle = [] as boolean[]
-
-    // Collect pixels by region
-    for (let row = 0; row < GRID_SIZE; row++) {
-      for (let col = 0; col < GRID_SIZE; col++) {
-        const idx = row * GRID_SIZE + col
-        if (pixelArray[idx]) {
-          if (col < 2) leftEdge.push(true)
-          if (col > 5) rightEdge.push(true)
-          if (row < 2) topMiddle.push(true)
-          if (row === 3 || row === 4) middleRow.push(true)
-          if (row > 5) bottomMiddle.push(true)
-        }
-      }
-    }
-
-    // Simple classification logic
-    // The number 3 has pixels on the right edge, 7 on the middle
-    // The letter E has pixels on the left edge, 7 on the middle, and more top/bottom
-    const rightEdgeScore = rightEdge.length
-    const leftEdgeScore = leftEdge.length
-    const topScore = topMiddle.length
-    const bottomScore = bottomMiddle.length
-
-    // E tends to have more left edge and balanced top/bottom
-    // 3 tends to have more right edge
-    const eScore =
-      leftEdgeScore * 2 + (Math.abs(topScore - bottomScore) < 2 ? 5 : 0) + topScore + bottomScore
-    const threeScore = rightEdgeScore * 2 + Math.abs(topScore - bottomScore) * 2
-
-    return {
-      isThree: threeScore > eScore,
-      confidence: Math.abs(threeScore - eScore) / Math.max(threeScore, eScore, 1),
-      threeScore,
-      eScore,
-    }
-  }, [])
+  const [pixels, setPixels] = useState<boolean[]>(Array(PIXEL_COUNT).fill(false))
 
   const handlePixelClick = (index: number) => {
     const updated = [...pixels]
@@ -58,43 +13,10 @@ export function PixelClassifier() {
   }
 
   const handleClear = () => {
-    setPixels(Array(GRID_SIZE * GRID_SIZE).fill(false))
+    setPixels(Array(PIXEL_COUNT).fill(false))
   }
 
-  const draw3 = () => {
-    // Draw a simple "3" pattern
-    const newPixels = Array(GRID_SIZE * GRID_SIZE).fill(false)
-    // Top bar
-    for (let col = 1; col < 6; col++) newPixels[col] = true
-    // Top-right curve
-    newPixels[1 * GRID_SIZE + 6] = true
-    newPixels[2 * GRID_SIZE + 6] = true
-    // Middle bar
-    for (let col = 2; col < 6; col++) newPixels[4 * GRID_SIZE + col] = true
-    // Bottom-right curve
-    newPixels[5 * GRID_SIZE + 6] = true
-    newPixels[6 * GRID_SIZE + 6] = true
-    // Bottom bar
-    for (let col = 1; col < 6; col++) newPixels[7 * GRID_SIZE + col] = true
-    setPixels(newPixels)
-  }
-
-  const drawE = () => {
-    // Draw a simple "E" pattern
-    const newPixels = Array(GRID_SIZE * GRID_SIZE).fill(false)
-    // Left edge
-    for (let row = 0; row < 8; row++) newPixels[row * GRID_SIZE] = true
-    for (let row = 0; row < 8; row++) newPixels[row * GRID_SIZE + 1] = true
-    // Top bar
-    for (let col = 1; col < 6; col++) newPixels[col] = true
-    // Middle bar
-    for (let col = 1; col < 6; col++) newPixels[4 * GRID_SIZE + col] = true
-    // Bottom bar
-    for (let col = 1; col < 6; col++) newPixels[7 * GRID_SIZE + col] = true
-    setPixels(newPixels)
-  }
-
-  const result = classifyPixels(pixels)
+  const result = classify(pixels)
   const totalPixels = pixels.filter(Boolean).length
 
   return (
@@ -136,17 +58,44 @@ export function PixelClassifier() {
             Clear
           </button>
           <button
-            onClick={draw3}
+            onClick={() => setPixels(patternThree())}
             className="rounded bg-bg-secondary px-4 py-2 text-sm font-medium text-fg-primary hover:bg-line"
           >
             Example: 3
           </button>
           <button
-            onClick={drawE}
+            onClick={() => setPixels(patternE())}
             className="rounded bg-bg-secondary px-4 py-2 text-sm font-medium text-fg-primary hover:bg-line"
           >
             Example: E
           </button>
+        </div>
+      </div>
+
+      {/* The 64 weights */}
+      <div className="rounded-lg border border-line bg-bg-secondary p-6">
+        <h3 className="text-lg font-semibold">The classifier's 64 weights</h3>
+        <p className="mt-2 text-sm text-fg-secondary">
+          This is the network's entire "knowledge" — one weight per pixel, squashed to 0–1 with the
+          sigmoid function and drawn in the same 8x8 layout as the drawing grid. Green cells (weight
+          near 1) are where a 3 puts ink but an E doesn't. Red cells (weight near 0) are where an E
+          puts ink but a 3 doesn't. Transparent cells (weight 0.5) don't help tell them apart, so
+          the network ignores them.
+        </p>
+        <div className="mt-6">
+          <WeightHeatmap />
+        </div>
+      </div>
+
+      {/* Network animation */}
+      <div className="rounded-lg border border-line bg-bg-secondary p-6">
+        <h3 className="text-lg font-semibold">Watch your drawing run through the network</h3>
+        <p className="mt-2 text-sm text-fg-secondary">
+          The same animation as the neural network page, wired with this classifier's real weights:
+          all 64 pixels feed two output neurons, one for "3" and one for "E".
+        </p>
+        <div className="mt-6">
+          <PixelNetworkDiagram pixels={pixels} />
         </div>
       </div>
 
@@ -159,7 +108,7 @@ export function PixelClassifier() {
             <div>
               <div className="text-sm text-fg-secondary">Prediction</div>
               <div className="text-2xl font-bold text-accent">
-                {totalPixels === 0 ? '—' : result.isThree ? '3' : 'E'}
+                {totalPixels === 0 ? '—' : result.prediction}
               </div>
             </div>
             <div>
@@ -170,19 +119,39 @@ export function PixelClassifier() {
             </div>
           </div>
 
-          {/* Debug: Score breakdown */}
+          {/* Per-class probabilities */}
+          <div className="space-y-2">
+            {(
+              [
+                ['"3" output', result.probThree],
+                ['"E" output', result.probE],
+              ] as const
+            ).map(([label, prob]) => (
+              <div key={label} className="flex items-center gap-3 text-xs text-fg-secondary">
+                <span className="w-20 shrink-0">{label}</span>
+                <div className="h-2 flex-1 overflow-hidden rounded-full bg-bg-primary">
+                  <div
+                    className="h-full rounded-full bg-accent transition-all duration-300"
+                    style={{ width: `${totalPixels === 0 ? 0 : prob * 100}%` }}
+                  />
+                </div>
+                <span className="w-10 shrink-0 text-right font-mono">
+                  {totalPixels === 0 ? '—' : `${(prob * 100).toFixed(0)}%`}
+                </span>
+              </div>
+            ))}
+          </div>
+
           <div className="space-y-2 text-xs text-fg-secondary">
             <div className="flex justify-between">
-              <span>Model score for "3":</span>
-              <span className="font-mono">{result.threeScore.toFixed(1)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Model score for "E":</span>
-              <span className="font-mono">{result.eScore.toFixed(1)}</span>
+              <span>Weighted sum (positive favors "3"):</span>
+              <span className="font-mono">{result.score.toFixed(1)}</span>
             </div>
             <div className="flex justify-between">
               <span>Pixels drawn:</span>
-              <span className="font-mono">{totalPixels} / 64</span>
+              <span className="font-mono">
+                {totalPixels} / {PIXEL_COUNT}
+              </span>
             </div>
           </div>
         </div>
@@ -194,33 +163,35 @@ export function PixelClassifier() {
 
         <div className="mt-4 space-y-4 text-sm">
           <p className="text-fg-secondary">
-            This is a simplified "neural network" with just one layer. Instead of billions of weights, it uses just a
-            few learned patterns to tell 3 from E:
+            This is a real (tiny) neural network with just one layer: 64 inputs, 64 weights, 2
+            outputs. Every pixel you draw is multiplied by its weight and the products are summed:
           </p>
 
           <ul className="space-y-3 text-fg-secondary">
             <li>
-              <strong className="text-fg-primary">Right edge pixels:</strong> The digit 3 has most of its pixels on
-              the right side.
+              <strong className="text-fg-primary">Green-weight pixels</strong> (the right edge) add
+              to the "3" score — that's where a 3 curves and an E is empty.
             </li>
             <li>
-              <strong className="text-fg-primary">Left edge pixels:</strong> The letter E has a strong vertical stroke
-              on the left.
+              <strong className="text-fg-primary">Red-weight pixels</strong> (the left edge) add to
+              the "E" score — that's the E's vertical stroke, which a 3 doesn't have.
             </li>
             <li>
-              <strong className="text-fg-primary">Top/bottom balance:</strong> The letter E has similar ink at the top
-              and bottom; 3 is more curved.
+              <strong className="text-fg-primary">Transparent-weight pixels</strong> (the top,
+              middle, and bottom bars) appear in both shapes, so they carry no evidence either way.
             </li>
           </ul>
 
           <p className="text-fg-secondary">
-            In a real neural network, you'd have hundreds or thousands of such patterns stacked and combined. The
-            network learns these patterns automatically from training data, without anyone writing them out.
+            The weighted sum then goes through the sigmoid function to become a confidence between 0
+            and 1. In a real image model the idea is identical — there are just millions of weights,
+            learned automatically from training data instead of derived from two example shapes.
           </p>
 
           <p className="text-fg-secondary">
-            Try drawing a 3 or E, or use the example buttons. Then try something in between or messy—you'll see the
-            confidence drop, just like a real model gets uncertain on ambiguous inputs.
+            Try drawing a 3 or E, or use the example buttons. Then try something in between or
+            messy—you'll see the confidence drop, just like a real model gets uncertain on ambiguous
+            inputs.
           </p>
         </div>
       </div>

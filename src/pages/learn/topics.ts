@@ -789,7 +789,7 @@ export const topics: Topic[] = [
         heading: 'What the network learns',
         paragraphs: [
           'During training, the network adjusts its weights to recognize meaningful patterns. It doesn\'t learn "a 3 has a line on the right"—a programmer didn\'t tell it that. Instead, through thousands of examples, the weights naturally become sensitive to the features that matter: curves, edges, connected regions.',
-          'On this demo, we\'ve hand-coded a few heuristics (right edge pixels favor 3, left edge pixels favor E). A real image classifier with millions of weights learns far richer patterns.',
+          'The demo below shows all 64 of its weights as an 8x8 grid of colors: green pixels are evidence for "3", red pixels are evidence for "E", and transparent pixels are ignored. You can also watch your drawing flow through the network—64 inputs to 2 outputs—and see the confidence it produces. A real image classifier with millions of weights learns far richer patterns, but the mechanics are the same.',
         ],
       },
       {
