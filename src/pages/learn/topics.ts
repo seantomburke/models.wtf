@@ -152,7 +152,7 @@ export const topics: Topic[] = [
         heading: 'Tokens are how models read',
         paragraphs: [
           'A token is a small chunk of text. Models don\'t read whole words or sentences at once. They read tokens: single characters, word pieces, or whole small words, depending on what\'s common.',
-          '"The" is one token. "Hamburger" might be three tokens: "ham", "burg", "er". Mathematical symbols, punctuation, and newlines also get tokenized. The pattern depends on the model\'s tokenizer, which is tuned during training.',
+          '"The" is one token. "Hamburger" is two: "Hamb" + "urger". Even the space before a word is part of its token. Mathematical symbols, punctuation, and newlines also get tokenized. The pattern depends on the model\'s tokenizer, which is tuned during training.',
         ],
       },
       {

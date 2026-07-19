@@ -1,62 +1,115 @@
+import { useEffect, useState } from 'react'
+import { loadTokenSplitter, type TokenSplitter } from '../../lib/tokenize'
 
 const COLORS = [
-  '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE',
-  '#85C1E2', '#F8B88B', '#79C6D9', '#FDA7DF', '#A3D5A3', '#FFEAA7', '#DFE6E9',
+  '#BFDBFE', '#BBF7D0', '#FDE68A', '#FBCFE8', '#C7D2FE', '#A7F3D0', '#FECACA',
+  '#DDD6FE', '#99F6E4', '#FED7AA',
 ]
 
-function getColorForToken(index: number): string {
-  return COLORS[index % COLORS.length]
+const EXAMPLES = [
+  {
+    text: 'The quick brown fox',
+    description: 'Common short words are one token each — and the space in front belongs to the token.',
+  },
+  {
+    text: 'Understanding tokenization',
+    description: 'Less common words split into pieces: "tokenization" is " token" + "ization".',
+  },
+  {
+    text: 'Supercalifragilisticexpialidocious',
+    description: 'The rarer the word, the more pieces it shatters into.',
+  },
+]
+
+/**
+ * Renders text as contiguous highlighted spans, one per real BPE token.
+ * Until the tokenizer chunk loads (and during prerender), falls back to a
+ * single unhighlighted span so the sentence still reads normally.
+ */
+function HighlightedTokens({ text, splitter }: { text: string; splitter: TokenSplitter | null }) {
+  const pieces = splitter ? splitter(text) : [text]
+  return (
+    <p className="text-base leading-loose break-words">
+      {pieces.map((piece, i) => (
+        <span
+          key={i}
+          className="whitespace-pre-wrap rounded-sm py-1 cursor-help"
+          style={
+            splitter
+              ? { backgroundColor: COLORS[i % COLORS.length], color: '#1f2937', boxShadow: 'inset -1px 0 0 rgba(255,255,255,0.9)' }
+              : undefined
+          }
+          title={splitter ? `Token ${i + 1}: "${piece}"` : undefined}
+        >
+          {piece}
+        </span>
+      ))}
+    </p>
+  )
 }
 
 export function TokenVisualization() {
-  const examples = [
-    {
-      text: 'The quick brown fox',
-      description: 'Short sentence: 4 words = 4 tokens',
-    },
-    {
-      text: 'Understanding tokenization',
-      description: 'Compound words may be split: 2 words = 3 tokens',
-    },
-    {
-      text: 'Artificial intelligence models process text by breaking it into smaller chunks called tokens.',
-      description: 'Longer sentence shows how tokens vary in size',
-    },
-  ]
+  const [splitter, setSplitter] = useState<TokenSplitter | null>(null)
+  const [customText, setCustomText] = useState('Type anything here to see how a model tokenizes it!')
+
+  useEffect(() => {
+    let cancelled = false
+    loadTokenSplitter()
+      .then((s) => {
+        if (!cancelled) setSplitter(() => s)
+      })
+      .catch((err) => console.error('tokenizer failed to load', err))
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const countLabel = (text: string) =>
+    splitter ? `${splitter(text).length} tokens` : 'loading tokenizer…'
 
   return (
     <div className="space-y-8">
-      {examples.map((example, exIndex) => {
-        const tokens = example.text.split(/\s+/)
+      <p className="text-sm text-fg-secondary">
+        These are the real tokens computed by the o200k_base tokenizer (used by
+        GPT-4o and o-series models). Each highlight is one token — notice how a
+        single word can span several colors, and how the leading space is part
+        of the token.
+      </p>
 
-        return (
-          <div key={exIndex} className="space-y-3">
-            <div>
-              <h3 className="text-sm font-semibold text-fg mb-2">{example.description}</h3>
-              <div className="flex flex-wrap gap-2">
-                {tokens.map((token, tokenIndex) => (
-                  <div
-                    key={tokenIndex}
-                    className="inline-flex flex-col items-center"
-                  >
-                    <div
-                      className="rounded-lg px-3 py-2 text-sm font-medium text-white transition-transform duration-150 hover:scale-105 cursor-help"
-                      style={{ backgroundColor: getColorForToken(tokenIndex) }}
-                      title={`Token ${tokenIndex + 1}: "${token}"`}
-                    >
-                      {token}
-                    </div>
-                    <span className="mt-1 text-xs text-fg-muted">#{tokenIndex + 1}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <p className="text-sm text-fg-secondary">
-              Total tokens: <span className="font-semibold text-fg">{tokens.length}</span>
+      {EXAMPLES.map((example) => (
+        <div key={example.text} className="space-y-2">
+          <h3 className="text-sm font-semibold text-fg">{example.description}</h3>
+          <div className="rounded-lg border border-line bg-surface p-4">
+            <HighlightedTokens text={example.text} splitter={splitter} />
+            <p className="mt-2 text-sm text-fg-secondary">
+              <span className="font-semibold text-fg">{countLabel(example.text)}</span>
+              {' · '}{example.text.length} characters
             </p>
           </div>
-        )
-      })}
+        </div>
+      ))}
+
+      <div className="space-y-2">
+        <label htmlFor="tokenize-input" className="text-sm font-semibold text-fg">
+          Try your own text
+        </label>
+        <textarea
+          id="tokenize-input"
+          value={customText}
+          onChange={(e) => setCustomText(e.target.value)}
+          rows={2}
+          className="w-full rounded-lg border border-line bg-surface p-3 text-base text-fg focus:outline-none focus:ring-2 focus:ring-accent-deep"
+        />
+        {customText.length > 0 && (
+          <div className="rounded-lg border border-line bg-surface p-4">
+            <HighlightedTokens text={customText} splitter={splitter} />
+            <p className="mt-2 text-sm text-fg-secondary">
+              <span className="font-semibold text-fg">{countLabel(customText)}</span>
+              {' · '}{customText.length} characters
+            </p>
+          </div>
+        )}
+      </div>
 
       <div className="rounded-lg border border-line bg-surface p-4">
         <h3 className="text-sm font-semibold text-fg mb-2">Why tokens matter</h3>
@@ -67,11 +120,11 @@ export function TokenVisualization() {
           </li>
           <li className="flex gap-2">
             <span className="text-accent-deep">•</span>
-            <span>A token is roughly 3/4 of a word on average</span>
+            <span>A token is roughly 3/4 of a word on average in English</span>
           </li>
           <li className="flex gap-2">
             <span className="text-accent-deep">•</span>
-            <span>Complex words break into multiple tokens</span>
+            <span>Rare or made-up words break into many small pieces</span>
           </li>
           <li className="flex gap-2">
             <span className="text-accent-deep">•</span>
