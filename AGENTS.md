@@ -2,7 +2,7 @@
 
 An educational website that simplifies AI model selection for non-experts. Tracks flagship models from OpenAI, Anthropic, Google, xAI, and others, compares them across benchmarks, and guides users to the right model for their task via interactive graphs and decision flows.
 
-See `README.md` for the full product vision and requirements.
+See `docs/initial-plan.md` for the full product vision and requirements.
 
 ## Stack
 
@@ -55,7 +55,7 @@ Four-phase approach:
 ## Conventions
 
 - SEO is a first-class requirement: semantic HTML, meta tags, and accessible markup on every page.
-- Keep the stack light. The README explicitly avoids heavy frameworks — prefer simple, composable components.
+- Keep the stack light. The initial plan (`docs/initial-plan.md`) explicitly avoids heavy frameworks — prefer simple, composable components.
 - Model and benchmark data are hardcoded for now. Isolate data behind a typed module so migrating to a database later is a contained change.
 
 ## Deployment
