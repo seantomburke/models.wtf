@@ -1,7 +1,11 @@
 import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 import { usePageMeta } from '../lib/meta.ts'
 import { metaFor, organizationSchema } from '../lib/routeMeta.ts'
-import { models, providers } from '../data/index.ts'
+import { models, providers, providerById } from '../data/index.ts'
+import { loadBookmarks } from '../lib/bookmarks.ts'
+import { ProviderLogo } from '../components/ProviderLogo.tsx'
+import { formatTokens } from '../lib/format.ts'
 
 export function Home() {
   const meta = metaFor('/')
@@ -14,7 +18,14 @@ export function Home() {
     structuredData: organizationSchema(),
   })
 
+  const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set())
+
+  useEffect(() => {
+    setBookmarkedIds(loadBookmarks())
+  }, [])
+
   const openCount = models.filter((m) => m.openSource).length
+  const bookmarkedModels = models.filter((m) => bookmarkedIds.has(m.id))
 
   return (
     <div className="space-y-12">
@@ -74,6 +85,38 @@ export function Home() {
           </p>
         </Link>
       </section>
+
+      {bookmarkedModels.length > 0 && (
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold tracking-tight">Your saved models</h2>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {bookmarkedModels.map((m) => {
+              const provider = providerById.get(m.providerId)
+              return (
+                <Link
+                  key={m.id}
+                  to={`/models/${m.id}`}
+                  className="group rounded-lg border border-line bg-surface-raised p-4 transition-colors duration-150 hover:border-line-strong hover:bg-surface-raised/80"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex flex-col gap-2 flex-1">
+                      <div className="flex items-center gap-2">
+                        {provider && <ProviderLogo providerId={provider.id} size={16} />}
+                        <h3 className="font-medium text-fg group-hover:text-accent-deep">{m.name}</h3>
+                      </div>
+                      {m.contextWindowTokens && (
+                        <p className="text-xs text-fg-secondary">
+                          {formatTokens(m.contextWindowTokens)} context window
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+        </section>
+      )}
 
       <section className="rounded-xl border border-line bg-accent-soft/60 p-6">
         <h2 className="text-lg font-semibold tracking-tight">
