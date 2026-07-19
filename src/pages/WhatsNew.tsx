@@ -1,8 +1,7 @@
 import { useMemo, useState } from 'react'
 import { usePageMeta } from '../lib/meta.ts'
 import { metaFor } from '../lib/routeMeta.ts'
-import { releases, type ReleaseType } from '../data/releases.ts'
-import { models, providerById } from '../data/index.ts'
+import { releases, models, providerById, type ReleaseType } from '../data/index.ts'
 import { ProviderLogo } from '../components/ProviderLogo.tsx'
 import { Breadcrumb } from '../components/Breadcrumb.tsx'
 

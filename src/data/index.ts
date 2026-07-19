@@ -12,9 +12,11 @@ export type {
   ModelTier,
 } from './types.ts'
 export type { GlossaryTerm } from './glossary.ts'
+export type { Release, ReleaseType } from './releases.ts'
 export { providers } from './providers.ts'
 export { benchmarks } from './benchmarks.ts'
 export { models } from './models.ts'
+export { releases } from './releases.ts'
 export { glossaryTerms, getGlossaryTerm, getTermsByLetter, getAllLetters } from './glossary.ts'
 
 import { providers } from './providers.ts'

@@ -12,6 +12,21 @@ export interface Release {
 
 export const releases: Release[] = [
   {
+    id: 'benchmark-updates',
+    type: 'update',
+    title: 'New benchmarks added to comparison',
+    description: 'Added Terminal-Bench and HLE benchmarks for more comprehensive model evaluation.',
+    date: '2026-07-18',
+  },
+  {
+    id: 'sonnet-5-intro-pricing',
+    modelId: 'claude-sonnet-5',
+    type: 'price-change',
+    title: 'Claude Sonnet 5 intro pricing extended',
+    description: 'Intro pricing extended through August 31, 2026: $2/$10 per million tokens (input/output).',
+    date: '2026-07-18',
+  },
+  {
     id: 'kimi-k3-launch',
     modelId: 'kimi-k3',
     type: 'new',
@@ -40,13 +55,32 @@ export const releases: Release[] = [
     link: 'https://www.anthropic.com/news/claude-fable-5',
   },
   {
-    id: 'gpt-5-6-sol-launch',
+    id: 'gpt-5-6-family-launch',
     modelId: 'gpt-5-6-sol',
     type: 'new',
-    title: 'GPT-5.6 Sol released',
-    description: 'OpenAI releases Sol variant optimized for speed and reasoning tasks, with 1.05M token context.',
+    title: 'GPT-5.6 family released',
+    description:
+      'OpenAI ships three tiers at once: Sol (flagship, $5/$30 per million tokens), Terra (balanced, $2.50/$15), and Luna (budget, $1/$6), all with a 1.05M token context window.',
     date: '2026-07-09',
     link: 'https://openai.com/blog/gpt-5-6-sol',
+  },
+  {
+    id: 'muse-spark-1-1-launch',
+    modelId: 'muse-spark-1-1',
+    type: 'new',
+    title: 'Muse Spark 1.1 released',
+    description:
+      "Meta's first paid, closed-weights model after the open Llama era: 1M token context, an exceptional 256K max output, and aggressive $1.25/$4.25 pricing aimed at agent workloads.",
+    date: '2026-07-09',
+  },
+  {
+    id: 'grok-4-5-launch',
+    modelId: 'grok-4-5',
+    type: 'new',
+    title: 'Grok 4.5 released',
+    description:
+      "xAI's new flagship pairs strong terminal and coding performance with real-time access to X (Twitter) data, at a mid-tier $2/$6 per million tokens with a 500K context window.",
+    date: '2026-07-08',
   },
   {
     id: 'sonnet-5-launch',
@@ -58,38 +92,6 @@ export const releases: Release[] = [
     link: 'https://www.anthropic.com/news/claude-sonnet-5',
   },
   {
-    id: 'sonnet-5-intro-pricing',
-    modelId: 'claude-sonnet-5',
-    type: 'price-change',
-    title: 'Claude Sonnet 5 intro pricing extended',
-    description: 'Intro pricing extended through August 31, 2026: $2/$10 per million tokens (input/output).',
-    date: '2026-07-18',
-  },
-  {
-    id: 'gemini-3-1-pro-update',
-    modelId: 'gemini-3-1-pro',
-    type: 'update',
-    title: 'Gemini 3.1 Pro updated',
-    description: 'Bug fixes and performance improvements. Now faster on long-context tasks.',
-    date: '2026-07-12',
-  },
-  {
-    id: 'web-search-claude',
-    modelId: 'claude-opus-4-8',
-    type: 'feature',
-    title: 'Web search available for all Claude models',
-    description: 'All Claude models (Opus, Sonnet, Haiku) now support real-time web search via the API and Claude.ai.',
-    date: '2026-05-20',
-  },
-  {
-    id: 'gpt-4o-vision-update',
-    modelId: 'gpt-4o',
-    type: 'feature',
-    title: 'GPT-4o vision model improvements',
-    description: 'Enhanced vision understanding for charts, diagrams, and complex visual content.',
-    date: '2026-06-10',
-  },
-  {
     id: 'opus-price-drop',
     modelId: 'claude-opus-4-8',
     type: 'price-change',
@@ -98,34 +100,12 @@ export const releases: Release[] = [
     date: '2026-06-05',
   },
   {
-    id: 'llama-3-2-released',
-    modelId: 'llama-3-2-70b',
+    id: 'gemini-3-5-flash-launch',
+    modelId: 'gemini-3-5-flash',
     type: 'new',
-    title: 'Meta Llama 3.2 released',
-    description: 'New open-source model family with 70B and 405B sizes. Strong performance on reasoning benchmarks.',
-    date: '2026-07-08',
-  },
-  {
-    id: 'gpt-5-6-luna-launch',
-    modelId: 'gpt-5-6-luna',
-    type: 'new',
-    title: 'GPT-5.6 Luna released',
-    description: 'Affordable variant focused on cost-efficiency with strong performance for everyday tasks.',
-    date: '2026-07-01',
-  },
-  {
-    id: 'function-calling-haiku',
-    modelId: 'claude-haiku-4-5',
-    type: 'feature',
-    title: 'Function calling for Claude Haiku',
-    description: 'Haiku now supports tool use and function calling for agent-based applications.',
-    date: '2026-06-15',
-  },
-  {
-    id: 'benchmark-updates',
-    type: 'update',
-    title: 'New benchmarks added to comparison',
-    description: 'Added Terminal-Bench and HLE benchmarks for more comprehensive model evaluation.',
-    date: '2026-07-18',
+    title: 'Gemini 3.5 Flash released',
+    description:
+      "Google's speed tier announced at I/O 2026 punches above its weight: it beats Gemini 3.1 Pro on some coding benchmarks at about 25% lower cost.",
+    date: '2026-05-19',
   },
 ]

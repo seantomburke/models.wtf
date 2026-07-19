@@ -5,7 +5,7 @@
  * TypeScript already enforces the schema shape; this catches what types
  * can't: broken references, duplicates, and implausible values.
  */
-import { benchmarks, models, providers, dataSourcedAt } from '../src/data/index.ts'
+import { benchmarks, models, providers, releases, dataSourcedAt } from '../src/data/index.ts'
 
 const errors: string[] = []
 const fail = (msg: string) => errors.push(msg)
@@ -44,11 +44,28 @@ for (const m of models) {
   }
 }
 
+// ─── Releases ──────────────────────────────────────────────────
+const modelIds = new Set(models.map((m) => m.id))
+for (const r of releases) {
+  if (r.modelId && !modelIds.has(r.modelId)) {
+    fail(`release "${r.id}": unknown model "${r.modelId}"`)
+  }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(r.date)) fail(`release "${r.id}": bad date "${r.date}"`)
+  // A launch announcement must agree with the catalog's release date.
+  if (r.type === 'new' && r.modelId) {
+    const m = models.find((model) => model.id === r.modelId)
+    if (m?.releaseDate && m.releaseDate !== r.date) {
+      fail(`release "${r.id}": dated ${r.date} but ${r.modelId} released ${m.releaseDate}`)
+    }
+  }
+}
+
 // ─── Uniqueness ────────────────────────────────────────────────
 for (const [label, ids] of [
   ['model', models.map((m) => m.id)],
   ['provider', providers.map((p) => p.id)],
   ['benchmark', benchmarks.map((b) => b.id)],
+  ['release', releases.map((r) => r.id)],
 ] as const) {
   const seen = new Set<string>()
   for (const id of ids) {
@@ -96,5 +113,5 @@ if (errors.length > 0) {
   process.exit(1)
 }
 console.log(
-  `✓ data valid: ${models.length} models, ${providers.length} providers, ${benchmarks.length} benchmarks (sourced ${dataSourcedAt})`,
+  `✓ data valid: ${models.length} models, ${providers.length} providers, ${benchmarks.length} benchmarks, ${releases.length} releases (sourced ${dataSourcedAt})`,
 )
