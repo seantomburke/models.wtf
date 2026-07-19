@@ -29,9 +29,9 @@ export function PixelClassifier() {
         </p>
 
         {/* Pixel Grid */}
-        <div className="mt-6 inline-block">
+        <div className="mt-6 w-full max-w-80">
           <div
-            className="inline-grid gap-1 rounded border border-line p-4"
+            className="grid gap-1 rounded border border-line p-3 sm:p-4"
             style={{
               gridTemplateColumns: `repeat(${GRID_SIZE}, minmax(0, 1fr))`,
             }}
@@ -40,7 +40,7 @@ export function PixelClassifier() {
               <button
                 key={i}
                 onClick={() => handlePixelClick(i)}
-                className={`h-8 w-8 rounded-sm border transition-colors ${
+                className={`aspect-square w-full touch-manipulation rounded-sm border transition-colors ${
                   isActive ? 'border-accent bg-accent' : 'border-line bg-bg-primary hover:bg-bg-secondary'
                 }`}
                 aria-label={`Pixel ${i}`}

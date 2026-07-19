@@ -32,10 +32,10 @@ describe('digitClassifierModel', () => {
     for (const row of OUTPUT_WEIGHTS) expect(row).toHaveLength(SEGMENT_COUNT)
   })
 
-  it.each(DIGITS.map((d) => [d]))('classifies the example %i correctly', (digit) => {
+  it.each(DIGITS.map((d) => [d]))('classifies the example %i decisively', (digit) => {
     const result = classifyDigit(digitPattern(digit))
     expect(result.prediction).toBe(digit)
-    expect(result.confidence).toBeGreaterThan(0.5)
+    expect(result.confidence).toBeGreaterThan(0.9)
   })
 
   it('produces probabilities that sum to 1', () => {

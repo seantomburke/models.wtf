@@ -97,6 +97,14 @@ export function sigmoid(x: number): number {
 const HIDDEN_STEEPNESS = 8
 const HIDDEN_BIAS = -0.5
 
+/**
+ * Softmax temperature for the output layer. Scores sit at most ~2 apart
+ * between a digit and its nearest rival, which left a perfect drawing of an
+ * 8 at only ~66% confidence; sharpening the softmax keeps the ranking
+ * identical but lets exact matches win decisively.
+ */
+const OUTPUT_STEEPNESS = 2
+
 export interface DigitClassification {
   prediction: number
   /** Probability of the winning digit. */
@@ -122,7 +130,7 @@ export function classifyDigit(pixels: boolean[]): DigitClassification {
   const scores = OUTPUT_WEIGHTS.map((row) => row.reduce((sum, w, j) => sum + w * centered[j], 0))
 
   const max = Math.max(...scores)
-  const exps = scores.map((s) => Math.exp(s - max))
+  const exps = scores.map((s) => Math.exp(OUTPUT_STEEPNESS * (s - max)))
   const total = exps.reduce((a, b) => a + b, 0)
   const probs = exps.map((e) => e / total)
 
