@@ -92,6 +92,7 @@ export function Compare() {
     image: meta.image,
     type: meta.type,
     pathname: '/compare',
+    structuredData: meta.structuredData,
   })
 
   // The URL is the source of truth for filter/search/sort state, so any
