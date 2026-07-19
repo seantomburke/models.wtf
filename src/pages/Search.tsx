@@ -22,7 +22,10 @@ export function Search() {
   const [query, setQuery] = useState('')
 
   const results = useMemo(() => {
-    return searchModels(models, query)
+    if (query) {
+      return searchModels(models, query)
+    }
+    return models.map((m) => ({ model: m, relevance: 100, matchType: 'name' as const }))
   }, [query])
 
   const grouped = useMemo(() => {
@@ -49,11 +52,19 @@ export function Search() {
         </div>
       )}
 
-      {query && results.length > 0 && (
+      {results.length > 0 && (
         <div className="space-y-6">
-          <p className="text-sm text-fg-muted">
-            Found {results.length} result{results.length !== 1 ? 's' : ''}
-          </p>
+          {query && (
+            <p className="text-sm text-fg-muted">
+              Found {results.length} result{results.length !== 1 ? 's' : ''}
+            </p>
+          )}
+
+          {!query && (
+            <p className="text-sm text-fg-muted">
+              Showing all {results.length} models
+            </p>
+          )}
 
           {grouped.name.length > 0 && (
             <section>
@@ -87,15 +98,6 @@ export function Search() {
               </div>
             </section>
           )}
-        </div>
-      )}
-
-      {!query && (
-        <div className="rounded-lg border border-line bg-surface-raised p-8 text-center">
-          <p className="text-lg font-medium">Start typing to search</p>
-          <p className="mt-2 text-sm text-fg-secondary">
-            Search by model name like "Claude", "GPT", or "Llama", or by provider.
-          </p>
         </div>
       )}
     </div>
