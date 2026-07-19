@@ -94,7 +94,7 @@ export function MultiLayerNetwork() {
     <div className="rounded-lg border border-line bg-bg-secondary p-6">
       <h3 className="text-lg font-semibold">Watch a signal travel through a deep network</h3>
       <p className="mt-2 text-sm text-fg-secondary">
-        This network has {LAYER_SIZES.join(' → ')} neurons across {LAYER_SIZES.length} layers — {' '}
+        This network has {LAYER_SIZES.join(' → ')} neurons across {LAYER_SIZES.length} layers, and{' '}
         {weights.reduce((n, m) => n + m.length * m[0].length, 0)} weights in total. Press play and watch each
         layer compute its values from the layer before it.
       </p>
@@ -205,8 +205,8 @@ export function MultiLayerNetwork() {
       <p className="mt-4 text-xs text-fg-muted">
         Blue lines are positive weights (excite the next neuron), orange lines are negative (dampen it).
         Thicker = stronger. Each neuron squashes its weighted sum into 0–1, and brighter circles mean values
-        closer to 1. Hit "Random weights" and the same inputs give a completely different answer — the
-        knowledge really is in the weights.
+        closer to 1. Hit "Random weights" and the same inputs give a completely different answer.
+        The knowledge is in the weights.
       </p>
     </div>
   )

@@ -24,7 +24,7 @@ import { ProviderLogo } from '../components/ProviderLogo.tsx'
 import { Breadcrumb } from '../components/Breadcrumb.tsx'
 
 /** Editable stand-in for a typical model reply, so the page shows real costs immediately. */
-export const SAMPLE_OUTPUT = `Here's a summary of the main trade-offs. Flagship models give you the best answers on hard problems, but you pay a premium for every token, and reasoning models quietly add "thinking" tokens on top of the reply you see. Balanced models handle most everyday work — drafting, summarizing, light coding — at a fraction of the price. Fast models are almost free and respond instantly, which makes them the right choice for high-volume tasks like tagging or extraction where a slightly rougher answer is fine.
+export const SAMPLE_OUTPUT = `Here's a summary of the main trade-offs. Flagship models give you the best answers on hard problems, but you pay a premium for every token, and reasoning models quietly add "thinking" tokens on top of the reply you see. Balanced models handle most everyday work, like drafting, summarizing, and light coding, at a fraction of the price. Fast models are almost free and respond instantly, which makes them the right choice for high-volume tasks like tagging or extraction where a slightly rougher answer is fine.
 
 A good rule of thumb: start with a balanced model, move up only when you can point to answers it got wrong, and move down when you stop noticing a difference. For most people, the expensive model is only worth it on the handful of tasks where quality visibly pays for itself.`
 
@@ -113,7 +113,7 @@ function EffortPicker({ value, onChange }: EffortPickerProps) {
       <p className="mt-1.5 max-w-2xl text-xs text-fg-muted">
         Reasoning models think step by step before answering, and providers bill those hidden
         thinking tokens at the same rate as the reply itself. Higher effort means better answers
-        on hard problems — and more tokens on the bill.
+        on hard problems, and more tokens on the bill.
       </p>
     </fieldset>
   )
@@ -257,8 +257,8 @@ export function Calculator({ debounceMs = 200 }: CalculatorProps) {
       <div className="max-w-2xl">
         <h1 className="text-3xl font-semibold tracking-tight">What does a conversation cost?</h1>
         <p className="mt-3 leading-relaxed text-fg-secondary">
-          Models charge per <span className="font-medium text-fg">token</span> — a chunk of text
-          about four characters long — with separate rates for the text you send (input) and the
+          Models charge per <span className="font-medium text-fg">token</span>, a chunk of text
+          about four characters long, with separate rates for the text you send (input) and the
           text you get back (output). Compare the rates below, then paste your own text to see
           what it would cost on every model.
         </p>
@@ -268,7 +268,7 @@ export function Calculator({ debounceMs = 200 }: CalculatorProps) {
         <h2 className="text-xl font-semibold tracking-tight">Price per million tokens</h2>
         <p className="max-w-2xl text-sm leading-relaxed text-fg-secondary">
           Output tokens cost several times more than input tokens on every model. Open-source
-          models aren't shown — they're free to download, so there's no fixed per-token price.
+          models aren't shown. They're free to download, so there's no fixed per-token price.
         </p>
         <div className="rounded-xl border border-line bg-surface-raised p-4">
           <div style={{ height: 560 }}>
@@ -293,7 +293,7 @@ export function Calculator({ debounceMs = 200 }: CalculatorProps) {
           <TokenTextarea
             id="calculator-output"
             label="Example output"
-            hint="A stand-in for the model's reply — edit it to match how long you expect answers to be."
+            hint="A stand-in for the model's reply. Edit it to match how long you expect answers to be."
             value={outputText}
             onChange={setOutputText}
             tokens={outputTokens}

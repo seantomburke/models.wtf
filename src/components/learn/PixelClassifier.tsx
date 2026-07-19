@@ -76,7 +76,7 @@ export function PixelClassifier() {
       <div className="rounded-lg border border-line bg-bg-secondary p-6">
         <h3 className="text-lg font-semibold">The classifier's 64 weights</h3>
         <p className="mt-2 text-sm text-fg-secondary">
-          This is the network's entire "knowledge" — one weight per pixel, squashed to 0–1 with the
+          This is the network's entire "knowledge": one weight per pixel, squashed to 0–1 with the
           sigmoid function and drawn in the same 8x8 layout as the drawing grid. Green cells (weight
           near 1) are where a 3 puts ink but an E doesn't. Red cells (weight near 0) are where an E
           puts ink but a 3 doesn't. Transparent cells (weight 0.5) don't help tell them apart, so
@@ -170,11 +170,11 @@ export function PixelClassifier() {
           <ul className="space-y-3 text-fg-secondary">
             <li>
               <strong className="text-fg-primary">Green-weight pixels</strong> (the right edge) add
-              to the "3" score — that's where a 3 curves and an E is empty.
+              to the "3" score. That's where a 3 curves and an E is empty.
             </li>
             <li>
               <strong className="text-fg-primary">Red-weight pixels</strong> (the left edge) add to
-              the "E" score — that's the E's vertical stroke, which a 3 doesn't have.
+              the "E" score. That's the E's vertical stroke, which a 3 doesn't have.
             </li>
             <li>
               <strong className="text-fg-primary">Transparent-weight pixels</strong> (the top,
@@ -184,13 +184,13 @@ export function PixelClassifier() {
 
           <p className="text-fg-secondary">
             The weighted sum then goes through the sigmoid function to become a confidence between 0
-            and 1. In a real image model the idea is identical — there are just millions of weights,
+            and 1. In a real image model the idea is identical. There are just millions of weights,
             learned automatically from training data instead of derived from two example shapes.
           </p>
 
           <p className="text-fg-secondary">
             Try drawing a 3 or E, or use the example buttons. Then try something in between or
-            messy—you'll see the confidence drop, just like a real model gets uncertain on ambiguous
+            messy. You'll see the confidence drop, just like a real model gets uncertain on ambiguous
             inputs.
           </p>
         </div>

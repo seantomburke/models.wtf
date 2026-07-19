@@ -559,7 +559,7 @@ export function Compare() {
         it: <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" aria-hidden /> an
         independent run, <span className="inline-block w-2 h-2 rounded-full bg-slate-400" aria-hidden />{' '}
         the provider's own number, <span className="inline-block w-2 h-2 rounded-full bg-amber-500" aria-hidden />{' '}
-        the provider's number where an independent run differs — hover for details. “reasoning”
+        the provider's number where an independent run differs (hover for details). “reasoning”
         means the model thinks step by step before answering; “web” means the provider's assistant
         can search the live internet.
       </p>

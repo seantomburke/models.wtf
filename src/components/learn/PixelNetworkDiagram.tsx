@@ -198,7 +198,7 @@ export function PixelNetworkDiagram({ pixels }: PixelNetworkDiagramProps) {
 
       <p className="mt-4 text-xs text-fg-muted">
         Green edges carry evidence toward an output, red edges carry evidence against it. Press run
-        and watch your lit pixels send their signal down the weighted connections — the output with
+        and watch your lit pixels send their signal down the weighted connections. The output with
         the bigger weighted sum wins.
       </p>
     </div>

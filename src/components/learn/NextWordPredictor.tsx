@@ -90,7 +90,7 @@ export function NextWordPredictor() {
         <h3 className="text-sm font-semibold text-fg">Your sentence so far</h3>
         <p className="mt-2 min-h-7 text-lg leading-relaxed" data-testid="sentence">
           {words.length === 0 ? (
-            <span className="text-fg-faint">(empty — pick the first word below)</span>
+            <span className="text-fg-faint">(empty: pick the first word below)</span>
           ) : (
             <>
               {words.join(' ')}

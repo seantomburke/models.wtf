@@ -9,7 +9,7 @@ const COLORS = [
 const EXAMPLES = [
   {
     text: 'The quick brown fox',
-    description: 'Common short words are one token each — and the space in front belongs to the token.',
+    description: 'Common short words are one token each, and the space in front belongs to the token.',
   },
   {
     text: 'Understanding tokenization',
@@ -71,7 +71,7 @@ export function TokenVisualization() {
     <div className="space-y-8">
       <p className="text-sm text-fg-secondary">
         These are the real tokens computed by the o200k_base tokenizer (used by
-        GPT-4o and o-series models). Each highlight is one token — notice how a
+        GPT-4o and o-series models). Each highlight is one token. Notice how a
         single word can span several colors, and how the leading space is part
         of the token.
       </p>

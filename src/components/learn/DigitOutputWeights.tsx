@@ -57,11 +57,11 @@ export function DigitOutputWeights() {
       <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-xs text-fg-secondary">
         <span className="flex items-center gap-2">
           <span className="h-3 w-3 rounded-sm" style={{ background: POSITIVE }} />
-          Weight +1 — the digit expects this stroke
+          Weight +1: the digit expects this stroke
         </span>
         <span className="flex items-center gap-2">
           <span className="h-3 w-3 rounded-sm" style={{ background: NEGATIVE }} />
-          Weight −1 — this stroke is evidence against the digit
+          Weight −1: this stroke is evidence against the digit
         </span>
       </div>
 

@@ -33,8 +33,8 @@ export function DigitClassifier() {
       <div className="rounded-lg border border-line bg-bg-secondary p-6">
         <h3 className="text-lg font-semibold">Draw a digit: 0–9</h3>
         <p className="mt-2 text-sm text-fg-secondary">
-          Click pixels to draw any digit. A two-layer network — 64 inputs, {SEGMENT_COUNT} stroke
-          detectors, 10 outputs — will read it.
+          Click pixels to draw any digit. A two-layer network, 64 inputs, {SEGMENT_COUNT} stroke
+          detectors, 10 outputs, will read it.
         </p>
 
         {/* Pixel Grid */}
@@ -83,7 +83,7 @@ export function DigitClassifier() {
       <div className="rounded-lg border border-line bg-bg-secondary p-6">
         <h3 className="text-lg font-semibold">Layer 1: seven stroke detectors</h3>
         <p className="mt-2 text-sm text-fg-secondary">
-          Each hidden neuron watches one stroke — a bar or a line — and its weights are drawn below
+          Each hidden neuron watches one stroke, a bar or a line, and its weights are drawn below
           in the same 8x8 layout as the drawing grid. Colored cells are the pixels that neuron
           cares about; everything else has weight zero. Draw something and watch each detector
           report how much of its stroke it sees.
@@ -174,8 +174,8 @@ export function DigitClassifier() {
         <div className="mt-4 space-y-4 text-sm">
           <p className="text-fg-secondary">
             The 3-vs-E classifier needed only one layer, because single pixels were enough to
-            separate two shapes. Ten digits share almost every pixel — an 8 contains a 3, a 9
-            contains a 7 — so no single pixel can vote cleanly for one digit. The fix is a hidden
+            separate two shapes. Ten digits share almost every pixel: an 8 contains a 3, a 9
+            contains a 7, so no single pixel can vote cleanly for one digit. The fix is a hidden
             layer that finds bigger patterns first:
           </p>
 
@@ -183,7 +183,7 @@ export function DigitClassifier() {
             <li>
               <strong className="text-fg-primary">Layer 1 finds strokes.</strong> Each of the seven
               hidden neurons sums the pixels of one bar or line and fires when most of its stroke
-              is drawn. It knows nothing about digits — it only knows its stroke.
+              is drawn. It knows nothing about digits. It only knows its stroke.
             </li>
             <li>
               <strong className="text-fg-primary">Layer 2 combines strokes.</strong> Each digit
@@ -200,9 +200,9 @@ export function DigitClassifier() {
           <p className="text-fg-secondary">
             Try drawing a digit with a stroke missing, or add an extra stroke, and watch the
             probabilities shift between the digits that share those strokes. That's the whole idea
-            of depth: early layers find parts, later layers reason about combinations of parts —
-            exactly what real vision models do with millions of learned weights instead of 518
-            hand-built ones.
+            of depth: early layers find parts, later layers reason about combinations of parts.
+            It's exactly what real vision models do, with millions of learned weights instead of
+            518 hand-built ones.
           </p>
         </div>
       </div>

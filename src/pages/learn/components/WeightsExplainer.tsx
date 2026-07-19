@@ -205,7 +205,7 @@ export function WeightsExplainer() {
         })()}
 
         <p className="mt-2 text-xs text-fg-muted">
-          Try it: set input a{graphedWeight + 1} to 0 and the line goes flat — a weight on a zero input can't
+          Try it: set input a{graphedWeight + 1} to 0 and the line goes flat. A weight on a zero input can't
           change anything. Set the input high and the same weight becomes a powerful dial.
         </p>
       </div>

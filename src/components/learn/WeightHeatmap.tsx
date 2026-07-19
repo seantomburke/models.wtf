@@ -27,7 +27,7 @@ export function WeightHeatmap() {
                 key={i}
                 className="h-8 w-8 rounded-sm border border-line"
                 style={{ background }}
-                title={`Weight ${weight.toFixed(2)} — ${
+                title={`Weight ${weight.toFixed(2)}: ${
                   raw > 0 ? 'evidence for "3"' : raw < 0 ? 'evidence for "E"' : 'neutral'
                 }`}
               />
@@ -39,15 +39,15 @@ export function WeightHeatmap() {
       <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-xs text-fg-secondary">
         <span className="flex items-center gap-2">
           <span className="h-3 w-3 rounded-sm" style={{ background: 'rgba(34, 197, 94, 0.9)' }} />
-          Weight near 1 — ink here says "3"
+          Weight near 1: ink here says "3"
         </span>
         <span className="flex items-center gap-2">
           <span className="h-3 w-3 rounded-sm" style={{ background: 'rgba(239, 68, 68, 0.9)' }} />
-          Weight near 0 — ink here says "E"
+          Weight near 0: ink here says "E"
         </span>
         <span className="flex items-center gap-2">
           <span className="h-3 w-3 rounded-sm border border-line" />
-          Weight 0.5 — this pixel is ignored
+          Weight 0.5: this pixel is ignored
         </span>
       </div>
     </div>
