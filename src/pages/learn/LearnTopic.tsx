@@ -71,6 +71,12 @@ export function LearnTopic() {
       <h1 className="mt-3 text-3xl font-semibold tracking-tight">{topic.question}</h1>
       <p className="mt-3 text-lg leading-relaxed text-fg-secondary">{topic.hook}</p>
 
+      {topic.interactive && (
+        <div className="mt-10">
+          <topic.interactive />
+        </div>
+      )}
+
       {topic.sections.map((s) => (
         <section key={s.heading} className="mt-8">
           <h2 className="text-xl font-semibold tracking-tight">{s.heading}</h2>
