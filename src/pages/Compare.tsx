@@ -250,6 +250,34 @@ export function Compare() {
         </div>
       </div>
 
+      {/* Sticky filter bar for scrolling context */}
+      <div className="sticky top-14 z-20 -mx-4 -mb-6 bg-gradient-to-b from-surface via-surface to-transparent px-4 py-3 sm:mx-0">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-xs text-fg-muted">
+          <div>
+            Showing <span className="font-semibold text-fg">{visible.length}</span> of{' '}
+            <span className="font-semibold text-fg">{models.length}</span> models
+            {capabilities.size > 0 && (
+              <span className="ml-2 font-medium text-accent-deep">
+                {capabilities.size === 1 ? '(1 filter' : `(${capabilities.size} filters`} applied)
+              </span>
+            )}
+          </div>
+          {(filter !== 'all' || capabilities.size > 0) && (
+            <button
+              type="button"
+              onClick={() => {
+                setFilter('all')
+                setCapabilities(new Set())
+                captureFilterCleared(posthog)
+              }}
+              className="text-accent-deep hover:text-accent-deep/80 font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-deep rounded px-2 py-1"
+            >
+              Clear all filters
+            </button>
+          )}
+        </div>
+      </div>
+
       <div className="overflow-x-auto rounded-xl border border-line bg-surface-raised">
         <table className="w-full min-w-[56rem] text-sm">
           <thead className="sticky top-0 z-10 bg-surface-raised">
