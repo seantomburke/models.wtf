@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { SITE_URL } from './routeMeta.ts'
+import { canonicalUrl } from './routeMeta.ts'
 
 export interface PageMetaOptions {
   title: string
@@ -66,17 +66,17 @@ export function usePageMeta(titleOrOptions: string | PageMetaOptions, descriptio
 
     // Set canonical URL
     if (options.pathname) {
-      const canonicalUrl = options.pathname === '/' ? SITE_URL : `${SITE_URL}${options.pathname}`
+      const url = canonicalUrl(options.pathname)
       let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]')
       if (!canonical) {
         canonical = document.createElement('link')
         canonical.rel = 'canonical'
         document.head.appendChild(canonical)
       }
-      canonical.href = canonicalUrl
+      canonical.href = url
 
       // Add og:url
-      setMetaTag('property', 'og:url', canonicalUrl)
+      setMetaTag('property', 'og:url', url)
     }
   }, [
     options.title,

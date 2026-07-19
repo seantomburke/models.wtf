@@ -7,7 +7,7 @@
  */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname } from 'node:path'
-import { render, routeMeta, SITE_URL } from '../dist-server/entry-server.js'
+import { render, routeMeta, canonicalUrl } from '../dist-server/entry-server.js'
 
 const esc = (s) =>
   s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;')
@@ -22,7 +22,7 @@ writeFileSync('dist/404.html', template)
 // tags and the canonical URL must be in the static head, not just set by
 // usePageMeta at runtime.
 const socialHead = ({ path, title, description, type, image }) => {
-  const url = path === '/' ? SITE_URL : `${SITE_URL}${path}`
+  const url = canonicalUrl(path)
   return [
     `<link rel="canonical" href="${url}" />`,
     `<meta property="og:title" content="${esc(title)}" />`,

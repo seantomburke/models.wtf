@@ -17,7 +17,7 @@
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { routeMeta } from '../dist-server/entry-server.js'
+import { routeMeta, canonicalUrl } from '../dist-server/entry-server.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const projectRoot = path.resolve(__dirname, '..')
@@ -26,8 +26,6 @@ const projectRoot = path.resolve(__dirname, '..')
  * Build the complete sitemap XML.
  */
 function generateSitemap() {
-  const baseUrl = 'https://seantomburke.github.io'
-  const basePath = '/models.fyi' // GitHub Pages project path
   const buildDate = new Date().toISOString().split('T')[0] // YYYY-MM-DD
 
   // Use routeMeta to get all routes dynamically
@@ -43,13 +41,9 @@ function generateSitemap() {
 
   // Build XML entries
   const urlEntries = routes.map(([path, changefreq]) => {
-    let loc = `${baseUrl}${basePath}${path}`
-    // Ensure home page has trailing slash
-    if (path === '/') {
-      loc = loc.replace(/\/+$/, '') + '/'
-    } else {
-      loc = loc.replace(/\/+$/, '')
-    }
+    // Trailing-slash form: GitHub Pages 301s the slashless URL, and sitemap
+    // entries must be the URLs that return 200 (see canonicalUrl).
+    const loc = canonicalUrl(path)
     return `  <url>
     <loc>${loc}</loc>
     <lastmod>${buildDate}</lastmod>

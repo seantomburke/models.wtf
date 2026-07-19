@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs'
-import { routeMeta, metaFor, SITE_URL } from './routeMeta'
+import { routeMeta, metaFor, canonicalUrl, SITE_URL } from './routeMeta'
 import { topics } from '../pages/learn/topics'
 
 test('covers every route in the sitemap, and nothing extra', () => {
@@ -38,4 +38,26 @@ test('every route has an og type and an absolute og:image URL', () => {
 
 test('metaFor throws on unknown paths', () => {
   expect(() => metaFor('/nope')).toThrow(/no route meta/i)
+})
+
+test('canonical URLs use the trailing-slash form GitHub Pages serves with a 200', () => {
+  // The slashless form 301-redirects (routes are served from <path>/index.html),
+  // and canonical/og:url/sitemap entries must never point at a redirect.
+  expect(canonicalUrl('/')).toBe(`${SITE_URL}/`)
+  expect(canonicalUrl('/compare')).toBe(`${SITE_URL}/compare/`)
+  expect(canonicalUrl('/models/kimi-k3')).toBe(`${SITE_URL}/models/kimi-k3/`)
+  for (const r of routeMeta) {
+    const url = canonicalUrl(r.path)
+    expect(url.endsWith('/')).toBe(true)
+    expect(url).not.toMatch(/(?<!:)\/\//)
+  }
+})
+
+test('sitemap and robots.txt point at URLs that return 200', () => {
+  const sitemap = readFileSync('public/sitemap.xml', 'utf8')
+  for (const [, loc] of sitemap.matchAll(/<loc>([^<]*)<\/loc>/g)) {
+    expect(loc.endsWith('/')).toBe(true)
+  }
+  const robots = readFileSync('public/robots.txt', 'utf8')
+  expect(robots).toContain(`Sitemap: ${SITE_URL}/sitemap.xml`)
 })

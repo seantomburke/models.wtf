@@ -18,6 +18,16 @@ export interface RouteMeta {
 /** Absolute base URL of the deployed site — og:image and canonical URLs must be absolute. */
 export const SITE_URL = 'https://seantomburke.github.io/models.fyi'
 
+/**
+ * The canonical absolute URL for a route path, always with a trailing slash.
+ * GitHub Pages serves each prerendered route from `<path>/index.html`, so the
+ * slashless form 301-redirects to the trailing-slash form. Canonical tags,
+ * og:url, sitemap entries, and JSON-LD must all use the URL that returns 200.
+ */
+export function canonicalUrl(path: string): string {
+  return path === '/' ? `${SITE_URL}/` : `${SITE_URL}${path}/`
+}
+
 const ogImage = `${SITE_URL}/og-image.png`
 
 export const routeMeta: RouteMeta[] = [
@@ -131,7 +141,7 @@ export function organizationSchema() {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'Models.fyi',
-    url: SITE_URL,
+    url: canonicalUrl('/'),
     description:
       'Compare flagship AI models from OpenAI, Anthropic, Google, and xAI across benchmarks, cost, and capability.',
     sameAs: ['https://github.com/seantomburke/models.fyi'],
@@ -167,7 +177,7 @@ export function breadcrumbSchema(items: Array<{ name: string; path: string }>) {
       '@type': 'ListItem',
       position: index + 1,
       name: item.name,
-      item: `${SITE_URL}${item.path}`,
+      item: canonicalUrl(item.path),
     })),
   }
 }
