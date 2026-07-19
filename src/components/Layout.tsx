@@ -3,6 +3,7 @@ import { NavLink, Outlet, Link } from 'react-router-dom'
 import { dataSourcedAt } from '../data/index.ts'
 import { DarkModeToggle } from './DarkModeToggle'
 import { ErrorBoundary } from './ErrorBoundary.tsx'
+import { ReturnToTop } from './ReturnToTop.tsx'
 
 const navItems = [
   { to: '/compare', label: 'Compare' },
@@ -133,6 +134,8 @@ export function Layout() {
           </Suspense>
         </ErrorBoundary>
       </main>
+
+      <ReturnToTop />
 
       <footer className="border-t border-line" role="contentinfo">
         <div className="mx-auto flex w-full max-w-5xl flex-col gap-3 px-4 py-6 text-xs text-fg-muted sm:flex-row sm:items-center sm:justify-between sm:px-6">
