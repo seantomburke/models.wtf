@@ -30,7 +30,7 @@ test('every nav destination renders with a heading and page title', async () => 
     ['/graph', /see it on a graph/i], // lazy-loaded
     ['/calculator', /what does a conversation cost/i], // lazy-loaded
     ['/quiz', /which model should i use/i],
-    ['/learn', /learn the basics/i],
+    ['/learn', /learn how ai models work/i],
   ]
   for (const [path, heading] of routes) {
     renderAt(path)

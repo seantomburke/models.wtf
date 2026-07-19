@@ -68,9 +68,9 @@ export const routeMeta: RouteMeta[] = [
   },
   {
     path: '/learn',
-    title: 'Learn the basics of AI models — Models.fyi',
+    title: 'Learn how AI models work — Models.fyi',
     description:
-      'What is an AI model? What is an LLM, GPT, or a context window? The basics of AI, explained in plain language with simple analogies.',
+      'A plain-language learning path for AI models: basics, intermediate, and advanced explainers, plus a model lab with tiny interactive models you can play with in your browser.',
     type: 'website',
     image: ogImage,
   },

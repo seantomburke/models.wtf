@@ -76,12 +76,12 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://seantomburke.github.io/models.fyi/learn/reasoning-models</loc>
+    <loc>https://seantomburke.github.io/models.fyi/learn/which-model-should-i-use</loc>
     <lastmod>2026-07-19</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://seantomburke.github.io/models.fyi/learn/which-model-should-i-use</loc>
+    <loc>https://seantomburke.github.io/models.fyi/learn/reasoning-models</loc>
     <lastmod>2026-07-19</lastmod>
     <changefreq>monthly</changefreq>
   </url>
@@ -121,22 +121,7 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://seantomburke.github.io/models.fyi/learn/embedding-models</loc>
-    <lastmod>2026-07-19</lastmod>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>https://seantomburke.github.io/models.fyi/learn/fine-tuning-models</loc>
-    <lastmod>2026-07-19</lastmod>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
     <loc>https://seantomburke.github.io/models.fyi/learn/model-pricing-tokens</loc>
-    <lastmod>2026-07-19</lastmod>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>https://seantomburke.github.io/models.fyi/learn/context-window-strategies</loc>
     <lastmod>2026-07-19</lastmod>
     <changefreq>monthly</changefreq>
   </url>
@@ -161,6 +146,21 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://seantomburke.github.io/models.fyi/learn/embedding-models</loc>
+    <lastmod>2026-07-19</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://seantomburke.github.io/models.fyi/learn/fine-tuning-models</loc>
+    <lastmod>2026-07-19</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://seantomburke.github.io/models.fyi/learn/context-window-strategies</loc>
+    <lastmod>2026-07-19</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://seantomburke.github.io/models.fyi/learn/how-do-neural-network-weights-work</loc>
     <lastmod>2026-07-19</lastmod>
     <changefreq>monthly</changefreq>
@@ -172,6 +172,11 @@
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.fyi/learn/how-neural-networks-recognize-digits</loc>
+    <lastmod>2026-07-19</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://seantomburke.github.io/models.fyi/learn/how-llms-predict-the-next-word</loc>
     <lastmod>2026-07-19</lastmod>
     <changefreq>monthly</changefreq>
   </url>

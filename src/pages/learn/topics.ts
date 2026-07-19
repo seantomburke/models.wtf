@@ -8,6 +8,7 @@ import { WeightsExplainer } from './components/WeightsExplainer'
 import { PixelClassifier } from '../../components/learn/PixelClassifier'
 import { DigitClassifier } from '../../components/learn/DigitClassifier'
 import { MultiLayerNetwork } from '../../components/learn/MultiLayerNetwork'
+import { NextWordPredictor } from '../../components/learn/NextWordPredictor'
 
 import { TokenVisualization } from '../../components/learn/TokenVisualization'
 
@@ -17,8 +18,52 @@ export interface TopicSection {
   component?: React.ComponentType
 }
 
+export type TopicLevel = 'basics' | 'intermediate' | 'advanced' | 'lab'
+
+/** The learning path, in reading order. The topics array follows this order. */
+export const levels: Array<{ id: TopicLevel; title: string; blurb: string }> = [
+  {
+    id: 'basics',
+    title: 'Basics',
+    blurb: 'Start here. What models are, how they read text, and which one to pick. No jargon, no math.',
+  },
+  {
+    id: 'intermediate',
+    title: 'Intermediate',
+    blurb: 'Put models to work: reasoning and vision, pricing, hallucinations, prompts, and head-to-head comparisons.',
+  },
+  {
+    id: 'advanced',
+    title: 'Advanced',
+    blurb: 'The deeper machinery: embeddings, fine-tuning, and squeezing value out of giant context windows.',
+  },
+  {
+    id: 'lab',
+    title: 'The model lab',
+    blurb: 'Real models small enough to see through, running in your browser. Meet Doodle-64, Doodle-525, and Parrot-43 — then scale the same ideas up to billion-parameter LLMs.',
+  },
+]
+
+/**
+ * Spec sheet for the lab's tiny models, presented like a real release's
+ * model card so the "parameters / inputs / outputs" vocabulary carries
+ * over to the big models on the compare table.
+ */
+export interface ModelSpec {
+  name: string
+  type: string
+  parameters: string
+  layers: string
+  inputs: string
+  outputs: string
+  /** One line placing this model against frontier LLMs. */
+  scale: string
+}
+
 export interface Topic {
   slug: string
+  /** Where the topic sits on the learning path. */
+  level: TopicLevel
   /** Question shown in nav/cards and as the H1. */
   question: string
   metaTitle: string
@@ -28,11 +73,14 @@ export interface Topic {
   sections: TopicSection[]
   /** Optional interactive component to render alongside sections. */
   interactive?: ComponentType
+  /** Optional spec card for lab topics that ship a named tiny model. */
+  modelSpec?: ModelSpec
 }
 
-export const topics: Topic[] = [
+const authored: Topic[] = [
   {
     slug: 'what-is-an-ai-model',
+    level: 'basics',
     question: 'What is an AI model?',
     metaTitle: 'What is an AI model? Explained simply - Models.fyi',
     metaDescription:
@@ -63,6 +111,7 @@ export const topics: Topic[] = [
   },
   {
     slug: 'what-is-an-llm',
+    level: 'basics',
     question: 'What is an LLM?',
     metaTitle: 'What is an LLM? Large Language Models explained - Models.fyi',
     metaDescription:
@@ -93,6 +142,7 @@ export const topics: Topic[] = [
   },
   {
     slug: 'what-is-gpt',
+    level: 'basics',
     question: 'What is GPT?',
     metaTitle: 'What is GPT? What the letters mean - Models.fyi',
     metaDescription:
@@ -118,6 +168,7 @@ export const topics: Topic[] = [
   },
   {
     slug: 'what-is-a-context-window',
+    level: 'basics',
     question: 'What is a context window?',
     metaTitle: 'What is a context window? AI memory explained - Models.fyi',
     metaDescription:
@@ -142,6 +193,7 @@ export const topics: Topic[] = [
   },
   {
     slug: 'what-is-a-token',
+    level: 'basics',
     question: 'What is a token?',
     metaTitle: 'What is a token? AI tokenization explained - Models.fyi',
     metaDescription:
@@ -166,6 +218,7 @@ export const topics: Topic[] = [
   },
   {
     slug: 'reasoning-models',
+    level: 'intermediate',
     question: 'What is a reasoning model?',
     metaTitle: 'Reasoning vs non-reasoning AI models explained - Models.fyi',
     metaDescription:
@@ -191,6 +244,7 @@ export const topics: Topic[] = [
   },
   {
     slug: 'which-model-should-i-use',
+    level: 'basics',
     question: 'Which model should I use?',
     metaTitle: 'Which AI model should I use? A plain answer - Models.fyi',
     metaDescription:
@@ -215,6 +269,7 @@ export const topics: Topic[] = [
   // Comparison topics
   {
     slug: 'claude-vs-gpt',
+    level: 'intermediate',
     question: 'Claude vs GPT: Which should I use?',
     metaTitle: 'Claude vs GPT - head-to-head comparison - Models.fyi',
     metaDescription:
@@ -250,6 +305,7 @@ export const topics: Topic[] = [
   },
   {
     slug: 'claude-vs-gemini',
+    level: 'intermediate',
     question: 'Claude vs Gemini: Which is better?',
     metaTitle: 'Claude vs Gemini - comparison and when to use each - Models.fyi',
     metaDescription:
@@ -286,6 +342,7 @@ export const topics: Topic[] = [
   },
   {
     slug: 'grok-vs-gpt',
+    level: 'intermediate',
     question: 'Grok vs GPT: Where Grok stands',
     metaTitle: 'Grok vs GPT - xAI\'s answer to OpenAI - Models.fyi',
     metaDescription:
@@ -321,6 +378,7 @@ export const topics: Topic[] = [
   // Use case topics
   {
     slug: 'best-model-for-coding',
+    level: 'intermediate',
     question: 'What\'s the best AI model for coding?',
     metaTitle: 'Best AI model for coding - comparison and tips - Models.fyi',
     metaDescription:
@@ -358,6 +416,7 @@ export const topics: Topic[] = [
   },
   {
     slug: 'best-model-for-writing',
+    level: 'intermediate',
     question: 'What\'s the best AI model for writing?',
     metaTitle: 'Best AI model for writing and content creation - Models.fyi',
     metaDescription:
@@ -394,6 +453,7 @@ export const topics: Topic[] = [
   },
   {
     slug: 'best-model-for-research',
+    level: 'intermediate',
     question: 'What\'s the best AI model for research?',
     metaTitle: 'Best AI model for research and analysis - Models.fyi',
     metaDescription:
@@ -431,6 +491,7 @@ export const topics: Topic[] = [
   // Concept topics
   {
     slug: 'vision-models',
+    level: 'intermediate',
     question: 'What are vision models?',
     metaTitle: 'What are vision models? AI that sees images - Models.fyi',
     metaDescription:
@@ -460,6 +521,7 @@ export const topics: Topic[] = [
   },
   {
     slug: 'embedding-models',
+    level: 'advanced',
     question: 'What are embedding models?',
     metaTitle: 'What are embeddings? How AI finds meaning in text - Models.fyi',
     metaDescription:
@@ -490,6 +552,7 @@ export const topics: Topic[] = [
   },
   {
     slug: 'fine-tuning-models',
+    level: 'advanced',
     question: 'What is fine-tuning?',
     metaTitle: 'Fine-tuning AI models: when and why - Models.fyi',
     metaDescription:
@@ -520,6 +583,7 @@ export const topics: Topic[] = [
   },
   {
     slug: 'model-pricing-tokens',
+    level: 'intermediate',
     question: 'How does AI pricing work - input vs output tokens',
     metaTitle: 'AI model pricing explained: input vs output tokens - Models.fyi',
     metaDescription:
@@ -550,6 +614,7 @@ export const topics: Topic[] = [
   },
   {
     slug: 'context-window-strategies',
+    level: 'advanced',
     question: 'How to make the most of context windows',
     metaTitle: 'Context window strategies: when big isn\'t better - Models.fyi',
     metaDescription:
@@ -579,6 +644,7 @@ export const topics: Topic[] = [
   },
   {
     slug: 'prompt-engineering-basics',
+    level: 'intermediate',
     question: 'Prompt engineering basics: how to get better answers',
     metaTitle: 'Prompt engineering 101: tips to get better AI answers - Models.fyi',
     metaDescription:
@@ -615,6 +681,7 @@ export const topics: Topic[] = [
   },
   {
     slug: 'web-search-models',
+    level: 'intermediate',
     question: 'When to use a model with web search',
     metaTitle: 'Web search in AI models: when you need real-time data - Models.fyi',
     metaDescription:
@@ -652,6 +719,7 @@ export const topics: Topic[] = [
   },
   {
     slug: 'hallucinations',
+    level: 'intermediate',
     question: 'What are AI hallucinations and why they happen',
     metaTitle: 'AI hallucinations explained: why models make things up - Models.fyi',
     metaDescription:
@@ -682,6 +750,7 @@ export const topics: Topic[] = [
   },
   {
     slug: 'open-source-vs-closed-source',
+    level: 'intermediate',
     question: 'Open source vs closed-source AI models',
     metaTitle: 'Open source vs closed source models: the trade-offs - Models.fyi',
     metaDescription:
@@ -718,6 +787,7 @@ export const topics: Topic[] = [
   },
   {
     slug: 'how-do-neural-network-weights-work',
+    level: 'lab',
     question: 'How do neural network weights work?',
     metaTitle: 'How neural network weights work - Interactive explainer - Models.fyi',
     metaDescription:
@@ -772,13 +842,30 @@ export const topics: Topic[] = [
   },
   {
     slug: 'understand-image-classification',
+    level: 'lab',
     question: 'How do neural networks classify images?',
     metaTitle: 'Image classification with neural networks - Interactive demo - Models.fyi',
     metaDescription:
       'See how neural networks classify images with an interactive 8x8 pixel demo. Draw a 3 or E and watch the classifier predict.',
-    hook: 'Train your own (tiny) classifier: teach the network to tell 3 from E.',
+    hook: 'Meet Doodle-64, a 64-parameter classifier that tells 3 from E — and works exactly like the big models.',
     interactive: PixelClassifier,
+    modelSpec: {
+      name: 'Doodle-64',
+      type: 'Single-layer binary image classifier (a perceptron, the original neural network)',
+      parameters: '64 — one learned weight per pixel',
+      layers: '1 (64 pixels → 1 score)',
+      inputs: '64 numbers: the 8×8 grid, 1 where you drew ink and 0 where you didn\'t',
+      outputs: '2 probabilities that sum to 100%: "this is a 3" vs "this is an E"',
+      scale: 'Frontier LLMs have hundreds of billions of parameters. Doodle-64 has 64 — about ten billion times smaller — but every one of them is the same kind of number doing the same multiply-and-add.',
+    },
     sections: [
+      {
+        heading: 'Meet Doodle-64',
+        paragraphs: [
+          'The demo on this page is a real model, so we gave it a real model card, just like the ones providers publish for GPT or Claude. Doodle-64 is a single-layer binary image classifier with exactly 64 parameters: one weight per pixel of its 8×8 input grid. Its input is 64 numbers (1 for ink, 0 for blank), and its output is two probabilities that always sum to 100%.',
+          'Sixty-four parameters sounds like a toy next to a frontier model\'s hundreds of billions, and it is. But "parameter" means exactly the same thing in both: one learned number that multiplies one input. When a model page on this site says "70B parameters", it means 70 billion of the same little dials you can see, all at once, in the heatmap below.',
+        ],
+      },
       {
         heading: 'From pixels to predictions',
         paragraphs: [
@@ -798,6 +885,7 @@ export const topics: Topic[] = [
         paragraphs: [
           'Vision models like Claude\'s or GPT-4\'s vision capability work on the same principle, scaled up. They process photos, screenshots, charts. The network has learned to recognize objects, text, patterns—all through millions of learned weights.',
           'Every model\'s understanding of images lives in those weights. That\'s why changing weights changes what the model sees, and why different models see images differently.',
+          'And it isn\'t just vision. An LLM answering "what comes next in this sentence?" is doing the same thing Doodle-64 does: multiply inputs by learned weights, add them up, and turn the scores into probabilities. Doodle-64 chooses between 2 answers with 64 parameters; an LLM chooses between ~200,000 possible next tokens with billions. The gap is size, not kind.',
         ],
       },
       {
@@ -810,13 +898,30 @@ export const topics: Topic[] = [
   },
   {
     slug: 'how-neural-networks-recognize-digits',
+    level: 'lab',
     question: 'How do neural networks recognize digits?',
     metaTitle: 'How neural networks recognize digits 0-9 - Interactive two-layer demo - Models.fyi',
     metaDescription:
       'Draw any digit 0-9 and watch a two-layer neural network recognize it. The hidden layer spots strokes, the output layer combines them into digits. Interactive demo.',
-    hook: 'Draw any digit and watch a hidden layer find the strokes before the network names the number.',
+    hook: 'Meet Doodle-525: draw any digit and watch its hidden layer find the strokes before it names the number.',
     interactive: DigitClassifier,
+    modelSpec: {
+      name: 'Doodle-525',
+      type: 'Two-layer feed-forward neural network (a tiny multi-layer perceptron)',
+      parameters: '525 — 448 pixel-to-stroke weights + 7 stroke biases + 70 stroke-to-digit weights',
+      layers: '2 (64 pixels → 7 stroke detectors → 10 digits)',
+      inputs: '64 numbers: the 8×8 grid, 1 where you drew ink and 0 where you didn\'t',
+      outputs: '10 probabilities, one per digit 0–9, summing to 100%',
+      scale: 'Same inputs as Doodle-64, eight times the parameters, and one hidden layer — the single upgrade that "deep" learning repeats hundreds of times in a billion-parameter LLM.',
+    },
     sections: [
+      {
+        heading: 'Meet Doodle-525',
+        paragraphs: [
+          'Doodle-525 is the second model in our lab, and its model card shows what one extra layer costs and buys. It reads the same 64-pixel grid as Doodle-64, but instead of mapping pixels straight to an answer, it spends 448 weights (plus 7 biases) turning pixels into 7 stroke detections, then 70 more weights turning strokes into 10 digit scores. Total: 525 parameters for a 10-way choice, where Doodle-64 needed 64 for a 2-way choice.',
+          'That budget is the whole story of neural network design: more possible answers and subtler distinctions demand more parameters, and layering lets the parameters share work. The 7 stroke detectors are reused by all 10 digits, the way an LLM\'s early layers are reused by every sentence it will ever read.',
+        ],
+      },
       {
         heading: 'Why one layer stops being enough',
         paragraphs: [
@@ -853,4 +958,62 @@ export const topics: Topic[] = [
       },
     ],
   },
+  {
+    slug: 'how-llms-predict-the-next-word',
+    level: 'lab',
+    question: 'How do LLMs predict the next word?',
+    metaTitle: 'How LLMs predict the next word - Interactive demo - Models.fyi',
+    metaDescription:
+      'Build a sentence one word at a time with a tiny language model trained on nine sentences. See exactly how next-word prediction comes from training data, then scale the idea to ChatGPT and Claude.',
+    hook: 'Meet Parrot-43, a language model trained on nine sentences. Watch it predict the next word — and see exactly where every prediction comes from.',
+    interactive: NextWordPredictor,
+    modelSpec: {
+      name: 'Parrot-43',
+      type: 'Bigram language model — the smallest honest next-word predictor',
+      parameters: '43 — one count for every word pair it saw during training',
+      layers: '0 — it\'s a lookup table, not a network (that\'s the punchline, keep reading)',
+      inputs: '1 word: the last word of the sentence so far',
+      outputs: 'A probability for every word that could come next, summing to 100%',
+      scale: 'ChatGPT and Claude do this exact job — predict the next token, append it, repeat — with billions of parameters and thousands of words of context instead of one.',
+    },
+    sections: [
+      {
+        heading: 'The smallest language model that could',
+        paragraphs: [
+          'Doodle-64 and Doodle-525 recognize things. Parrot-43 generates things, which makes it the closest cousin of ChatGPT and Claude in our lab. Its entire education is the nine sentences shown above, and its entire brain is 43 counts: how many times each word followed each other word in those sentences.',
+          'That\'s all "training" means here. Read the data, count the pairs. "the cat" appears three times, so after "the", the word "cat" gets 3 votes. Divide the votes by the total and you have probabilities. When you click a word in the demo, the highlighted corpus shows you exactly which sentences cast those votes — nothing is hidden, because there is nothing else.',
+        ],
+      },
+      {
+        heading: 'Generation is prediction in a loop',
+        paragraphs: [
+          'To write a sentence, Parrot-43 does what every LLM does: predict the next word, append it, and predict again from the new ending. Click through a few choices and you can splice its training sentences into one it was never taught, like "my cat sat on the fence". New sentences out of old counts — that is generation.',
+          'Now press "Always pick the favorite" and watch it get stuck chanting "the cat ate my cat ate my…". Always taking the single most likely word is a real failure mode in big models too — it\'s part of why LLMs add a dash of randomness, called temperature, when they pick from their probabilities.',
+          'You\'ll also notice what it can never do: say a word it hasn\'t seen. Its 22-word vocabulary is the entire universe as far as it\'s concerned. And when you steer it onto a rare word like "flew", it has exactly one recorded continuation and marches straight down it. Tiny training data makes a tiny parrot.',
+        ],
+      },
+      {
+        heading: 'What LLMs do differently',
+        paragraphs: [
+          'Three upgrades separate Parrot-43 from GPT or Claude. First, context: Parrot-43 looks at one previous word; an LLM weighs thousands of previous tokens at once (that\'s what the transformer\'s attention is for). Second, generalization: an LLM doesn\'t store counts in a table, it compresses the patterns of its training data into billions of weights — the same multiply-and-add weights as Doodle-64 — so it can handle sentences it has never seen. Third, scale: instead of nine sentences, most of the internet; instead of a 22-word vocabulary, ~200,000 tokens.',
+          'But the job description never changes. Every reply from a frontier model is next-token prediction repeated thousands of times: score every possible continuation, turn scores into probabilities, pick one, append, repeat. If you understand why Parrot-43 says "cat" after "the", you understand what a trillion-dollar industry is scaling up.',
+        ],
+      },
+      {
+        heading: 'Where the hallucinations come from',
+        paragraphs: [
+          'Parrot-43 also demonstrates the famous LLM failure mode in miniature. Ask it to continue "my" and it says "cat" or "homework" — not because either is true, but because those are the likeliest continuations of its training data. Likely and true are different things. An LLM with billions of parameters blurs that line much more convincingly, but the gap never fully closes. That\'s a hallucination, and now you\'ve watched one get built.',
+        ],
+      },
+    ],
+  },
 ]
+
+const levelRank: Record<TopicLevel, number> = { basics: 0, intermediate: 1, advanced: 2, lab: 3 }
+
+/**
+ * Topics in learning-path order: basics → intermediate → advanced → lab.
+ * The sort is stable, so authoring order decides the sequence within a level,
+ * and the "Next up" links walk the whole path in this order.
+ */
+export const topics: Topic[] = [...authored].sort((a, b) => levelRank[a.level] - levelRank[b.level])

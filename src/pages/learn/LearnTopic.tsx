@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { usePostHog } from '@posthog/react'
 import { usePageMeta } from '../../lib/meta.ts'
 import { metaFor, faqSchema } from '../../lib/routeMeta.ts'
-import { topics } from './topics.ts'
+import { topics, levels } from './topics.ts'
 import { Breadcrumb } from '../../components/Breadcrumb.tsx'
 
 const crossLinks = [
@@ -57,6 +57,9 @@ export function LearnTopic() {
   }
 
   const next = topics[index + 1]
+  const level = levels.find((l) => l.id === topic.level)
+  const levelIndex = topics.filter((t) => t.level === topic.level).findIndex((t) => t.slug === topic.slug)
+  const spec = topic.modelSpec
 
   return (
     <article className="max-w-2xl">
@@ -68,8 +71,42 @@ export function LearnTopic() {
         ]}
         className="mb-4"
       />
-      <h1 className="mt-3 text-3xl font-semibold tracking-tight">{topic.question}</h1>
+      {level && (
+        <p className="mt-3 text-xs font-medium uppercase tracking-wide text-fg-faint">
+          {level.title} · Part {levelIndex + 1}
+        </p>
+      )}
+      <h1 className="mt-1 text-3xl font-semibold tracking-tight">{topic.question}</h1>
       <p className="mt-3 text-lg leading-relaxed text-fg-secondary">{topic.hook}</p>
+
+      {spec && (
+        <section
+          aria-label={`${spec.name} model card`}
+          className="mt-8 rounded-xl border border-line bg-surface-raised p-5"
+        >
+          <div className="flex items-baseline justify-between gap-3">
+            <h2 className="text-lg font-semibold tracking-tight">{spec.name}</h2>
+            <span className="text-xs font-medium uppercase tracking-wide text-fg-faint">Model card</span>
+          </div>
+          <dl className="mt-3 space-y-2.5 text-sm">
+            {[
+              ['Type', spec.type],
+              ['Parameters', spec.parameters],
+              ['Layers', spec.layers],
+              ['Input', spec.inputs],
+              ['Output', spec.outputs],
+            ].map(([label, value]) => (
+              <div key={label} className="sm:grid sm:grid-cols-[7rem_1fr] sm:gap-3">
+                <dt className="font-medium text-fg">{label}</dt>
+                <dd className="text-fg-secondary">{value}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="mt-4 border-t border-line pt-3 text-sm leading-relaxed text-fg-secondary">
+            {spec.scale}
+          </p>
+        </section>
+      )}
 
       {topic.interactive && (
         <div className="mt-10">

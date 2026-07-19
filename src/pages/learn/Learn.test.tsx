@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import { Learn } from './Learn'
 import { LearnTopic } from './LearnTopic'
-import { topics } from './topics'
+import { topics, levels } from './topics'
 
 function renderAt(path: string) {
   render(
@@ -37,6 +37,29 @@ test('every topic page renders with unique SEO meta and cross-links', () => {
     expect(screen.getByRole('link', { name: /recommendation in 4 questions/i })).toBeInTheDocument()
     document.body.innerHTML = ''
   }
+})
+
+test('index groups topics under the four learning-path levels', () => {
+  renderAt('/learn')
+  for (const level of levels) {
+    expect(screen.getByRole('heading', { level: 2, name: level.title })).toBeInTheDocument()
+  }
+  // The learning path walks levels in order: every topic's level rank is
+  // greater than or equal to the one before it.
+  const rank = new Map(levels.map((l, i) => [l.id, i]))
+  for (let i = 1; i < topics.length; i++) {
+    expect(rank.get(topics[i].level)!).toBeGreaterThanOrEqual(rank.get(topics[i - 1].level)!)
+  }
+})
+
+test('lab topics with a named model render its model card', () => {
+  renderAt('/learn/understand-image-classification')
+  expect(screen.getByText('Doodle-64')).toBeInTheDocument()
+  expect(screen.getByText('Model card')).toBeInTheDocument()
+  expect(screen.getByText('Parameters')).toBeInTheDocument()
+  document.body.innerHTML = ''
+  renderAt('/learn/how-neural-networks-recognize-digits')
+  expect(screen.getByText('Doodle-525')).toBeInTheDocument()
 })
 
 test('unknown topic slug shows not-found with a way back', () => {
