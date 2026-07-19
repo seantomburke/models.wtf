@@ -37,8 +37,8 @@ export function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
   }, [schema])
 
   return (
-    <nav aria-label="Breadcrumb" className={`text-sm text-fg-muted ${className}`}>
-      <ol className="flex flex-wrap gap-1">
+    <nav aria-label="Breadcrumb" className={`text-sm text-fg-muted overflow-x-auto ${className}`}>
+      <ol className="inline-flex flex-nowrap gap-1 whitespace-nowrap">
         {items.map((item, index) => {
           const isLast = index === items.length - 1
           return (

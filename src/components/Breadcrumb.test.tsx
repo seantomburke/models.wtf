@@ -146,6 +146,9 @@ describe('Breadcrumb', () => {
     )
 
     const ol = container.querySelector('ol')
-    expect(ol).toHaveClass('flex', 'flex-wrap', 'gap-1')
+    expect(ol).toHaveClass('inline-flex', 'flex-nowrap', 'gap-1', 'whitespace-nowrap')
+
+    const nav = container.querySelector('nav')
+    expect(nav).toHaveClass('overflow-x-auto')
   })
 })
