@@ -6,6 +6,7 @@
 import type { ComponentType } from 'react'
 import { WeightsExplainer } from './components/WeightsExplainer'
 import { PixelClassifier } from '../../components/learn/PixelClassifier'
+import { DigitClassifier } from '../../components/learn/DigitClassifier'
 import { MultiLayerNetwork } from '../../components/learn/MultiLayerNetwork'
 
 import { TokenVisualization } from '../../components/learn/TokenVisualization'
@@ -803,6 +804,51 @@ export const topics: Topic[] = [
         heading: 'Try it yourself',
         paragraphs: [
           'Below, draw on the pixel grid or use the example buttons. You\'re seeing how a tiny network makes a prediction. The confidence score tells you how sure the classifier is. When you draw something ambiguous (halfway between 3 and E), watch the confidence drop—just like a real model.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'how-neural-networks-recognize-digits',
+    question: 'How do neural networks recognize digits?',
+    metaTitle: 'How neural networks recognize digits 0-9 - Interactive two-layer demo - Models.fyi',
+    metaDescription:
+      'Draw any digit 0-9 and watch a two-layer neural network recognize it. The hidden layer spots strokes, the output layer combines them into digits. Interactive demo.',
+    hook: 'Draw any digit and watch a hidden layer find the strokes before the network names the number.',
+    interactive: DigitClassifier,
+    sections: [
+      {
+        heading: 'Why one layer stops being enough',
+        paragraphs: [
+          'The 3-vs-E classifier got away with a single layer because one pixel could settle the argument: ink on the left edge means E, ink on the right curve means 3. With ten digits that trick collapses. An 8 contains every pixel of a 3, a 9 contains every pixel of a 7—so no single pixel is evidence for exactly one digit.',
+          'The fix is the most important idea in deep learning: don\'t go straight from pixels to answers. First recognize parts, then reason about combinations of parts. That "first" step is a hidden layer.',
+        ],
+      },
+      {
+        heading: 'Layer 1 finds strokes, not digits',
+        paragraphs: [
+          'The demo below has seven hidden neurons, and each one is a stroke detector: a top bar, a middle bar, a bottom bar, and four vertical lines. Each detector\'s weights cover just the pixels of its stroke—you can see them as seven mini heatmaps, each in its own color. When you draw most of a stroke, its detector fires.',
+          'Notice what these neurons don\'t know: anything about digits. The top-bar detector fires for a 5, a 7, and an 8 alike. It has one tiny job, done with a handful of weights.',
+        ],
+      },
+      {
+        heading: 'Layer 2 combines strokes into digits',
+        paragraphs: [
+          'The second layer is where digits exist. Each of the ten outputs holds a recipe: +1 for every stroke the digit uses, -1 for every stroke it doesn\'t. A firing detector pushes up the digits that want its stroke and pushes down the ones that don\'t—and a silent detector votes in reverse, because a missing bottom bar really is evidence for a 4 and against an 8.',
+          'Softmax then turns the ten scores into probabilities that sum to 100%. Draw an 8 and leave out the middle bar: the network\'s vote swings to 0, exactly the digit whose recipe matches what you actually drew.',
+        ],
+      },
+      {
+        heading: 'This is exactly what deep networks do',
+        paragraphs: [
+          'Real image models are this demo scaled up. Their early layers learn edge and color detectors, middle layers combine edges into textures and shapes, and late layers combine shapes into "cat ear" or "handwritten 7". Nobody programs those features—training finds them, the way our stroke detectors were chosen by hand here.',
+          '"Deep" in deep learning just means many hidden layers stacked, each reasoning about the patterns the previous one found. Two layers read seven strokes; a hundred layers can read a photograph.',
+        ],
+      },
+      {
+        heading: 'Try it yourself',
+        paragraphs: [
+          'Use the example buttons to load a clean digit, then vandalize it. Erase one stroke, add another, and watch the stroke detectors switch on and off and the probabilities slide between the digits that share those strokes. Then press play on the network animation to watch the whole forward pass: pixels light detectors, detectors vote on digits.',
         ],
       },
     ],

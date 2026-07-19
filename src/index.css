@@ -14,6 +14,16 @@
   --color-line: rgb(28 25 23 / 0.08);
   --color-line-strong: rgb(28 25 23 / 0.16);
 
+  /* Categorical colors for the digit classifier's seven stroke detectors.
+     Validated for CVD separation and contrast against the light surface. */
+  --color-seg-1: #2a78d6;
+  --color-seg-2: #008300;
+  --color-seg-3: #e87ba4;
+  --color-seg-4: #eda100;
+  --color-seg-5: #1baf7a;
+  --color-seg-6: #eb6834;
+  --color-seg-7: #4a3aa7;
+
   --shadow-subtle: 0 1px 3px rgb(0 0 0 / 0.08);
 }
 
@@ -30,6 +40,15 @@
   --color-accent-soft: #0f172a;
   --color-line: rgb(248 250 252 / 0.08);
   --color-line-strong: rgb(248 250 252 / 0.16);
+
+  /* Same seven hues re-stepped for the dark surface. */
+  --color-seg-1: #3987e5;
+  --color-seg-2: #008300;
+  --color-seg-3: #d55181;
+  --color-seg-4: #c98500;
+  --color-seg-5: #199e70;
+  --color-seg-6: #d95926;
+  --color-seg-7: #9085e9;
 
   --shadow-subtle: 0 1px 3px rgb(0 0 0 / 0.3);
 }
