@@ -3,6 +3,8 @@
  * Each topic is its own route for SEO. The slugs and meta titles target
  * the search phrases from the product requirements.
  */
+import type { ComponentType } from 'react'
+import { WeightsExplainer } from './components/WeightsExplainer'
 
 export interface TopicSection {
   heading: string
@@ -18,6 +20,8 @@ export interface Topic {
   /** One-line hook shown on the index cards. */
   hook: string
   sections: TopicSection[]
+  /** Optional interactive component to render alongside sections. */
+  interactive?: ComponentType
 }
 
 export const topics: Topic[] = [
@@ -678,6 +682,52 @@ export const topics: Topic[] = [
         paragraphs: [
           'For consumer use: closed-source is simpler. For enterprises with privacy needs: open-source wins. For maximum capability: closed. For maximum control: open.',
           'The gap is closing. Some open models rival closed flagships now. Check benchmarks, not ideology.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'how-do-neural-network-weights-work',
+    question: 'How do neural network weights work?',
+    metaTitle: 'How neural network weights work - Interactive explainer - Models.fyi',
+    metaDescription:
+      'Understand neural network weights with an interactive explainer. See how inputs multiply by weights and sum to create outputs. No math jargon needed.',
+    hook: 'The tiny dials that make neural networks learn anything.',
+    interactive: WeightsExplainer,
+    sections: [
+      {
+        heading: 'What are weights?',
+        paragraphs: [
+          'Weights are numbers inside a neural network, like tiny dials on a massive control panel. During training, the network adjusts millions of these dials until it gets good at its job.',
+          'Think of them like the volume knob on a speaker. Turn it up, the sound gets louder. In a network, "turn up" a weight and that input has more effect on the output.',
+        ],
+      },
+      {
+        heading: 'How they work: the multiplication',
+        paragraphs: [
+          'Each input gets multiplied by its weight. A weight of 0 means "this input doesn\'t matter." A weight of 2 means "pay double attention to this input." So if an input is 0.5 and its weight is 2, the product is 1.0.',
+          'Then all those products get added together. That sum is the output of the layer. In math: output = (input₁ × weight₁) + (input₂ × weight₂) + ... This operation repeats billions of times across a model.',
+        ],
+      },
+      {
+        heading: 'Why they matter',
+        paragraphs: [
+          'A model\'s knowledge lives in its weights. They encode everything the network learned during training: what a dog looks like in pixels, what makes good code, the patterns in human speech. Change the weights, the model\'s behavior changes.',
+          'When you "fine-tune" a model, you\'re tweaking its weights. When someone sells a model, they\'re selling the weights (and the architecture that uses them).',
+        ],
+      },
+      {
+        heading: 'The training process',
+        paragraphs: [
+          'Training a model is a loop: (1) Make a guess with the current weights, (2) See how wrong it is, (3) Adjust the weights to be less wrong, (4) Repeat with the next batch of data.',
+          'This happens millions of times. Each tiny adjustment nudges the weights towards better predictions. After weeks or months, the weights are "just right" for the task, and you have a trained model.',
+        ],
+      },
+      {
+        heading: 'A concrete example',
+        paragraphs: [
+          'Imagine training a model to predict house prices. Inputs might be: square footage, number of bedrooms, location. Weights learn how much each factor matters. Maybe the model learns: "100 extra square feet is worth $15,000, but being one neighborhood over costs $50,000."',
+          'Those relative values are encoded in the weights. They\'re the model\'s learned understanding of the housing market, baked into numbers.',
         ],
       },
     ],
