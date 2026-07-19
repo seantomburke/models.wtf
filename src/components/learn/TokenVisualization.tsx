@@ -33,7 +33,7 @@ function HighlightedTokens({ text, splitter }: { text: string; splitter: TokenSp
       {pieces.map((piece, i) => (
         <span
           key={i}
-          className="whitespace-pre-wrap rounded-sm py-1 cursor-help"
+          className="whitespace-pre-wrap py-1 cursor-help"
           style={
             splitter
               ? { backgroundColor: COLORS[i % COLORS.length], color: '#1f2937', boxShadow: 'inset -1px 0 0 rgba(255,255,255,0.9)' }

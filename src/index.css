@@ -174,12 +174,6 @@ select:focus-visible {
   .overflow-x-auto {
     -webkit-overflow-scrolling: touch;
   }
-
-  /* Improve touch target sizes on mobile */
-  button, a, [role="button"] {
-    min-height: 2.75rem; /* 44px */
-    min-width: 2.75rem; /* 44px */
-  }
 }
 
 /* Print styles for optimized printing experience */
