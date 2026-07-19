@@ -1,4 +1,5 @@
 import type { Model, Benchmark } from '../../data/types'
+import { provenanceFor } from '../../lib/scoreProvenance'
 
 interface Props {
   model: Model
@@ -32,6 +33,7 @@ export function ModelBenchmarks({ model, benchmarks }: Props) {
               {benches.map((bench) => {
                 const score = model.scores[bench.id]
                 if (score === undefined) return null
+                const provenance = provenanceFor(model, bench.id)
                 return (
                   <div key={bench.id}>
                     <div className="flex justify-between items-start mb-1">
@@ -49,6 +51,9 @@ export function ModelBenchmarks({ model, benchmarks }: Props) {
                         style={{ width: `${score}%` }}
                       />
                     </div>
+                    <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                      {provenance.detail}
+                    </p>
                   </div>
                 )
               })}

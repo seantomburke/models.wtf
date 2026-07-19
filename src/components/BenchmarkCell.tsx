@@ -1,14 +1,23 @@
 import { useState, useRef, useEffect } from 'react'
 import type { Benchmark } from '../data/types.ts'
+import type { ProvenanceDisplay } from '../lib/scoreProvenance.ts'
 import { BenchmarkSourceLink } from './BenchmarkSourceLink.tsx'
 
 interface BenchmarkCellProps {
   benchmark: Benchmark
   score: number | undefined
   isBest: boolean
+  provenance?: ProvenanceDisplay
 }
 
-export function BenchmarkCell({ benchmark, score, isBest }: BenchmarkCellProps) {
+const provenanceDotColor: Record<ProvenanceDisplay['kind'], string> = {
+  'independent': 'bg-emerald-500',
+  'provider-reproduced': 'bg-emerald-500',
+  'provider': 'bg-slate-400',
+  'provider-diverging': 'bg-amber-500',
+}
+
+export function BenchmarkCell({ benchmark, score, isBest, provenance }: BenchmarkCellProps) {
   const [showTooltip, setShowTooltip] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
@@ -23,23 +32,11 @@ export function BenchmarkCell({ benchmark, score, isBest }: BenchmarkCellProps) 
       `${score.toFixed(1)}%`
     )
 
-  const confidenceBadge =
-    score !== undefined && benchmark.confidence ? (
+  const provenanceDot =
+    score !== undefined && provenance ? (
       <span
-        className={`ml-1 inline-block w-2 h-2 rounded-full ${
-          benchmark.confidence === 'published'
-            ? 'bg-green-500'
-            : benchmark.confidence === 'independent'
-              ? 'bg-blue-500'
-              : 'bg-yellow-500'
-        }`}
-        title={
-          benchmark.confidence === 'published'
-            ? 'Published by provider'
-            : benchmark.confidence === 'independent'
-              ? 'Independent run'
-              : 'Mixed sources'
-        }
+        className={`ml-1 inline-block w-2 h-2 rounded-full ${provenanceDotColor[provenance.kind]}`}
+        title={provenance.detail}
         aria-hidden="true"
       />
     ) : null
@@ -102,12 +99,12 @@ export function BenchmarkCell({ benchmark, score, isBest }: BenchmarkCellProps) 
           >
             {scoreContent}
           </BenchmarkSourceLink>
-          {confidenceBadge}
+          {provenanceDot}
         </button>
       ) : (
         <>
           {scoreContent}
-          {confidenceBadge}
+          {provenanceDot}
         </>
       )}
 
@@ -130,16 +127,10 @@ export function BenchmarkCell({ benchmark, score, isBest }: BenchmarkCellProps) 
                 </span>
               </div>
             )}
-            {benchmark.confidence && (
+            {provenance && (
               <div className="mt-2 text-xs text-fg-muted">
-                Type:{' '}
-                <span className="font-medium text-fg-secondary">
-                  {benchmark.confidence === 'published'
-                    ? 'Provider published'
-                    : benchmark.confidence === 'independent'
-                      ? 'Independent'
-                      : 'Mixed sources'}
-                </span>
+                This score:{' '}
+                <span className="font-medium text-fg-secondary">{provenance.detail}</span>
               </div>
             )}
             <div className="mt-3">

@@ -5,6 +5,11 @@ import type { Model } from './types.ts'
  * where available, otherwise independent leaderboard runs (noted below).
  * A missing score means no reliable published number was found, not zero.
  * Sources are listed in src/data/README.md.
+ *
+ * scoreProvenance records who produced each displayed number; scores
+ * without an entry are provider-published. When an independent run of a
+ * provider-reported benchmark exists, it's recorded as independentScore
+ * so the UI can surface the divergence (or the confirmation).
  */
 export const models: Model[] = [
   // ─── Anthropic ───────────────────────────────────────────────
@@ -27,6 +32,10 @@ export const models: Model[] = [
       'gpqa-diamond': 92.6, // Anthropic-published (July 2026)
       'terminal-bench': 88.0, // vals.ai independent run (July 16, 2026)
       'hle': 53.3, // Artificial Analysis independent run (July 2026)
+    },
+    scoreProvenance: {
+      'terminal-bench': { source: 'independent', runner: 'vals.ai' },
+      'hle': { source: 'independent', runner: 'Artificial Analysis' },
     },
     blurb:
       "Anthropic's most capable model. Built for the hardest reasoning and long autonomous work, at a premium price.",
@@ -59,6 +68,14 @@ export const models: Model[] = [
       'terminal-bench': 74.6, // Anthropic-published (Terminus 2); tbench.ai independent run (Claude Code) lands higher at 78.9
       'hle': 45.7, // Artificial Analysis independent run (July 2026)
     },
+    scoreProvenance: {
+      'terminal-bench': {
+        source: 'provider',
+        independentScore: 78.9,
+        independentRunner: 'tbench.ai (Claude Code)',
+      },
+      'hle': { source: 'independent', runner: 'Artificial Analysis' },
+    },
     blurb:
       'A coding workhorse. Near the top of the toughest coding benchmarks at half the price of Fable 5.',
     useCases: ['coding', 'debugging', 'analysis'],
@@ -90,6 +107,15 @@ export const models: Model[] = [
       'gpqa-diamond': 91.1, // Artificial Analysis independent run (Anthropic published none)
       'terminal-bench': 80.4, // Anthropic-published; tbench.ai independent run (Claude Code) lands 74.6
       'hle': 57.4, // BenchLM independent run (July 2026)
+    },
+    scoreProvenance: {
+      'gpqa-diamond': { source: 'independent', runner: 'Artificial Analysis' },
+      'terminal-bench': {
+        source: 'provider',
+        independentScore: 74.6,
+        independentRunner: 'tbench.ai (Claude Code)',
+      },
+      'hle': { source: 'independent', runner: 'BenchLM' },
     },
     blurb:
       'The most agentic Sonnet yet, released June 30. Can make plans and run tools autonomously. Best value for daily work, now at intro pricing.',
@@ -150,6 +176,10 @@ export const models: Model[] = [
       'gpqa-diamond': 94.1, // Artificial Analysis independent run (July 2026)
       'hle': 47.2, // Artificial Analysis independent run (July 2026; max effort)
     },
+    scoreProvenance: {
+      'gpqa-diamond': { source: 'independent', runner: 'Artificial Analysis' },
+      'hle': { source: 'independent', runner: 'Artificial Analysis' },
+    },
     blurb:
       "OpenAI's brand-new flagship. State of the art on autonomous terminal work, strong all-rounder.",
     useCases: ['coding', 'research', 'debugging'],
@@ -176,7 +206,14 @@ export const models: Model[] = [
     releaseDate: '2026-07-09',
     scores: {
       'swe-bench-pro': 63.4, // OpenAI-published
-      'terminal-bench': 87.4, // OpenAI-published (July 2026)
+      'terminal-bench': 87.4, // OpenAI-published; tbench.ai independent run (Codex) lands 78.4
+    },
+    scoreProvenance: {
+      'terminal-bench': {
+        source: 'provider',
+        independentScore: 78.4,
+        independentRunner: 'tbench.ai (Codex)',
+      },
     },
     blurb:
       'The balanced middle tier of the GPT-5.6 family. Most of Sol\'s ability at half the cost.',
@@ -205,6 +242,13 @@ export const models: Model[] = [
     scores: {
       'swe-bench-pro': 62.7,
       'terminal-bench': 84.7, // OpenAI-published; tbench.ai independent run (Codex) lands 75.7
+    },
+    scoreProvenance: {
+      'terminal-bench': {
+        source: 'provider',
+        independentScore: 75.7,
+        independentRunner: 'tbench.ai (Codex)',
+      },
     },
     blurb:
       'The fastest, most cost-efficient GPT-5.6 tier. Built for speed and high-volume simple tasks.',
@@ -235,6 +279,11 @@ export const models: Model[] = [
       'swe-bench-pro': 54.2, // from Anthropic's comparison table; Google published none
       'gpqa-diamond': 94.3, // Artificial Analysis independent run (July 2026)
       'terminal-bench': 70.79, // vals.ai independent run (July 16, 2026)
+    },
+    scoreProvenance: {
+      'swe-bench-pro': { source: 'independent', runner: "Anthropic's comparison table" },
+      'gpqa-diamond': { source: 'independent', runner: 'Artificial Analysis' },
+      'terminal-bench': { source: 'independent', runner: 'vals.ai' },
     },
     blurb:
       "Google's flagship. A top-tier reasoner with strong long-context skills at an aggressive price.",
@@ -295,7 +344,15 @@ export const models: Model[] = [
     scores: {
       'swe-bench-pro': 64.7, // xAI-published (July 2026)
       'gpqa-diamond': 93.1, // Artificial Analysis independent run (July 2026)
-      'terminal-bench': 83.3, // xAI-published (July 2026)
+      'terminal-bench': 83.3, // xAI-published; tbench.ai independent run (Cursor CLI) lands 79.3
+    },
+    scoreProvenance: {
+      'gpqa-diamond': { source: 'independent', runner: 'Artificial Analysis' },
+      'terminal-bench': {
+        source: 'provider',
+        independentScore: 79.3,
+        independentRunner: 'tbench.ai (Cursor CLI)',
+      },
     },
     blurb:
       "xAI's brand-new flagship. Strong terminal and coding chops at a mid-tier price, with live access to X (Twitter) data.",
@@ -322,6 +379,9 @@ export const models: Model[] = [
     scores: {
       'swe-bench-pro': 70.0, // xAI-published (July 2026)
       'gpqa-diamond': 63.7, // Artificial Analysis independent run (July 2026)
+    },
+    scoreProvenance: {
+      'gpqa-diamond': { source: 'independent', runner: 'Artificial Analysis' },
     },
     blurb:
       'A budget speedster with a huge 2M-token context window. One of the cheapest ways to process large amounts of text.',
@@ -355,6 +415,11 @@ export const models: Model[] = [
       'gpqa-diamond': 88.4, // Artificial Analysis independent run (Meta published none)
       'terminal-bench': 76.2, // tbench.ai independent run (mini-SWE-agent); Meta itself published only a 2.0 number
       'hle': 62.1, // BenchLM independent run (July 2026)
+    },
+    scoreProvenance: {
+      'gpqa-diamond': { source: 'independent', runner: 'Artificial Analysis' },
+      'terminal-bench': { source: 'independent', runner: 'tbench.ai (mini-SWE-agent)' },
+      'hle': { source: 'independent', runner: 'BenchLM' },
     },
     blurb:
       "Meta's new flagship and its first paid, closed-weights model after the open Llama era. Built for agent work at an aggressive price.",
@@ -477,6 +542,13 @@ export const models: Model[] = [
       'swe-bench-pro': 55.4,
       'gpqa-diamond': 90.1, // independently reproduced by NIST/CAISI
       'terminal-bench': 67.9, // DeepSeek-published (max reasoning) (July 2026)
+    },
+    scoreProvenance: {
+      'gpqa-diamond': {
+        source: 'provider',
+        independentScore: 90.1,
+        independentRunner: 'NIST CAISI',
+      },
     },
     blurb:
       'An open-source powerhouse for code and math. Free to self-host under an MIT license.',

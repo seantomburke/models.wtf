@@ -69,4 +69,16 @@ describe('ModelBenchmarks component', () => {
       expect(scores.length).toBeGreaterThan(0)
     }
   })
+
+  test('shows who measured each score', () => {
+    const model = models.find((m) => m.id === 'gpt-5-6-luna')!
+    const relevantBenchmarks = benchmarks.filter((b) => model.scores[b.id] !== undefined)
+    render(<ModelBenchmarks model={model} benchmarks={relevantBenchmarks} />)
+    expect(
+      screen.getByText('Provider-reported; an independent run by tbench.ai (Codex) lands at 75.7%.'),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText('Provider-reported; no independent run recorded yet.'),
+    ).toBeInTheDocument()
+  })
 })

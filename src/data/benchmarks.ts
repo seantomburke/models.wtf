@@ -14,7 +14,6 @@ export const benchmarks: Benchmark[] = [
     unit: '%',
     category: 'Software Engineering',
     sourceUrl: 'https://github.com/princeton-nlp/SWE-bench',
-    confidence: 'independent',
     sourceOrganization: 'Princeton NLP',
   },
   {
@@ -24,7 +23,6 @@ export const benchmarks: Benchmark[] = [
     unit: '%',
     category: 'Software Engineering',
     sourceUrl: 'https://github.com/princeton-nlp/SWE-bench',
-    confidence: 'independent',
     sourceOrganization: 'Princeton NLP',
   },
   {
@@ -34,7 +32,6 @@ export const benchmarks: Benchmark[] = [
     unit: '%',
     category: 'Knowledge',
     sourceUrl: 'https://huggingface.co/datasets/Idavidrein/gpqa',
-    confidence: 'independent',
     sourceOrganization: 'Hugging Face',
   },
   {
@@ -44,7 +41,6 @@ export const benchmarks: Benchmark[] = [
     unit: '%',
     category: 'Software Engineering',
     sourceUrl: 'https://github.com/aime-bench/aime-bench',
-    confidence: 'independent',
     sourceOrganization: 'AIME Bench',
   },
   {
@@ -54,7 +50,6 @@ export const benchmarks: Benchmark[] = [
     unit: '%',
     category: 'Knowledge',
     sourceUrl: 'https://scale.com/leaderboard/humanitys_last_exam',
-    confidence: 'independent',
     sourceOrganization: 'Scale AI',
   },
 ]

@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { BenchmarkCell } from './BenchmarkCell'
 import type { Benchmark } from '../data/types'
+import type { ProvenanceDisplay } from '../lib/scoreProvenance'
 
 const mockBenchmark: Benchmark = {
   id: 'gpqa-diamond',
@@ -10,8 +11,25 @@ const mockBenchmark: Benchmark = {
   unit: '%',
   category: 'Reasoning',
   sourceUrl: 'https://example.com/test',
-  confidence: 'independent',
   sourceOrganization: 'Test Org',
+}
+
+const independentProvenance: ProvenanceDisplay = {
+  kind: 'independent',
+  label: 'independent run',
+  detail: 'Independently measured by vals.ai.',
+}
+
+const providerProvenance: ProvenanceDisplay = {
+  kind: 'provider',
+  label: 'provider-reported',
+  detail: 'Provider-reported; no independent run recorded yet.',
+}
+
+const divergingProvenance: ProvenanceDisplay = {
+  kind: 'provider-diverging',
+  label: 'provider-reported',
+  detail: 'Provider-reported; an independent run by tbench.ai (Codex) lands at 75.7%.',
 }
 
 describe('BenchmarkCell', () => {
@@ -34,25 +52,46 @@ describe('BenchmarkCell', () => {
     expect(td).toHaveClass('font-semibold')
   })
 
-  it('renders confidence badge for independent benchmarks', () => {
-    render(<BenchmarkCell benchmark={mockBenchmark} score={75.0} isBest={false} />)
-    const badge = screen.getByTitle('Independent run')
+  it('renders green dot for independently measured scores', () => {
+    render(
+      <BenchmarkCell
+        benchmark={mockBenchmark}
+        score={75.0}
+        isBest={false}
+        provenance={independentProvenance}
+      />,
+    )
+    const badge = screen.getByTitle('Independently measured by vals.ai.')
     expect(badge).toBeInTheDocument()
-    expect(badge).toHaveClass('bg-blue-500')
+    expect(badge).toHaveClass('bg-emerald-500')
   })
 
-  it('renders confidence badge with published color', () => {
-    const publishedBenchmark = { ...mockBenchmark, confidence: 'published' as const }
-    render(<BenchmarkCell benchmark={publishedBenchmark} score={80.0} isBest={false} />)
-    const badge = screen.getByTitle('Published by provider')
-    expect(badge).toHaveClass('bg-green-500')
+  it('renders neutral dot for provider-reported scores', () => {
+    render(
+      <BenchmarkCell
+        benchmark={mockBenchmark}
+        score={80.0}
+        isBest={false}
+        provenance={providerProvenance}
+      />,
+    )
+    const badge = screen.getByTitle('Provider-reported; no independent run recorded yet.')
+    expect(badge).toHaveClass('bg-slate-400')
   })
 
-  it('renders confidence badge with mixed color', () => {
-    const mixedBenchmark = { ...mockBenchmark, confidence: 'mixed' as const }
-    render(<BenchmarkCell benchmark={mixedBenchmark} score={82.0} isBest={false} />)
-    const badge = screen.getByTitle('Mixed sources')
-    expect(badge).toHaveClass('bg-yellow-500')
+  it('renders amber dot when an independent run diverges', () => {
+    render(
+      <BenchmarkCell
+        benchmark={mockBenchmark}
+        score={84.7}
+        isBest={false}
+        provenance={divergingProvenance}
+      />,
+    )
+    const badge = screen.getByTitle(
+      'Provider-reported; an independent run by tbench.ai (Codex) lands at 75.7%.',
+    )
+    expect(badge).toHaveClass('bg-amber-500')
   })
 
   it('has proper accessibility labels', () => {
@@ -73,9 +112,11 @@ describe('BenchmarkCell', () => {
     expect(button).toHaveAttribute('title', expect.stringContaining('Test Benchmark'))
   })
 
-  it('no badge without confidence level', () => {
-    const benchmarkNoConfidence = { ...mockBenchmark, confidence: undefined }
-    render(<BenchmarkCell benchmark={benchmarkNoConfidence} score={75.0} isBest={false} />)
+  it('no dot without provenance', () => {
+    const { container } = render(
+      <BenchmarkCell benchmark={mockBenchmark} score={75.0} isBest={false} />,
+    )
     expect(screen.getByText('75.0%')).toBeInTheDocument()
+    expect(container.querySelector('span.rounded-full')).toBeNull()
   })
 })

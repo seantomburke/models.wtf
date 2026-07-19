@@ -24,6 +24,7 @@ import { BenchmarkSourceLink } from '../components/BenchmarkSourceLink.tsx'
 import { BookmarkButton } from '../components/BookmarkButton.tsx'
 import { SearchInput } from '../components/SearchInput.tsx'
 import { BenchmarkCell } from '../components/BenchmarkCell.tsx'
+import { provenanceFor } from '../lib/scoreProvenance.ts'
 import { CopyButton } from '../components/CopyButton.tsx'
 import { ModelCard } from '../components/ModelCard.tsx'
 import { loadBookmarks, saveBookmarks, toggleBookmark, isBookmarked } from '../lib/bookmarks.ts'
@@ -461,6 +462,7 @@ export function Compare() {
                         benchmark={b}
                         score={score}
                         isBest={isBest}
+                        provenance={score !== undefined ? provenanceFor(m, b.id) : undefined}
                       />
                     )
                   })}
@@ -497,8 +499,13 @@ export function Compare() {
       <p className="text-xs text-fg-muted">
         *Open-source models are free to download and run yourself; hosted-API pricing varies by
         vendor. Scores are provider-published evals where available, otherwise independent
-        leaderboard runs, collected {dataSourcedAt}. “reasoning” means the model thinks step by
-        step before answering; “web” means the provider's assistant can search the live internet.
+        leaderboard runs, collected {dataSourcedAt}. The dot next to each score shows who measured
+        it: <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" aria-hidden /> an
+        independent run, <span className="inline-block w-2 h-2 rounded-full bg-slate-400" aria-hidden />{' '}
+        the provider's own number, <span className="inline-block w-2 h-2 rounded-full bg-amber-500" aria-hidden />{' '}
+        the provider's number where an independent run differs — hover for details. “reasoning”
+        means the model thinks step by step before answering; “web” means the provider's assistant
+        can search the live internet.
       </p>
     </div>
   )

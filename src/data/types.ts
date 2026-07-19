@@ -53,10 +53,27 @@ export interface Benchmark {
   category: BenchmarkCategory
   /** URL to the benchmark source or documentation. */
   sourceUrl?: string
-  /** Data quality indicator: provider-published, independent run, or mixed sources. */
-  confidence?: 'published' | 'independent' | 'mixed'
   /** Organization that publishes or maintains this benchmark. */
   sourceOrganization?: string
+}
+
+/**
+ * Where a displayed benchmark score comes from. Scores without an entry
+ * in Model.scoreProvenance are provider-published (the dataset default).
+ */
+export interface ScoreProvenance {
+  /** Who produced the number shown in Model.scores. */
+  source: 'provider' | 'independent'
+  /** Org that ran the eval, when source is 'independent' (e.g. 'vals.ai'). */
+  runner?: string
+  /**
+   * An independent run of the same benchmark, when the displayed score is
+   * provider-reported. Equal to the score = independently reproduced;
+   * different = the runs diverge and readers should know.
+   */
+  independentScore?: number
+  /** Org behind independentScore (e.g. 'tbench.ai (Codex)'). */
+  independentRunner?: string
 }
 
 export type ModelTier = 'flagship' | 'balanced' | 'fast'
@@ -90,6 +107,12 @@ export interface Model {
   releaseDate?: string
   /** Benchmark scores in percent. Missing key = no published score found. */
   scores: Partial<Record<BenchmarkId, number>>
+  /**
+   * Per-score sourcing for entries in `scores`. Only non-default cases need
+   * an entry: independent runs, and provider numbers with a known
+   * independent counterpart. Missing key = provider-published.
+   */
+  scoreProvenance?: Partial<Record<BenchmarkId, ScoreProvenance>>
   /** One-sentence plain-language description. */
   blurb: string
   /** Typical use cases for this model (e.g., "coding", "writing", "research"). */

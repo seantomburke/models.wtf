@@ -23,6 +23,25 @@ for (const m of models) {
       fail(`${m.id}: score for unknown benchmark "${key}"`)
     }
   }
+  for (const [bench, prov] of Object.entries(m.scoreProvenance ?? {})) {
+    if (!(bench in m.scores)) {
+      fail(`${m.id}: provenance for "${bench}" but no score`)
+    }
+    if (prov.source === 'independent') {
+      if (!prov.runner) fail(`${m.id}: independent ${bench} score missing runner`)
+      if (prov.independentScore !== undefined) {
+        fail(`${m.id}: ${bench} is already independent — independentScore is for provider-reported scores`)
+      }
+    }
+    if (prov.independentScore !== undefined) {
+      if (prov.independentScore < 0 || prov.independentScore > 100) {
+        fail(`${m.id}: ${bench} independentScore ${prov.independentScore} out of 0-100 range`)
+      }
+      if (!prov.independentRunner) {
+        fail(`${m.id}: ${bench} independentScore missing independentRunner`)
+      }
+    }
+  }
 }
 
 // ─── Uniqueness ────────────────────────────────────────────────
