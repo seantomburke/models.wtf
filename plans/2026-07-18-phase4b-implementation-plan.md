@@ -477,8 +477,8 @@ interface Release {
 
 All twelve tasks are done and deployed. What remains is carried forward, not part of Phase 4B:
 
-1. **Browser-dependent QA** — Lighthouse ≥90, mobile-responsive and dark-mode passes, manual sign-off. These need a real browser; the repo's light-stack rule keeps that tooling out of the test suite, so it wants a deliberate decision rather than a quiet dependency add.
-2. **Glossary to 50+ terms** — currently 47.
+1. **Browser-dependent QA** — Lighthouse ≥90, mobile-responsive and dark-mode passes, manual sign-off. These need a real browser; the repo's light-stack rule keeps that tooling out of the test suite, so it wants a deliberate decision rather than a quiet dependency add. **Now tracked as issue #80** (2026-07-20) — attempted via Claude in Chrome, extension not connected. A static a11y audit ran instead and fixed unlabeled `WeightsExplainer` sliders (`623780b`).
+2. ~~**Glossary to 50+ terms**~~ — done, 50 terms shipped in `5d5acaa`.
 3. **Model pages to 30+** — currently 19, gated on the model dataset growing (see issue #19, the standing benchmark/model refresh).
 4. **Verify rich snippets in Google Search Console** — markup validates locally; confirming how Google actually reads it needs live GSC access.
 
