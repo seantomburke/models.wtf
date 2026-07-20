@@ -59,7 +59,7 @@ export const faqs: FAQItem[] = [
     category: 'Model Selection',
     question: 'Do all models have access to the internet?',
     answer:
-      'No. Some models, like GPT-4o and Claude 3.5 Sonnet, can access the web in real time and provide fresh information. Others (especially open-source models) cannot. If your task needs current news, stock prices, or live data, check whether the model has web access before choosing.',
+      'No. Some models, like GPT-5.6 Sol and Claude Sonnet 5, can access the web in real time and provide fresh information. Others (especially open-source models) cannot. If your task needs current news, stock prices, or live data, check whether the model has web access before choosing.',
   },
   {
     category: 'Model Selection',
@@ -85,7 +85,7 @@ export const faqs: FAQItem[] = [
     category: 'Pricing',
     question: 'Are thinking tokens more expensive?',
     answer:
-      'Yes. Thinking tokens are billed at a premium because the model uses extra compute to reason through your question. GPT-4o, for example, charges more per thinking token than regular tokens. If cost is tight, use thinking tokens sparingly, only for questions that truly need them.',
+      'Yes. Thinking tokens are billed at a premium because the model uses extra compute to reason through your question. GPT-5.6 Sol, for example, charges more per thinking token than regular tokens. If cost is tight, use thinking tokens sparingly, only for questions that truly need them.',
   },
   {
     category: 'Pricing',

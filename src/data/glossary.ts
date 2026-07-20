@@ -31,7 +31,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     id: 'gpt',
     term: 'GPT',
     short: 'A type of language model created by OpenAI.',
-    long: 'GPT stands for "Generative Pre-trained Transformer." It\'s OpenAI\'s line of AI models (like GPT-4o, GPT-4 Turbo). The name breaks down: "Generative" means it creates text, "Pre-trained" means it was trained on lots of data before release, and "Transformer" is the underlying architecture. Most people use GPT to mean "any advanced AI chatbot."',
+    long: 'GPT stands for "Generative Pre-trained Transformer." It\'s OpenAI\'s line of AI models (like GPT-5.6 Sol, GPT-5.6 Luna). The name breaks down: "Generative" means it creates text, "Pre-trained" means it was trained on lots of data before release, and "Transformer" is the underlying architecture. Most people use GPT to mean "any advanced AI chatbot."',
   },
   {
     id: 'context-window',
@@ -129,7 +129,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     id: 'closed-source',
     term: 'Closed Source',
     short: 'AI models you access through an API, not by downloading.',
-    long: 'Closed source models like GPT-4, Claude, and Gemini aren\'t available to download. You access them through an API: you send your text to OpenAI\'s servers, they run the model, and they send the result back. The advantage: these models are typically more powerful. The tradeoff: your data goes to their servers, and you depend on their service.',
+    long: 'Closed source models like GPT-5.6 Sol, Claude, and Gemini aren\'t available to download. You access them through an API: you send your text to OpenAI\'s servers, they run the model, and they send the result back. The advantage: these models are typically more powerful. The tradeoff: your data goes to their servers, and you depend on their service.',
   },
   {
     id: 'temperature',
@@ -141,7 +141,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     id: 'multimodal',
     term: 'Multimodal',
     short: 'An AI model that can understand multiple types of input (text, images, etc).',
-    long: 'A multimodal model can process more than just text. It can read images, understand video, listen to audio, etc. GPT-4 Vision, Claude 3, and Gemini are all multimodal. You can show them a photo and ask what\'s in it, or give them a chart and ask them to summarize it.',
+    long: 'A multimodal model can process more than just text. It can read images, understand video, listen to audio, etc. GPT-5.6 Sol, Claude Opus 4.8, and Gemini 3.1 Pro are all multimodal. You can show them a photo and ask what\'s in it, or give them a chart and ask them to summarize it.',
   },
   {
     id: 'vision-model',
@@ -160,13 +160,13 @@ export const glossaryTerms: GlossaryTerm[] = [
     id: 'flagship-model',
     term: 'Flagship Model',
     short: 'A company\'s most powerful, most expensive AI model.',
-    long: 'Every provider has a "flagship": their best model. For OpenAI, it\'s GPT-4o. For Anthropic, it\'s Claude Opus. These are the most capable and usually the most expensive. It\'s like the luxury car in a car company\'s lineup.',
+    long: 'Every provider has a "flagship": their best model. For OpenAI, it\'s GPT-5.6 Sol. For Anthropic, it\'s Claude Opus 4.8. These are the most capable and usually the most expensive. It\'s like the luxury car in a car company\'s lineup.',
   },
   {
     id: 'fast-model',
     term: 'Fast Model',
     short: 'A smaller AI model that\'s cheaper and quicker, but less powerful.',
-    long: 'Fast models are lightweight versions that trade capability for speed and cost. OpenAI\'s GPT-4o mini, Anthropic\'s Claude Haiku, and Google\'s Gemini Flash are all "fast" models. Use these for simple tasks like classifying text or generating boilerplate. Save the flagship for hard reasoning problems.',
+    long: 'Fast models are lightweight versions that trade capability for speed and cost. OpenAI\'s GPT-5.6 Luna, Anthropic\'s Claude Haiku 4.5, and Google\'s Gemini 3.5 Flash are all "fast" models. Use these for simple tasks like classifying text or generating boilerplate. Save the flagship for hard reasoning problems.',
   },
   {
     id: 'input-tokens',
@@ -232,7 +232,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     id: 'parameter',
     term: 'Parameter',
     short: 'Internal knobs in an AI model that control its behavior.',
-    long: 'A parameter is a weight or setting inside an AI model. GPT-4 has hundreds of billions of parameters: that\'s "hundreds of billions of knobs." During training, all these knobs get tuned so the model can predict text well. More parameters usually means more capability, but slower inference.',
+    long: 'A parameter is a weight or setting inside an AI model. A frontier model has hundreds of billions of parameters: that\'s "hundreds of billions of knobs." During training, all these knobs get tuned so the model can predict text well. More parameters usually means more capability, but slower inference.',
   },
   {
     id: 'transformer',
@@ -268,7 +268,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     id: 'frontier-models',
     term: 'Frontier Models',
     short: 'The most advanced AI models available right now.',
-    long: 'Frontier models are the cutting-edge AI models of the moment. As of 2026, GPT-4o, Claude Opus, and Gemini 2.0 are frontier models. In a year, better ones will exist and be the new frontier. Frontier models are expensive but most powerful.',
+    long: 'Frontier models are the cutting-edge AI models of the moment. As of 2026, GPT-5.6 Sol, Claude Opus 4.8, and Gemini 3.1 Pro are frontier models. In a year, better ones will exist and be the new frontier. Frontier models are expensive but most powerful.',
   },
   {
     id: 'state-of-the-art',
