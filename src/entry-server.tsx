@@ -2,9 +2,19 @@ import { StrictMode } from 'react'
 import { prerender } from 'react-dom/static'
 import { StaticRouter } from 'react-router'
 import App from './App.tsx'
+import { provideCorpus } from './lib/routeMeta.ts'
+import { faqs } from './data/faqs.ts'
+import { glossaryTerms } from './data/glossary.ts'
+import { releases } from './data/releases.ts'
 
 // Re-exported for scripts/prerender.mjs (which can only import compiled JS).
 export { routeMeta, SITE_URL, canonicalUrl } from './lib/routeMeta.ts'
+
+// The client leaves these corpora to the pages that own them, so no single
+// client bundle carries all three. Prerendering emits JSON-LD for every route
+// from one process, so register them all here — up front, rather than relying
+// on a page module having been rendered first.
+provideCorpus({ faqs, glossaryTerms, releases })
 
 /**
  * Render the app for one route. `path` excludes the base (e.g. "/compare").

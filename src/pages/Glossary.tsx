@@ -1,9 +1,13 @@
 import { useMemo, useState } from 'react'
 import { usePageMeta } from '../lib/meta.ts'
-import { metaFor } from '../lib/routeMeta.ts'
+import { metaFor, provideCorpus } from '../lib/routeMeta.ts'
 import { glossaryTerms } from '../data/index.ts'
 import type { GlossaryTerm } from '../data/index.ts'
 import { Breadcrumb } from '../components/Breadcrumb.tsx'
+
+// This page already loads the glossary to render it, so it supplies the terms
+// the /glossary JSON-LD needs — keeping them out of every other route's bundle.
+provideCorpus({ glossaryTerms })
 
 export function Glossary() {
   const meta = metaFor('/glossary')

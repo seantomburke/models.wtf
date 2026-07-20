@@ -2,9 +2,6 @@ import { topics, levels } from '../pages/learn/topics.ts'
 import type { Topic } from '../pages/learn/topics.ts'
 import { models } from '../data/models.ts'
 import { providers } from '../data/providers.ts'
-import { glossaryTerms } from '../data/glossary.ts'
-import { releases } from '../data/releases.ts'
-import { faqs } from '../data/faqs.ts'
 import type { Model } from '../data/types.ts'
 
 /**
@@ -322,7 +319,9 @@ export function learnTopicSchema(topic: Topic): Record<string, unknown> {
  * Each term's `short` is the definition users see collapsed; `long` is the
  * expanded one, so the long form is the description.
  */
-export function glossarySchema(): Record<string, unknown> {
+export function glossarySchema(
+  glossaryTerms: ReadonlyArray<{ id: string; term: string; long: string }>,
+): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
     '@type': 'DefinedTermSet',
@@ -345,7 +344,14 @@ export function glossarySchema(): Record<string, unknown> {
  * Generate ItemList schema for the What's New feed, newest first.
  * Dates are the release records' own ISO dates — nothing is inferred.
  */
-export function releasesSchema(): Record<string, unknown> {
+export function releasesSchema(
+  releases: ReadonlyArray<{
+    modelId?: string
+    title: string
+    description: string
+    date: string
+  }>,
+): Record<string, unknown> {
   const ordered = [...releases].sort((a, b) => b.date.localeCompare(a.date))
   return {
     '@context': 'https://schema.org',
@@ -449,6 +455,36 @@ export function webPageSchema(path: string, extra: Record<string, unknown> = {})
   }
 }
 
+interface SchemaCorpus {
+  faqs: ReadonlyArray<{ question: string; answer: string }>
+  glossaryTerms: ReadonlyArray<{ id: string; term: string; long: string }>
+  releases: ReadonlyArray<{ modelId?: string; title: string; description: string; date: string }>
+}
+
+/**
+ * Corpora used only to build the /faq, /glossary, and /whats-new JSON-LD.
+ *
+ * Every route imports this module for `metaFor`/`canonicalUrl`, so importing
+ * these datasets here would pull all of them into the chunk each page preloads.
+ * Instead the owning page (or the prerenderer) hands its corpus in — it already
+ * imports the data to render the page, so this adds no payload where it's used
+ * and removes it everywhere else.
+ *
+ * Empty by default: a route whose corpus was never provided simply emits no
+ * JSON-LD, which the prerender guard turns into a build failure rather than a
+ * silent SEO regression.
+ */
+const corpus: SchemaCorpus = { faqs: [], glossaryTerms: [], releases: [] }
+
+/** Bumped on every registration so memoised schemas rebuild against new data. */
+let corpusVersion = 0
+
+/** Register a corpus so its route's JSON-LD can be built. Idempotent. */
+export function provideCorpus(part: Partial<SchemaCorpus>): void {
+  Object.assign(corpus, part)
+  corpusVersion++
+}
+
 /**
  * Structured data per route, attached after routeMeta is built so the builders
  * above can read titles and descriptions back out of it via metaFor.
@@ -491,14 +527,19 @@ const pageSchemas: Record<string, () => Record<string, unknown>> = {
       },
       trail({ name: 'Learn', path: '/learn' }),
     ),
+  // The FAQ, glossary, and release corpora are large and are needed *only* to
+  // build these three schemas, so this module does not import them — see
+  // `provideCorpus` above. Each page supplies its own corpus (which it already
+  // imports to render), keeping ~77kB gzip out of every other route's payload.
   '/faq': () =>
     graph(
-      faqSchema(faqs.map((f) => ({ question: f.question, answer: f.answer }))),
+      faqSchema(corpus.faqs.map((f) => ({ question: f.question, answer: f.answer }))),
       trail({ name: 'FAQ', path: '/faq' }),
     ),
-  '/glossary': () => graph(glossarySchema(), trail({ name: 'Glossary', path: '/glossary' })),
+  '/glossary': () =>
+    graph(glossarySchema(corpus.glossaryTerms), trail({ name: 'Glossary', path: '/glossary' })),
   '/whats-new': () =>
-    graph(releasesSchema(), trail({ name: "What's New", path: '/whats-new' })),
+    graph(releasesSchema(corpus.releases), trail({ name: "What's New", path: '/whats-new' })),
   '/models': () => graph(modelsIndexSchema(), trail({ name: 'Models', path: '/models' })),
   ...Object.fromEntries(
     models.map((m) => [
@@ -522,7 +563,37 @@ const pageSchemas: Record<string, () => Record<string, unknown>> = {
   ),
 }
 
+/**
+ * Attach each route's JSON-LD as a lazy getter rather than building it up front.
+ *
+ * Every page imports this module (for `metaFor`/`canonicalUrl`), so anything
+ * reachable at module scope lands in the chunk each route preloads. Building
+ * all schemas eagerly pulled the FAQ, glossary, and release corpora in with
+ * them — ~77kB gzip on every page, for JSON-LD that `scripts/prerender.mjs`
+ * has already baked into the static HTML.
+ *
+ * The getter keeps the property read-identical for prerender (still synchronous,
+ * still enumerable on the RouteMeta objects) while deferring the work until a
+ * caller actually reads `structuredData` — by which point the owning page has
+ * registered its corpus. Results are memoised so repeated reads stay cheap and
+ * referentially stable, which matters because `usePageMeta` lists this in a
+ * `useEffect` dependency array; the memo is keyed on `corpusVersion` so a schema
+ * read before its corpus arrived is rebuilt rather than cached empty.
+ */
 for (const meta of routeMeta) {
   const build = pageSchemas[meta.path]
-  if (build) meta.structuredData = build()
+  if (!build) continue
+  let cached: Record<string, unknown> | undefined
+  let cachedVersion = -1
+  Object.defineProperty(meta, 'structuredData', {
+    enumerable: true,
+    configurable: true,
+    get() {
+      if (cachedVersion !== corpusVersion) {
+        cached = build()
+        cachedVersion = corpusVersion
+      }
+      return cached
+    },
+  })
 }

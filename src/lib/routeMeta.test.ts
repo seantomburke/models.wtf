@@ -1,11 +1,17 @@
 import { readFileSync } from 'node:fs'
-import { routeMeta, metaFor, canonicalUrl, SITE_URL } from './routeMeta'
+import { routeMeta, metaFor, canonicalUrl, SITE_URL, provideCorpus } from './routeMeta'
 import { topics, levels } from '../pages/learn/topics'
 import { models } from '../data/models'
 import { providers } from '../data/providers'
 import { glossaryTerms } from '../data/glossary'
 import { releases } from '../data/releases'
 import { faqs } from '../data/faqs'
+
+// These corpora live with the pages that own them so they stay out of every
+// other route's bundle; the FAQ/Glossary/WhatsNew modules register them at
+// import time, and entry-server does the same for prerendering. Assertions here
+// address routeMeta directly, so register them the same way first.
+provideCorpus({ faqs, glossaryTerms, releases })
 
 type Node = Record<string, unknown>
 

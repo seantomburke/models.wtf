@@ -1,8 +1,12 @@
 import { useState } from 'react'
 import { usePageMeta } from '../lib/meta.ts'
-import { metaFor } from '../lib/routeMeta.ts'
-import { faqsByCategory, faqCategories } from '../data/faqs.ts'
+import { metaFor, provideCorpus } from '../lib/routeMeta.ts'
+import { faqs, faqsByCategory, faqCategories } from '../data/faqs.ts'
 import { Breadcrumb } from '../components/Breadcrumb.tsx'
+
+// This page already loads the FAQ corpus to render it, so it supplies the copy
+// the /faq JSON-LD needs — keeping it out of every other route's bundle.
+provideCorpus({ faqs })
 
 export function FAQ() {
   const meta = metaFor('/faq')

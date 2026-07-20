@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { usePageMeta } from '../lib/meta.ts'
-import { metaFor } from '../lib/routeMeta.ts'
+import { metaFor, provideCorpus } from '../lib/routeMeta.ts'
 import { releases, models, providerById, type ReleaseType } from '../data/index.ts'
 import { ProviderLogo } from '../components/ProviderLogo.tsx'
 import { Breadcrumb } from '../components/Breadcrumb.tsx'
@@ -32,6 +32,10 @@ function getRelativeDate(dateStr: string): string {
   if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`
   return `${Math.floor(diffDays / 365)} years ago`
 }
+
+// This page already loads the release feed to render it, so it supplies the
+// entries the /whats-new JSON-LD needs — keeping them out of other bundles.
+provideCorpus({ releases })
 
 export function WhatsNew() {
   const [filter, setFilter] = useState<ReleaseType | 'all'>('all')
