@@ -43,6 +43,11 @@ let loadPromise: Promise<PostHog | null> | null = null
  */
 const stub = {
   capture(event: string, properties?: Record<string, unknown>) {
+    if (client) {
+      client.capture(event, properties)
+      return
+    }
+
     queue.push({ event, properties })
   },
 } as unknown as PostHog

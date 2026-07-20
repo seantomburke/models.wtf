@@ -1,74 +1,87 @@
-# PostHog audit report: post-remediation
+# PostHog Audit Report
 
 ## Summary
 
-The two actionable event-contract findings from the initial audit are resolved. Event helper names now come from static maps, and bookmark changes emit `compare_bookmark_toggled` with the model ID and the action taken. Browser events still use PostHog's public ingest host, and the installed JavaScript SDK remains one patch behind the audited latest version.
-
-This report describes the source tree after remediation. It does not claim that proxy infrastructure changed.
+The browser-only React/Vite integration is healthy after remediation: initialization is deferred but queues early events, the stable provider client now forwards post-load captures to the real SDK, initialization runs once, and configuration comes from environment variables. The audit found no remaining correctness errors; the only data-collection risk is that browser events go directly to PostHog rather than through a first-party proxy, while the installed SDK is one patch release behind.
 
 **Counts**
 
-- **Errors**: 0
-- **Warnings**: 1
-- **Suggestions**: 1
-- **Passes**: 9
+- **Errors**: 0 (must fix)
+- **Warnings**: 1 (should fix)
+- **Suggestions**: 1 (nice to have)
+- **Passes**: 10
+
+**Problematic items**
 
 | Severity | Area | Check | File | Details |
 |----------|------|-------|------|---------|
-| `pass` | Event Capture | Static event names | `src/lib/posthog.ts:8` | The four finite helper families use explicit typed maps and preserve their existing emitted names. |
-| `pass` | Event Capture | Growth events | `src/pages/Compare.tsx:142` | Bookmark add/remove emits `compare_bookmark_toggled` with `model_id` and `action` set to `add` or `remove`. |
-| `warning` | Event Capture | First-party proxy | `src/lib/analytics.ts:87` | Production sends browser events to the configured PostHog ingest host without a first-party proxy, so tracking blockers can drop them. |
-| `suggestion` | Installation | SDK version | `package.json:22` | `posthog-js` 1.404.0 is one patch behind the audited 1.404.1 release. |
+| `warning` | Event Capture | Reverse proxy | `.env.production:2` | `VITE_POSTHOG_HOST` points directly to `https://us.i.posthog.com`, so blockers can discard browser captures. |
+| `suggestion` | Installation | SDK up to date | `package.json:22` | `posthog-js` 1.404.0 is installed; 1.404.1 is current. |
 
-## Remaining actions
+## Recommended actions
 
-1. **First-party proxy** — Configure proxy infrastructure before changing `VITE_POSTHOG_HOST` at `src/lib/analytics.ts:88`. GitHub Pages cannot provide an origin proxy by itself. See [PostHog proxy guidance](https://posthog.com/docs/advanced/proxy).
-2. **SDK patch version** — Update `posthog-js` from 1.404.0 to 1.404.1 in `package.json:22`. See [posthog-js releases](https://github.com/PostHog/posthog-js/releases).
-
-## Resolved findings
-
-### Static event names
-
-`src/lib/posthog.ts:8-30` defines typed maps for model, quiz, calculator, and graph interactions. The public helper signatures and emitted names are unchanged, and focused tests cover every action-to-event mapping.
-
-### Bookmark telemetry
-
-`src/lib/posthog-events.ts:17` defines the static `compare_bookmark_toggled` event. `src/lib/posthog-events.ts:182-190` captures the typed `model_id` and `action` properties, while `src/pages/Compare.tsx:142-147` derives the action from the pre-toggle state before saving the updated bookmark set. Integration coverage exercises add/remove behavior in both table and card views.
+1. **Event Capture · Reverse proxy** — Browser captures use PostHog's public ingest host. _Why it matters:_ Tracking blockers can undercount visits, funnels, and activation events. _Fix:_ Provision a first-party ingest proxy and update `VITE_POSTHOG_HOST` at `.env.production:2`; static GitHub Pages hosting means this requires external infrastructure. See [PostHog proxy docs](https://posthog.com/docs/advanced/proxy).
+2. **Installation · SDK up to date** — The JavaScript SDK is one patch release behind. _Why it matters:_ Patch releases carry low-risk fixes, though no current data-quality defect was found. _Fix:_ Update `posthog-js` at `package.json:22` after validating the slim-build import remains compatible. See [PostHog JavaScript SDK docs](https://posthog.com/docs/libraries/js).
 
 ## Full audit
 
 ### Installation
 
+These checks verify that the project has a supported PostHog SDK, keeps it current, and initializes it once in the correct runtime with environment-provided configuration.
+
 | Check | Status | File | Details |
 |-------|--------|------|---------|
-| SDK installed | pass | `package.json:19` | `@posthog/react` 1.10.3 and `posthog-js` 1.404.0 are installed. |
-| SDK up to date | suggestion | `package.json:22` | Installed 1.404.0; the audited latest patch is 1.404.1. |
-| Init correct | pass | `src/lib/analytics.ts:76` | Token and host come from Vite environment variables; SSR exits before importing the browser SDK. |
-| Init not duplicated | pass | `src/lib/analytics.ts:85` | One browser initialization is guarded by a shared load promise. |
+| SDK installed | pass | `package.json:22` | `posthog-js` 1.404.0 is installed for the React/Vite browser application. |
+| SDK up to date | suggestion | `package.json:22` | Installed 1.404.0; latest published version is 1.404.1. |
+| Initialization correct | pass | `src/lib/analytics.ts:81` | Browser-only initialization uses `VITE_POSTHOG_PROJECT_TOKEN`; early events are queued and replayed. |
+| Initialization not duplicated | pass | `src/lib/analytics.ts:92` | Exactly one browser initialization site exists; the SSR entry does not initialize PostHog. |
+| Deferred provider capture | pass | `src/lib/analytics.ts:45` | The stable provider client queues before initialization and delegates to the real SDK afterward, preventing post-load event loss. |
 
-Static inspection cannot prove that production environment variables are populated at deploy time. Verify live events after deployment.
+#### Assumptions and blind spots
+
+Static inspection cannot prove the production environment injects the same values as `.env.production` or that blockers do not prevent the deferred chunk from loading. Live event volume and browser request behavior should be checked in PostHog and the deployed site.
 
 ### Identification
 
-| Check | Status | File | Details |
-|-------|--------|------|---------|
-| Stable distinct ID | pass | `src/lib/analytics.ts:22` | Not applicable: the site is anonymous and has no identify flow. |
-| Identify before capture | pass | `src/main.tsx:15` | Not applicable: no authenticated identity or identity-dependent flags exist. |
-| Cross-runtime distinct ID | pass | `src/entry-server.tsx:1` | Only the browser runtime initializes PostHog. |
-| Reset on logout | pass | `src/App.tsx:99` | Not applicable: no login, logout, or account-switch flow exists. |
-
-If accounts are added later, add identify-on-session-start and reset-on-logout together.
-
-### Event capture
+These checks verify that authenticated identities are stable, timely, coordinated across runtimes, and reset during account changes.
 
 | Check | Status | File | Details |
 |-------|--------|------|---------|
-| Static event names | pass | `src/lib/posthog.ts:8` | All finite helper families use explicit event-name maps. |
-| First-party proxy | warning | `src/lib/analytics.ts:87` | No first-party ingest proxy is configured. |
-| Growth events | pass | `src/pages/Compare.tsx:142` | Bookmark add/remove emits `compare_bookmark_toggled`; quiz, compare, calculator, and Learn actions remain tracked. |
+| Stable distinct ID | pass | `src/lib/analytics.ts:22` | Not applicable: the site is anonymous and has no `identify` call. |
+| Identify before captures | pass | `src/lib/analytics.ts:56` | Not applicable: anonymous captures are queued until initialization and require no authenticated identity. |
+| Cross-runtime distinct ID | pass | `src/entry-server.tsx:1` | Single runtime: only the browser initializes PostHog. |
+| Reset on logout | pass | `docs/initial-plan.md:56` | Not applicable: no authentication, logout, or account switching exists. |
 
-This source audit does not quantify event loss from tracking blockers or prove that bookmarks predict retention. Check event volume and retention correlation in PostHog after deployment.
+#### Assumptions and blind spots
 
-## About this report
+No authentication or server-side capture path exists today. If either is added, this area must be re-audited before identified events ship.
 
-This is a post-remediation source review of the original audit ledger. The proxy warning and SDK patch suggestion remain open; the static-name error and missing bookmark-event warning are resolved.
+### Event Capture
+
+These checks verify bounded event naming, reliable delivery, and explicit measurement of the product's meaningful activation outcomes.
+
+| Check | Status | File | Details |
+|-------|--------|------|---------|
+| Static event names | pass | `src/lib/posthog-events.ts:8` | Captures use literals, fixed constants, or finite literal maps; runtime values are properties. |
+| Reverse proxy | warning | `.env.production:2` | The browser posts directly to `https://us.i.posthog.com`; no first-party proxy is configured. |
+| Growth events | pass | `src/lib/posthog-events.ts:29` | Quiz completion, bookmark actions, and successful exports are explicit; the site has no auth, billing, or subscription flows. |
+
+#### Assumptions and blind spots
+
+Static inspection confirms capture intent but not ingestion success, event volume, or whether the chosen activation events correlate with user value. Live schema and behavioral queries are required to validate those assumptions.
+
+## Remediation history
+
+- Finite interaction helpers use explicit typed event-name maps in `src/lib/posthog.ts`, resolving the earlier risk of dynamic event definitions.
+- Bookmark add/remove actions emit `compare_bookmark_toggled` with `model_id` and `action` from `src/pages/Compare.tsx`, resolving the earlier activation-coverage gap.
+- The stable client retained by `PostHogProvider` now forwards captures after deferred initialization, resolving silent loss of post-load component events.
+
+## About this audit
+
+The PostHog audit runs a five-stage chain: SDK installation → init correctness → identification → event capture → this report. Each stage checks the project's source tree and records every result, including passes.
+
+- `error` items break correctness now (events lost, identity broken). Fix first.
+- `warning` items work today but cause subtle data-quality bugs. Fix when convenient.
+- `suggestion` items are best-practice improvements with measurable upside.
+
+Re-run the PostHog audit after applying fixes to refresh these findings.

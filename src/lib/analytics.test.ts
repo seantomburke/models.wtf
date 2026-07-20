@@ -47,6 +47,21 @@ describe('analytics', () => {
     expect(capture).toHaveBeenCalledExactlyOnceWith('later_event', { ok: true })
   })
 
+  it('keeps the original provider client live after the deferred SDK loads', async () => {
+    const { getAnalyticsClient, loadAnalytics } = await freshModule()
+    const providerClient = getAnalyticsClient()
+
+    providerClient.capture('before_load', { position: 1 })
+    expect(capture).not.toHaveBeenCalled()
+
+    await loadAnalytics()
+    providerClient.capture('after_load', { position: 2 })
+
+    expect(capture).toHaveBeenCalledTimes(2)
+    expect(capture).toHaveBeenNthCalledWith(1, 'before_load', { position: 1 })
+    expect(capture).toHaveBeenNthCalledWith(2, 'after_load', { position: 2 })
+  })
+
   it('replays each queued event only once', async () => {
     const { capture: track, loadAnalytics } = await freshModule()
 
@@ -83,6 +98,20 @@ describe('analytics', () => {
 
     // An ad blocker or missing config must not turn a tracked click into a crash.
     expect(() => track('event_without_sdk')).not.toThrow()
+    expect(capture).not.toHaveBeenCalled()
+  })
+
+  it('keeps the original provider client safe when SDK initialisation fails', async () => {
+    init.mockImplementationOnce(() => {
+      throw new Error('blocked SDK')
+    })
+    const { getAnalyticsClient, loadAnalytics } = await freshModule()
+    const providerClient = getAnalyticsClient()
+
+    providerClient.capture('before_failed_load')
+    await expect(loadAnalytics()).resolves.toBeNull()
+
+    expect(() => providerClient.capture('after_failed_load')).not.toThrow()
     expect(capture).not.toHaveBeenCalled()
   })
 
