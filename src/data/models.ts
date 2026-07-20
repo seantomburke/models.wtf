@@ -171,13 +171,19 @@ export const models: Model[] = [
     internetAccess: true,
     releaseDate: '2026-07-09',
     scores: {
+      'swe-bench-verified': 96.2, // Vals independent run (mini-swe-agent, July 2026)
       'terminal-bench': 88.8, // OpenAI-published (single-agent) (July 2026)
       'swe-bench-pro': 64.6, // OpenAI-published
-      'gpqa-diamond': 94.1, // Artificial Analysis independent run (July 2026)
+      'gpqa-diamond': 94.6, // OpenAI-published (July 2026)
       'hle': 47.2, // Artificial Analysis independent run (July 2026; max effort)
     },
     scoreProvenance: {
-      'gpqa-diamond': { source: 'independent', runner: 'Artificial Analysis' },
+      'swe-bench-verified': { source: 'independent', runner: 'Vals AI (mini-swe-agent)' },
+      'terminal-bench': {
+        source: 'provider',
+        independentScore: 85.77,
+        independentRunner: 'Vals AI (Terminus 2)',
+      },
       'hle': { source: 'independent', runner: 'Artificial Analysis' },
     },
     blurb:
@@ -206,6 +212,7 @@ export const models: Model[] = [
     releaseDate: '2026-07-09',
     scores: {
       'swe-bench-pro': 63.4, // OpenAI-published
+      'gpqa-diamond': 92.9, // OpenAI-published
       'terminal-bench': 87.4, // OpenAI-published; tbench.ai independent run (Codex) lands 78.4
     },
     scoreProvenance: {
@@ -240,14 +247,17 @@ export const models: Model[] = [
     internetAccess: true,
     releaseDate: '2026-07-09',
     scores: {
-      'swe-bench-pro': 62.7,
+      'swe-bench-verified': 93.0, // Vals independent run (mini-swe-agent, July 2026)
+      'swe-bench-pro': 62.7, // OpenAI-published
+      'gpqa-diamond': 92.3, // OpenAI-published
       'terminal-bench': 84.7, // OpenAI-published; tbench.ai independent run (Codex) lands 75.7
     },
     scoreProvenance: {
+      'swe-bench-verified': { source: 'independent', runner: 'Vals AI (mini-swe-agent)' },
       'terminal-bench': {
         source: 'provider',
-        independentScore: 75.7,
-        independentRunner: 'tbench.ai (Codex)',
+        independentScore: 79.03,
+        independentRunner: 'Vals AI (Terminus 2)',
       },
     },
     blurb:
@@ -342,11 +352,13 @@ export const models: Model[] = [
     internetAccess: true,
     releaseDate: '2026-07-08',
     scores: {
+      'swe-bench-verified': 86.6, // Vals independent run (mini-swe-agent, July 2026)
       'swe-bench-pro': 64.7, // xAI-published (July 2026)
       'gpqa-diamond': 93.1, // Artificial Analysis independent run (July 2026)
       'terminal-bench': 83.3, // xAI-published; tbench.ai independent run (Cursor CLI) lands 79.3
     },
     scoreProvenance: {
+      'swe-bench-verified': { source: 'independent', runner: 'Vals AI (mini-swe-agent)' },
       'gpqa-diamond': { source: 'independent', runner: 'Artificial Analysis' },
       'terminal-bench': {
         source: 'provider',
@@ -447,9 +459,18 @@ export const models: Model[] = [
     internetAccess: true,
     releaseDate: '2026-07-16',
     scores: {
+      'swe-bench-verified': 93.4, // Vals independent run (mini-swe-agent, July 2026)
       'gpqa-diamond': 93.5, // Moonshot-published (July 2026)
-      'terminal-bench': 88.3, // Moonshot-published; no independent tbench.ai run yet
+      'terminal-bench': 88.3, // Moonshot-published; Vals independent run lands 80.90
       'hle': 56.0, // Moonshot-published (with tools) (July 2026)
+    },
+    scoreProvenance: {
+      'swe-bench-verified': { source: 'independent', runner: 'Vals AI (mini-swe-agent)' },
+      'terminal-bench': {
+        source: 'provider',
+        independentScore: 80.9,
+        independentRunner: 'Vals AI (Terminus 2)',
+      },
     },
     blurb:
       "Moonshot AI's brand-new 2.8-trillion-parameter flagship. Frontier scores on agentic and reasoning work, with open weights promised within weeks.",

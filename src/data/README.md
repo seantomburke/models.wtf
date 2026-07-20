@@ -31,10 +31,34 @@ All model and benchmark data is static and hardcoded here. This is deliberate
 3. Bump `dataSourcedAt` in `index.ts`.
 4. Run `npm run validate` (schema + sanity checks; also runs in CI).
 
-Last refreshed: **2026-07-19** (Kimi K3 and Inkling added; Gemini 3.5 Pro
-delay confirmed). Provider-published evals win over third-party harness
+Last refreshed: **2026-07-20** (GPT-5.6 GPQA and independent coding evals
+backfilled). Provider-published evals win over third-party harness
 runs; where a number is third-party or contested, `models.ts` carries an
 inline comment saying so.
+
+2026-07-20 refresh notes:
+
+- **GPT-5.6 GPQA corrected from OpenAI's GA table:** Sol is 94.6, Terra is
+  92.9, and Luna is 92.3. Sol previously showed an older Artificial Analysis
+  run (94.1), while Terra and Luna were missing. OpenAI still publishes no
+  SWE-bench Verified scores for the family.
+- **Vals AI coding runs backfilled:** its July 17 uniform mini-swe-agent
+  SWE-bench Verified run reports Sol 96.2, Kimi K3 93.4, Luna 93.0, and Grok
+  4.5 86.6. Its July 16 Terminus 2 Terminal-Bench run provides independent
+  comparisons for Sol (85.77), Kimi K3 (80.90), and Luna (79.03); provider
+  scores remain displayed where available. Luna's earlier tbench.ai Codex run
+  was 75.7, but the provenance UI currently presents one independent
+  counterpart, so it now shows the newer Vals run.
+- Checked and unchanged: no post-July-19 tbench.ai entries for Kimi K3,
+  Inkling, GPT-5.6 Sol, DeepSeek V4 Pro, Qwen 3.6, GLM-5.2, or Haiku 4.5;
+  Kimi K3 weights remain promised for July 27; Gemini 3.5 Pro remains
+  unreleased and no official Gemini 3.6 model is listed.
+
+Sources used (2026-07-20): openai.com/index/gpt-5-6 (official GA eval
+table), vals.ai/benchmarks/swebench (updated July 17),
+vals.ai/benchmarks/terminal-bench-2-1 (updated July 16), tbench.ai,
+ai.google.dev/gemini-api/docs/models, deepmind.google/models/gemini, and
+anthropic.com/news/claude-haiku-4-5.
 
 2026-07-19 refresh notes:
 

@@ -75,10 +75,10 @@ describe('ModelBenchmarks component', () => {
     const relevantBenchmarks = benchmarks.filter((b) => model.scores[b.id] !== undefined)
     render(<ModelBenchmarks model={model} benchmarks={relevantBenchmarks} />)
     expect(
-      screen.getByText('Provider-reported; an independent run by tbench.ai (Codex) lands at 75.7%.'),
+      screen.getByText(
+        'Provider-reported; an independent run by Vals AI (Terminus 2) lands at 79.03%.',
+      ),
     ).toBeInTheDocument()
-    expect(
-      screen.getByText('Provider-reported; no independent run recorded yet.'),
-    ).toBeInTheDocument()
+    expect(screen.getAllByText('Provider-reported; no independent run recorded yet.')).toHaveLength(2)
   })
 })
