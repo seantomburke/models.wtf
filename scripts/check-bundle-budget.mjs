@@ -17,9 +17,9 @@ import { gzipSync } from 'node:zlib'
 // feature work doesn't trip them, but a dataset-sized regression does.
 const BUDGET_KB = {
   /** Total JS the homepage preloads before it can render. */
-  entry: 160,
+  entry: 140,
   /** The shared chunk holding route metadata, imported by every page. */
-  meta: 80,
+  meta: 60,
 }
 
 const html = 'dist/index.html'

@@ -4,6 +4,7 @@ import { usePostHog } from '../../lib/posthog-react.ts'
 import { usePageMeta } from '../../lib/meta.ts'
 import { metaFor } from '../../lib/routeMeta.ts'
 import { topics, levels } from './topics.ts'
+import { topicProse } from './topicProse.ts'
 import { Breadcrumb } from '../../components/Breadcrumb.tsx'
 
 const crossLinks = [
@@ -110,7 +111,7 @@ export function LearnTopic() {
       {topic.sections.map((s) => (
         <section key={s.heading} className="mt-8">
           <h2 className="text-xl font-semibold tracking-tight">{s.heading}</h2>
-          {s.paragraphs.map((p) => (
+          {(topicProse[`${topic.slug}::${s.heading}`] ?? []).map((p) => (
             <p key={p.slice(0, 40)} className="mt-3 leading-relaxed text-fg-secondary">
               {p}
             </p>

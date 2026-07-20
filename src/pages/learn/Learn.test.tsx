@@ -3,6 +3,7 @@ import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import { Learn } from './Learn'
 import { LearnTopic } from './LearnTopic'
 import { topics, levels } from './topics'
+import { topicProse } from './topicProse'
 
 function renderAt(path: string) {
   render(
@@ -71,4 +72,26 @@ test('unknown topic slug shows not-found with a way back', () => {
 test('topics use semantic heading structure', () => {
   renderAt(`/learn/${topics[0].slug}`)
   expect(screen.getAllByRole('heading', { level: 2 }).length).toBeGreaterThan(1)
+})
+
+// Body copy lives in topicProse.ts keyed by `<slug>::<heading>`, so a renamed
+// heading or a stale key would silently render a section with no paragraphs.
+// LearnTopic falls back to [] rather than crashing, which is exactly why the
+// mismatch needs a test to be visible at all.
+test('every topic section resolves its body copy', () => {
+  const missing: string[] = []
+  for (const topic of topics) {
+    for (const section of topic.sections) {
+      const paragraphs = topicProse[`${topic.slug}::${section.heading}`]
+      if (!paragraphs?.length) missing.push(`${topic.slug}::${section.heading}`)
+    }
+  }
+  expect(missing).toEqual([])
+})
+
+test('no orphaned body copy is left behind by a renamed section', () => {
+  const live = new Set(
+    topics.flatMap((t) => t.sections.map((s) => `${t.slug}::${s.heading}`)),
+  )
+  expect(Object.keys(topicProse).filter((key) => !live.has(key))).toEqual([])
 })
