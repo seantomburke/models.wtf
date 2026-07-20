@@ -1,8 +1,8 @@
 import { useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { usePostHog } from '../lib/posthog-react.ts'
-import { Chart } from '@opendata-ai/openchart-react'
 import '@opendata-ai/openchart-react/styles.css'
+import { ThemeAwareChart } from '../components/ThemeAwareChart.tsx'
 import { usePageMeta } from '../lib/meta.ts'
 import { metaFor } from '../lib/routeMeta.ts'
 import { axisOptions, buildGraphRows, buildGraphSpec, providerColor } from '../lib/graph.ts'
@@ -313,9 +313,8 @@ export function Graph() {
         {rows.length > 0 ? (
           <>
             <div style={{ height: 480 }}>
-              <Chart<GraphRow>
+              <ThemeAwareChart<GraphRow>
                 spec={spec}
-                darkMode="off"
                 onMarkClick={(e) => handlePointSelected(e.datum as GraphRow)}
               />
             </div>
