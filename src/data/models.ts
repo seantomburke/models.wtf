@@ -226,6 +226,7 @@ export const models: Model[] = [
       'swe-bench-pro': 63.4, // OpenAI-published
       'gpqa-diamond': 92.9, // OpenAI-published
       'terminal-bench': 87.4, // OpenAI-published; tbench.ai independent run (Codex) lands 78.4
+      'hle': 41.8, // Artificial Analysis independent run (max effort, closed-book)
     },
     scoreProvenance: {
       'terminal-bench': {
@@ -233,6 +234,7 @@ export const models: Model[] = [
         independentScore: 78.4,
         independentRunner: 'tbench.ai (Codex)',
       },
+      'hle': { source: 'independent', runner: 'Artificial Analysis' },
     },
     blurb:
       'The balanced middle tier of the GPT-5.6 family. Most of Sol\'s ability at half the cost.',
@@ -265,6 +267,7 @@ export const models: Model[] = [
       'swe-bench-pro': 62.7, // OpenAI-published
       'gpqa-diamond': 92.3, // OpenAI-published
       'terminal-bench': 84.7, // OpenAI-published; tbench.ai independent run (Codex) lands 75.7
+      'hle': 37.2, // Artificial Analysis independent run (medium effort, closed-book)
     },
     scoreProvenance: {
       'swe-bench-verified': { source: 'independent', runner: 'Vals AI (mini-swe-agent)' },
@@ -273,6 +276,7 @@ export const models: Model[] = [
         independentScore: 79.03,
         independentRunner: 'Vals AI (Terminus 2)',
       },
+      'hle': { source: 'independent', runner: 'Artificial Analysis' },
     },
     blurb:
       'The fastest, most cost-efficient GPT-5.6 tier. Built for speed and high-volume simple tasks.',
@@ -423,10 +427,12 @@ export const models: Model[] = [
     internetAccess: true,
     scores: {
       'swe-bench-pro': 70.0, // xAI-published (July 2026)
-      'gpqa-diamond': 63.7, // Artificial Analysis independent run (July 2026)
+      'gpqa-diamond': 85.3, // Artificial Analysis independent reasoning run; replaces non-reasoning 63.7
+      'hle': 17.6, // Artificial Analysis independent reasoning run (closed-book)
     },
     scoreProvenance: {
       'gpqa-diamond': { source: 'independent', runner: 'Artificial Analysis' },
+      'hle': { source: 'independent', runner: 'Artificial Analysis' },
     },
     blurb:
       'A budget speedster with a huge 2M-token context window. One of the cheapest ways to process large amounts of text.',

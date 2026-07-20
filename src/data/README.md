@@ -31,11 +31,43 @@ All model and benchmark data is static and hardcoded here. This is deliberate
 3. Bump `dataSourcedAt` in `index.ts`.
 4. Run `npm run validate` (schema + sanity checks; also runs in CI).
 
-Last refreshed: **2026-07-20, third pass** (gap-filling sweep over the 23
-empty benchmark cells: Gemini 3.1 Pro HLE resolved and added; the other 22
-confirmed unpublished and left empty). Provider-published evals win over
+Last refreshed: **2026-07-20, fourth pass** (gap-filling sweep over the 22
+remaining empty benchmark cells: three resolved and added, one stale score
+corrected, and the other 19 confirmed unpublished or protocol-incompatible).
+Provider-published evals win over
 third-party harness runs; where a number is third-party or contested,
 `models.ts` carries an inline comment saying so.
+
+2026-07-20 fourth-pass refresh notes (new leaderboard results):
+
+- **Three empty cells filled.** Artificial Analysis now reports closed-book HLE
+  runs for GPT-5.6 Terra (41.8, max effort), GPT-5.6 Luna (37.2, medium effort),
+  and Grok 4.1 Fast Reasoning (17.6). Each carries explicit independent-run
+  provenance.
+- **Grok 4.1 Fast GPQA corrected from 63.7 to 85.3.** The old value no longer
+  matches the model row: it came from Artificial Analysis's non-reasoning
+  record, while `models.ts` describes the reasoning variant. The matching
+  reasoning run is 85.2525, rounded to 85.3; its HLE result comes from the same
+  record.
+- **Nineteen cells stay empty.** OpenAI still publishes no SWE-bench Verified
+  or HLE result for Terra and no HLE result for Luna. Anthropic's Haiku
+  Terminal-Bench result does not name benchmark version 2.1, so it remains
+  excluded; conflicting GPQA values (74.1/73.0/67.2/67) still have no
+  unambiguous source for the tracked variant, and no reliable Haiku SWE-bench
+  Pro or HLE result was found. Meta's
+  Llama 4 card still publishes none of the four missing coding/terminal/HLE
+  cells for Scout or Maverick.
+- **Rejected near-matches:** Scout HLE figures of 4.3/6.0 and coding figures of
+  35/25/20 lack a reproducible matching harness; Terminal-Bench Hard or 2.0
+  results cannot populate the 2.1 column; GLM-5.2's apparent SWE-bench Verified
+  77.8 result belongs to the older GLM-5 model. Scale AI's Maverick HLE 5.68 is
+  a public multimodal-set result rather than the closed-book protocol used by
+  this column, so it remains omitted.
+
+Sources used (2026-07-20 fourth pass): artificialanalysis.ai model records and
+Humanity's Last Exam leaderboard, anthropic.com/news/claude-haiku-4-5,
+labs.scale.com/leaderboard/humanitys_last_exam, openai.com/index/gpt-5-6,
+github.com/meta-llama/llama-models MODEL_CARD.md, vals.ai, and tbench.ai.
 
 2026-07-20 third-pass refresh notes (empty-cell sweep):
 
