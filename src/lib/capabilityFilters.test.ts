@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { hasCapability, filterByCapabilities, capabilityOptions } from './capabilityFilters'
+import { models as realModels } from '../data/index.ts'
 import type { Model } from '../data/types.ts'
 
 const mockModel = (overrides?: Partial<Model>): Model => ({
@@ -20,7 +21,7 @@ const mockModel = (overrides?: Partial<Model>): Model => ({
 
 describe('capabilityFilters', () => {
   it('exports capability options', () => {
-    expect(capabilityOptions.length).toBe(4)
+    expect(capabilityOptions.length).toBe(3)
     expect(capabilityOptions[0].id).toBe('reasoning')
   })
 
@@ -114,8 +115,30 @@ describe('capabilityFilters', () => {
     })
 
     it('returns empty array when no models match', () => {
-      const filtered = filterByCapabilities(models, new Set(['image-generation']))
-      expect(filtered).toHaveLength(1) // only all-capabilities
+      // No mock pairs web search with image generation.
+      const noMatch = filterByCapabilities(
+        models.filter((m) => m.id !== 'all-capabilities'),
+        new Set(['image-generation']),
+      )
+      expect(noMatch).toHaveLength(0)
+    })
+  })
+
+  // Regression guard. Every filter chip on /compare must be satisfiable by the
+  // real dataset — a chip no model matches silently empties the table. This is
+  // the check that would have caught `vision`/`imageGeneration` going unset on
+  // all 19 models. Deliberately imports the real data, not mocks.
+  describe('capability options against the real dataset', () => {
+    it.each(capabilityOptions.map((o) => o.id))('at least one real model has %s', (id) => {
+      const matching = realModels.filter((model) => hasCapability(model, id))
+      expect(matching.length).toBeGreaterThan(0)
+    })
+
+    it('offers no filter that would empty the comparison table', () => {
+      const dead = capabilityOptions
+        .filter((option) => !realModels.some((model) => hasCapability(model, option.id)))
+        .map((option) => option.id)
+      expect(dead).toEqual([])
     })
   })
 })

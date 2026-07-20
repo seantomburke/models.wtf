@@ -26,6 +26,8 @@ export const models: Model[] = [
     maxOutputTokens: 128_000,
     reasoning: true,
     internetAccess: true,
+    vision: true, // Anthropic model overview: all current Claude models support text and image input
+    imageGeneration: false, // same doc: text output only
     scores: {
       'swe-bench-verified': 95.0, // Anthropic-published (averaged over 5 trials)
       'swe-bench-pro': 80.0, // Anthropic-published via BenchLM (July 2026)
@@ -61,6 +63,8 @@ export const models: Model[] = [
     maxOutputTokens: 128_000,
     reasoning: true,
     internetAccess: true,
+    vision: true, // Anthropic model overview: all current Claude models support text and image input
+    imageGeneration: false, // same doc: text output only
     scores: {
       'swe-bench-verified': 88.6,
       'swe-bench-pro': 69.2,
@@ -100,6 +104,8 @@ export const models: Model[] = [
     maxOutputTokens: 128_000,
     reasoning: true,
     internetAccess: true,
+    vision: true, // Anthropic model overview: all current Claude models support text and image input
+    imageGeneration: false, // same doc: text output only
     releaseDate: '2026-06-30',
     scores: {
       'swe-bench-verified': 82.1,
@@ -141,6 +147,8 @@ export const models: Model[] = [
     maxOutputTokens: 64_000,
     reasoning: true,
     internetAccess: true,
+    vision: true, // Anthropic model overview: all current Claude models support text and image input
+    imageGeneration: false, // same doc: text output only
     scores: {
       'swe-bench-verified': 73.3,
     },
@@ -169,6 +177,8 @@ export const models: Model[] = [
     maxOutputTokens: 128_000,
     reasoning: true,
     internetAccess: true,
+    vision: true, // OpenAI models docs: all latest models support text and image input
+    imageGeneration: false, // OpenAI models docs: text output only; GPT Image 2 is the separate image model
     releaseDate: '2026-07-09',
     scores: {
       'swe-bench-verified': 96.2, // Vals independent run (mini-swe-agent, July 2026)
@@ -209,6 +219,8 @@ export const models: Model[] = [
     maxOutputTokens: 128_000,
     reasoning: true,
     internetAccess: true,
+    vision: true, // OpenAI models docs: all latest models support text and image input
+    imageGeneration: false, // OpenAI models docs: text output only; GPT Image 2 is the separate image model
     releaseDate: '2026-07-09',
     scores: {
       'swe-bench-pro': 63.4, // OpenAI-published
@@ -245,6 +257,8 @@ export const models: Model[] = [
     maxOutputTokens: 128_000,
     reasoning: true,
     internetAccess: true,
+    vision: true, // OpenAI models docs: all latest models support text and image input
+    imageGeneration: false, // OpenAI models docs: text output only; GPT Image 2 is the separate image model
     releaseDate: '2026-07-09',
     scores: {
       'swe-bench-verified': 93.0, // Vals independent run (mini-swe-agent, July 2026)
@@ -284,6 +298,8 @@ export const models: Model[] = [
     contextWindowTokens: 1_000_000,
     reasoning: true,
     internetAccess: true,
+    vision: true, // Gemini API model card: inputs are text, image, video, audio, PDF
+    imageGeneration: false, // same card: output is text; image generation listed as not supported
     scores: {
       'swe-bench-verified': 80.6, // Google-published
       'swe-bench-pro': 54.2, // from Anthropic's comparison table; Google published none
@@ -318,6 +334,8 @@ export const models: Model[] = [
     maxOutputTokens: 64_000,
     reasoning: true,
     internetAccess: true,
+    vision: true, // Gemini API model card: inputs are text, image, video, audio, PDF
+    imageGeneration: false, // same card: output is text only
     releaseDate: '2026-05-19',
     scores: {
       'swe-bench-verified': 78.0, // Google-published (announced at Google I/O 2026)
@@ -359,6 +377,8 @@ export const models: Model[] = [
     contextWindowTokens: 500_000,
     reasoning: true,
     internetAccess: true,
+    vision: true, // docs.x.ai image-understanding guide uses grok-4.5 for image input
+    imageGeneration: false, // docs.x.ai routes image creation to the separate Grok Imagine API
     releaseDate: '2026-07-08',
     scores: {
       'swe-bench-verified': 86.6, // Vals independent run (mini-swe-agent, July 2026)
@@ -430,6 +450,8 @@ export const models: Model[] = [
     maxOutputTokens: 256_000,
     reasoning: true,
     internetAccess: true,
+    vision: true, // Meta Model API launch post: natively multimodal, accepts images/video/PDFs
+    imageGeneration: false, // same post: text output; Muse Image is the separate image model
     releaseDate: '2026-07-09',
     scores: {
       'swe-bench-pro': 61.5, // Meta-published; no independent run yet
@@ -466,6 +488,8 @@ export const models: Model[] = [
     contextWindowTokens: 1_000_000,
     reasoning: true, // always-on reasoning; effort currently fixed at maximum
     internetAccess: true,
+    vision: true, // Kimi API platform model list: native visual understanding, visual + text input
+    imageGeneration: false, // same docs list text output only
     releaseDate: '2026-07-16',
     scores: {
       'swe-bench-verified': 93.4, // Vals independent run (mini-swe-agent, July 2026)
@@ -506,6 +530,8 @@ export const models: Model[] = [
     contextWindowTokens: 1_000_000,
     reasoning: true,
     internetAccess: false,
+    vision: true, // TML launch post: 'Inkling accepts images as input'
+    imageGeneration: false, // same post: reasons over text/images/audio, generates text
     releaseDate: '2026-07-15',
     scores: {
       // All figures are Thinking Machines-published (launch eval table, effort=0.99).
@@ -545,6 +571,8 @@ export const models: Model[] = [
     contextWindowTokens: 1_000_000,
     reasoning: true,
     internetAccess: false,
+    vision: false, // Z.AI GLM-5.2 model card is text-generation only (third-party 'multimodal' claims contradict it)
+    imageGeneration: false, // same card: text output only
     scores: {
       'swe-bench-pro': 62.1,
       'gpqa-diamond': 91.2,
@@ -584,6 +612,8 @@ export const models: Model[] = [
     contextWindowTokens: null,
     reasoning: true,
     internetAccess: false,
+    vision: false, // DeepSeek-V4-Pro model card: text-generation MoE, no image input
+    imageGeneration: false, // same card: text output only
     scores: {
       // DeepSeek technical report figures for V4 Pro in "Think Max" mode.
       'swe-bench-verified': 80.6,
@@ -629,6 +659,8 @@ export const models: Model[] = [
     contextWindowTokens: null,
     reasoning: true,
     internetAccess: false,
+    vision: true, // Qwen3.6-35B-A3B card: image-text-to-text, 'Causal Language Model with Vision Encoder'
+    imageGeneration: false, // same card: text output only
     scores: {
       // Alibaba-published figures for Qwen3.6-35B-A3B, the flagship open release.
       'swe-bench-verified': 73.4,
@@ -663,6 +695,8 @@ export const models: Model[] = [
     contextWindowTokens: 1_000_000,
     reasoning: false,
     internetAccess: false,
+    vision: true, // Llama 4 Maverick card: input modalities 'Multilingual text and image'
+    imageGeneration: false, // same card: output modalities 'Multilingual text and code'
     scores: {
       'gpqa-diamond': 69.8, // Meta-published (April 2026)
     },
@@ -689,6 +723,8 @@ export const models: Model[] = [
     contextWindowTokens: 10_000_000,
     reasoning: false,
     internetAccess: false,
+    vision: true, // Llama 4 Scout card: input modalities 'Multilingual text and image'
+    imageGeneration: false, // same card: output modalities 'Multilingual text and code'
     scores: {
       'gpqa-diamond': 57.2, // Meta-published (April 2026)
     },

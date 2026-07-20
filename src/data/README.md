@@ -36,6 +36,53 @@ Gemini 3.5 Flash provenance corrected). Provider-published evals win over
 third-party harness runs; where a number is third-party or contested,
 `models.ts` carries an inline comment saying so.
 
+2026-07-20 capability-pass refresh notes (vision / imageGeneration):
+
+- **Why this pass happened:** `vision` and `imageGeneration` were declared in
+  `types.ts` and read by the `/compare` capability filters, but *no* model set
+  either one. The Vision chip therefore emptied the comparison table, and
+  `ModelCard`'s `👁️ vision` badge was unreachable. Both fields are now set
+  from provider documentation, with the source in an inline comment.
+- **Vision = true for 16 models**, each from a first-party modality table:
+  all four Claude models (the Anthropic models overview states plainly that
+  "All current Claude models support text and image input, text output,
+  multilingual capabilities, and vision"); all three GPT-5.6 tiers (OpenAI's
+  models docs: "All latest OpenAI models support text and image input, text
+  output, multilingual capabilities, and vision"); Gemini 3.1 Pro and 3.5
+  Flash (Gemini API model cards, inputs "Text, Image, Video, Audio, and
+  PDF"); Grok 4.5; Muse Spark 1.1; Kimi K3; Inkling; Qwen3.6-35B-A3B; and
+  Llama 4 Maverick and Scout.
+- **Vision = false for two**, on the strength of their own model cards:
+  GLM-5.2 and DeepSeek V4 Pro are both plain text-generation models. Note
+  these are recorded as explicit `false`, not omissions — the provider card
+  positively establishes the absence, which is different from "unknown".
+- **imageGeneration is false for all 18 models we could source.** Every
+  provider that documents an output modality lists text only, and each one
+  that offers image generation routes it to a *separate* model: OpenAI to
+  GPT Image 2, xAI to the Grok Imagine API, Meta to Muse Image. No model in
+  this dataset emits images.
+- **The image-generation filter was removed rather than faked.** Since no
+  model satisfies it, leaving the chip on `/compare` would only ever blank
+  the table. `hasCapability` still handles the `image-generation` id and the
+  `Model.imageGeneration` field stays, so restoring the chip is a one-line
+  change the day an image model joins. The `🎨 image gen` badge was likewise
+  not added to `ModelCard`, because it would be dead markup today.
+- **Regression guard added** in `src/lib/capabilityFilters.test.ts`: every
+  entry in `capabilityOptions` must match at least one model in the real
+  dataset (imported from `../data/index.ts`, not mocked). Any future filter
+  that goes dead now fails CI instead of silently emptying the table.
+- **Omitted for lack of a source: `grok-4-1-fast`.** Secondary sources
+  (MindStudio, TypingMind, Oracle's model docs) all describe it as accepting
+  text and image, but xAI's current `docs.x.ai/developers/models` table no
+  longer lists the model at all, and both plausible doc URLs 404. Per
+  "missing beats fabricated" both keys are omitted rather than guessed. Grok
+  4.5 itself is confirmed by xAI's image-understanding guide, whose examples
+  pass images to `grok-4.5`.
+- **Rejected lead:** several third-party pages (MindStudio, Gate.AI) call
+  GLM-5.2 multimodal. Z.AI's own model card lists it under Text Generation
+  with no image input, and NVIDIA's mirror of the card lists text-only input
+  types. The provider card wins; GLM-5.2 is recorded `vision: false`.
+
 2026-07-20 second-pass refresh notes:
 
 - **HLE column filled for five models**, all closed-book to match the
