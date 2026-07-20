@@ -80,9 +80,10 @@ test('canonical URLs use the trailing-slash form GitHub Pages serves with a 200'
 
 test('every model route carries valid SoftwareApplication JSON-LD', () => {
   for (const m of models) {
-    const schema = metaFor(`/models/${m.id}`).structuredData
+    // Model pages carry a @graph: the SoftwareApplication plus the
+    // BreadcrumbList for the Home / Models / <model> trail they render.
+    const schema = nodeOfType(`/models/${m.id}`, 'SoftwareApplication')
     expect(schema).toBeDefined()
-    expect(schema!['@type']).toBe('SoftwareApplication')
     expect(schema!.url).toBe(canonicalUrl(`/models/${m.id}`))
     const provider = providers.find((p) => p.id === m.providerId)!
     expect((schema!.creator as { name: string }).name).toBe(provider.name)
@@ -97,6 +98,23 @@ test('every model route carries valid SoftwareApplication JSON-LD', () => {
     if (m.releaseDate) expect(schema!.datePublished).toBe(m.releaseDate)
     if (m.license) expect(schema!.license).toBe(m.license)
   }
+})
+
+test('model pages breadcrumb up through the /models index', () => {
+  for (const m of models) {
+    const crumbs = nodeOfType(`/models/${m.id}`, 'BreadcrumbList')
+    const items = crumbs.itemListElement as Array<{ name: string; item: string }>
+    expect(items.map((i) => i.name)).toEqual(['Home', 'Models', m.name])
+    expect(items[1].item).toBe(canonicalUrl('/models'))
+    expect(items[2].item).toBe(canonicalUrl(`/models/${m.id}`))
+  }
+})
+
+test('the /models index lists every model', () => {
+  const list = nodeOfType('/models', 'ItemList')
+  expect(list.numberOfItems).toBe(models.length)
+  const urls = (list.itemListElement as Array<{ url: string }>).map((i) => i.url)
+  expect(urls).toEqual(models.map((m) => canonicalUrl(`/models/${m.id}`)))
 })
 
 test('every prerendered route carries JSON-LD that survives a JSON round-trip', () => {

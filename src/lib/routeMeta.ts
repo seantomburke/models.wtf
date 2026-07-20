@@ -51,7 +51,7 @@ export const routeMeta: RouteMeta[] = [
     path: '/compare',
     title: 'Compare AI models — Models.fyi',
     description:
-      'Every flagship AI model side by side: benchmark scores, prices, and context windows from OpenAI, Anthropic, Google, xAI, and open source, explained in plain language.',
+      'Every flagship AI model side by side: benchmark scores, prices, and context windows from OpenAI, Anthropic, Google, and xAI, in plain language.',
     type: 'website',
     image: ogImage,
   },
@@ -67,7 +67,7 @@ export const routeMeta: RouteMeta[] = [
     path: '/calculator',
     title: 'AI token cost calculator — Models.fyi',
     description:
-      'Compare what AI models charge per million tokens, then paste your own text to calculate input, output, and thinking-token costs across GPT, Claude, Gemini, and Grok.',
+      'Compare what AI models charge per million tokens, then paste your own text to price input, output, and thinking tokens across GPT, Claude, and Gemini.',
     type: 'website',
     image: ogImage,
   },
@@ -91,7 +91,7 @@ export const routeMeta: RouteMeta[] = [
     path: '/learn',
     title: 'Learn how AI models work — Models.fyi',
     description:
-      'A plain-language learning path for AI models: basics, intermediate, and advanced explainers, plus a model lab with tiny interactive models you can play with in your browser.',
+      'A plain-language learning path for AI models: basics, intermediate, and advanced explainers, plus a lab of tiny models you can train in your browser.',
     type: 'website',
     image: ogImage,
   },
@@ -116,6 +116,14 @@ export const routeMeta: RouteMeta[] = [
     title: "What's New — latest AI model releases — Models.fyi",
     description:
       'The latest AI model releases, updates, and announcements from OpenAI, Anthropic, Google, xAI, and the open-source community, in one chronological feed.',
+    type: 'website',
+    image: ogImage,
+  },
+  {
+    path: '/models',
+    title: 'All AI models — benchmarks, pricing, and specs — Models.fyi',
+    description:
+      'Browse every AI model we track, grouped by provider. One page each with benchmark scores, prices, context window, and who the model actually suits.',
     type: 'website',
     image: ogImage,
   },
@@ -384,6 +392,29 @@ export function compareSchema(): Record<string, unknown> {
 }
 
 /**
+ * Generate ItemList schema for the /models browse index: every model grouped
+ * under its provider on the page, each entry pointing at its own detail page.
+ * This is the crawlable path to the model pages that the compare table only
+ * hints at.
+ */
+export function modelsIndexSchema(): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'All AI models',
+    url: canonicalUrl('/models'),
+    description: metaFor('/models').description,
+    numberOfItems: models.length,
+    itemListElement: models.map((m, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      url: canonicalUrl(`/models/${m.id}`),
+      name: m.name,
+    })),
+  }
+}
+
+/**
  * Generate WebApplication schema for the interactive tools (calculator, quiz,
  * graph). These are real browser-only tools with no server and no price, so
  * `isAccessibleForFree` is a fact about them, not a marketing claim.
@@ -468,6 +499,17 @@ const pageSchemas: Record<string, () => Record<string, unknown>> = {
   '/glossary': () => graph(glossarySchema(), trail({ name: 'Glossary', path: '/glossary' })),
   '/whats-new': () =>
     graph(releasesSchema(), trail({ name: "What's New", path: '/whats-new' })),
+  '/models': () => graph(modelsIndexSchema(), trail({ name: 'Models', path: '/models' })),
+  ...Object.fromEntries(
+    models.map((m) => [
+      `/models/${m.id}`,
+      () =>
+        graph(
+          modelSchema(m),
+          trail({ name: 'Models', path: '/models' }, { name: m.name, path: `/models/${m.id}` }),
+        ),
+    ]),
+  ),
   ...Object.fromEntries(
     topics.map((t) => [
       `/learn/${t.slug}`,

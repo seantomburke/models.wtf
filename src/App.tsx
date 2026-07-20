@@ -32,6 +32,9 @@ const LearnTopic = lazy(() =>
 const FAQ = lazy(() => import('./pages/FAQ.tsx').then((m) => ({ default: m.FAQ })))
 const Glossary = lazy(() => import('./pages/Glossary.tsx').then((m) => ({ default: m.Glossary })))
 const WhatsNew = lazy(() => import('./pages/WhatsNew.tsx').then((m) => ({ default: m.WhatsNew })))
+const ModelsIndex = lazy(() =>
+  import('./pages/models/ModelsIndex.tsx').then((m) => ({ default: m.ModelsIndex })),
+)
 const ModelDetail = lazy(() =>
   import('./pages/models/ModelDetail.tsx').then((m) => ({ default: m.ModelDetail })),
 )
@@ -126,6 +129,7 @@ function App() {
         <Route path="faq" element={<FAQ />} />
         <Route path="glossary" element={<Glossary />} />
         <Route path="whats-new" element={<WhatsNew />} />
+        <Route path="models" element={<ModelsIndex />} />
         <Route path="models/:id" element={<ModelDetail />} />
         <Route path="*" element={<NotFound />} />
       </Route>

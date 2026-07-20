@@ -191,6 +191,13 @@ export function Layout() {
             </p>
             <p className="text-fg-muted">
               <Link
+                to="/models"
+                className="text-accent-deep underline underline-offset-1 focus:outline-none focus:ring-2 focus:ring-accent rounded-lg"
+              >
+                All models
+              </Link>
+              {' · '}
+              <Link
                 to="/glossary"
                 className="text-accent-deep underline underline-offset-1 focus:outline-none focus:ring-2 focus:ring-accent rounded-lg"
               >

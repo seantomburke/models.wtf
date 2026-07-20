@@ -10,6 +10,7 @@ import { ModelBenchmarks } from '../../components/models/ModelBenchmarks'
 import { UseCasesSection } from '../../components/models/UseCasesSection'
 import { ProsCons } from '../../components/models/ProsCons'
 import { RelatedModels } from '../../components/models/RelatedModels'
+import { Breadcrumb } from '../../components/Breadcrumb'
 import { NotFound } from '../NotFound'
 
 export function ModelDetail() {
@@ -39,6 +40,15 @@ function ModelDetailContent({ model }: { model: Model }) {
 
   return (
     <div className="mx-auto max-w-4xl space-y-12">
+        <Breadcrumb
+          items={[
+            { name: 'Home', path: '/' },
+            { name: 'Models', path: '/models' },
+            { name: model.name },
+          ]}
+          className="-mb-8"
+        />
+
         <ModelHeader model={model} provider={provider} />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
