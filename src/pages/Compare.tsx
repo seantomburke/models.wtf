@@ -16,6 +16,7 @@ import {
   captureExport,
   captureExportFailed,
   captureViewModeChange,
+  captureBookmarkToggle,
 } from '../lib/posthog-events.ts'
 import { ProviderLogo } from '../components/ProviderLogo.tsx'
 import { SortableHeader } from '../components/SortableHeader.tsx'
@@ -139,9 +140,11 @@ export function Compare() {
   }
 
   const handleToggleBookmark = (modelId: string) => {
+    const action = isBookmarked(bookmarks, modelId) ? 'remove' : 'add'
     const updated = toggleBookmark(bookmarks, modelId)
     setBookmarks(updated)
     saveBookmarks(updated)
+    captureBookmarkToggle(posthog, modelId, action)
   }
 
   const handleViewModeChange = (mode: ViewMode) => {

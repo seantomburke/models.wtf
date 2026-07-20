@@ -7,6 +7,7 @@ import {
   captureExport,
   captureExportFailed,
   captureBenchmarkSourceClick,
+  captureBookmarkToggle,
   captureGraphAxesChange,
   captureGraphPointSelected,
   captureCalculatorTextEntered,
@@ -35,6 +36,7 @@ describe('EVENTS', () => {
   it('should have all required event names defined', () => {
     expect(EVENTS.COMPARE_FILTER_CHANGED).toBe('compare_filter_changed')
     expect(EVENTS.COMPARE_TABLE_SORTED).toBe('compare_table_sorted')
+    expect(EVENTS.COMPARE_BOOKMARK_TOGGLED).toBe('compare_bookmark_toggled')
     expect(EVENTS.GRAPH_AXES_CHANGED).toBe('graph_axes_changed')
     expect(EVENTS.CALCULATOR_TEXT_ENTERED).toBe('calculator_text_entered')
     expect(EVENTS.QUIZ_COMPLETED).toBe('quiz_completed')
@@ -94,6 +96,22 @@ describe('Compare page events', () => {
     captureBenchmarkSourceClick({ capture: mockPostHog.capture } as any, 'swe-bench-verified')
     expect(mockPostHog.capture).toHaveBeenCalledWith(EVENTS.COMPARE_BENCHMARK_CLICKED, {
       benchmark_id: 'swe-bench-verified',
+    })
+  })
+
+  it('captureBookmarkToggle sends the exact event contract for add and remove', () => {
+    const client = { capture: mockPostHog.capture } as any
+
+    captureBookmarkToggle(client, 'claude-opus-4-8', 'add')
+    captureBookmarkToggle(client, 'claude-opus-4-8', 'remove')
+
+    expect(mockPostHog.capture).toHaveBeenNthCalledWith(1, 'compare_bookmark_toggled', {
+      model_id: 'claude-opus-4-8',
+      action: 'add',
+    })
+    expect(mockPostHog.capture).toHaveBeenNthCalledWith(2, 'compare_bookmark_toggled', {
+      model_id: 'claude-opus-4-8',
+      action: 'remove',
     })
   })
 })

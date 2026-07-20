@@ -14,6 +14,7 @@ export const EVENTS = {
   COMPARE_TABLE_EXPORT_FAILED: 'compare_table_export_failed',
   COMPARE_BENCHMARK_CLICKED: 'compare_benchmark_clicked',
   COMPARE_VIEW_MODE_CHANGED: 'compare_view_mode_changed',
+  COMPARE_BOOKMARK_TOGGLED: 'compare_bookmark_toggled',
 
   // Graph page events
   GRAPH_AXES_CHANGED: 'graph_axes_changed',
@@ -62,6 +63,8 @@ export interface EventProperties {
   success?: boolean
   error?: string
   benchmark_id?: string
+  model_id?: string
+  action?: 'add' | 'remove'
 
   // Graph page
   axis?: 'x' | 'y'
@@ -170,6 +173,20 @@ export function captureBenchmarkSourceClick(
 ): void {
   posthog?.capture?.(EVENTS.COMPARE_BENCHMARK_CLICKED, {
     benchmark_id: benchmarkId,
+  })
+}
+
+/**
+ * Capture a model bookmark being added or removed from the comparison.
+ */
+export function captureBookmarkToggle(
+  posthog: ReturnType<typeof usePostHog>,
+  modelId: string,
+  action: 'add' | 'remove',
+): void {
+  posthog?.capture?.(EVENTS.COMPARE_BOOKMARK_TOGGLED, {
+    model_id: modelId,
+    action,
   })
 }
 

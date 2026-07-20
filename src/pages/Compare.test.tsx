@@ -7,6 +7,12 @@ import type { Model } from '../data/index.ts'
 import { formatPrice, formatTokens } from '../lib/format.ts'
 import { exportComparison, EXPORT_SHORTCUT_EVENT } from '../lib/export.ts'
 
+const posthogCapture = vi.fn()
+
+vi.mock('../lib/posthog-react.ts', () => ({
+  usePostHog: () => ({ capture: posthogCapture }),
+}))
+
 vi.mock('../lib/export.ts', async (importOriginal) => {
   const actual = await importOriginal<typeof import('../lib/export.ts')>()
   return { ...actual, exportComparison: vi.fn() }
@@ -29,6 +35,7 @@ function renderCompare(initialEntry = '/compare') {
 // View-mode and bookmark state persist in localStorage; isolate tests from each other.
 beforeEach(() => {
   localStorage.clear()
+  posthogCapture.mockClear()
 })
 
 test('renders a row for every model in the dataset', () => {
@@ -244,6 +251,37 @@ test('view mode preference persists to localStorage', async () => {
   await user.click(screen.getByRole('button', { name: 'cards' }))
   expect(localStorage.getItem('models-fyi-view-mode')).toBe('cards')
 })
+
+test.each(['table', 'cards'] as const)(
+  'adding then removing a bookmark in %s view persists the UI state and captures accurate actions',
+  async (view) => {
+    const user = userEvent.setup()
+    const model = models[0]
+    renderCompare()
+    if (view === 'cards') {
+      await user.click(screen.getByRole('button', { name: 'cards' }))
+      posthogCapture.mockClear()
+    }
+    const bookmark = screen.getByRole('button', { name: `Bookmark ${model.name}` })
+
+    expect(bookmark).toHaveAttribute('title', 'Add bookmark')
+    await user.click(bookmark)
+    expect(bookmark).toHaveAttribute('title', 'Remove bookmark')
+    expect(JSON.parse(localStorage.getItem('models-fyi-bookmarks')!)).toEqual([model.id])
+
+    await user.click(bookmark)
+    expect(bookmark).toHaveAttribute('title', 'Add bookmark')
+    expect(JSON.parse(localStorage.getItem('models-fyi-bookmarks')!)).toEqual([])
+    expect(posthogCapture).toHaveBeenNthCalledWith(1, 'compare_bookmark_toggled', {
+      model_id: model.id,
+      action: 'add',
+    })
+    expect(posthogCapture).toHaveBeenNthCalledWith(2, 'compare_bookmark_toggled', {
+      model_id: model.id,
+      action: 'remove',
+    })
+  },
+)
 
 test('filters still apply in card view', async () => {
   const user = userEvent.setup()
