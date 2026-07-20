@@ -35,7 +35,8 @@ async function renderCalculator() {
       <Calculator debounceMs={0} />
     </BrowserRouter>,
   )
-  // The mocked tokenizer resolves immediately; wait for the estimate label to clear.
+  // Exact tokenization is intentionally deferred until the user engages.
+  screen.getByLabelText('Example output').focus()
   await waitFor(() => expect(screen.queryByText(/\(estimated\)/)).not.toBeInTheDocument())
 }
 

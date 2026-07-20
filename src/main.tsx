@@ -1,26 +1,42 @@
 import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { hydrateRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { PostHogProvider } from './lib/posthog-react.ts'
 import './index.css'
 import App from './App.tsx'
 import { getAnalyticsClient, loadAnalytics } from './lib/analytics.ts'
+import { preloadInitialRoute } from './routePreload.ts'
 
 // Routes are prerendered to static HTML for crawlers and first paint
-// (scripts/prerender.mjs). We deliberately client-render over that markup
-// instead of hydrating: production React reported mismatches on subroutes
-// (#418) and its recovery path is a client re-render anyway — doing it
-// unconditionally is byte-identical markup swapped in with zero errors.
+// (scripts/prerender.mjs). Preserve that DOM during startup: replacing it with
+// createRoot caused the footer to jump through the viewport on every lazy-route
+// landing. The current route chunk is preloaded below before hydration so React
+// sees the same complete tree the server emitted, including on direct visits.
 const container = document.getElementById('root')!
-createRoot(container).render(
-  <StrictMode>
-    <PostHogProvider client={getAnalyticsClient()}>
-      <BrowserRouter basename={import.meta.env.BASE_URL}>
-        <App />
-      </BrowserRouter>
-    </PostHogProvider>
-  </StrictMode>,
-)
+const renderApp = () => {
+  hydrateRoot(
+    container,
+    <StrictMode>
+      <PostHogProvider client={getAnalyticsClient()}>
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
+          <App />
+        </BrowserRouter>
+      </PostHogProvider>
+    </StrictMode>,
+  )
+}
+
+const startApp = () => {
+  preloadInitialRoute(window.location.pathname, import.meta.env.BASE_URL)
+    .catch((error: unknown) => {
+      // A transient chunk failure should not leave a permanently static page.
+      // The retryable loader will make one fresh request when React renders.
+      console.error('Failed to preload the current route; rendering with its loading state.', error)
+    })
+    .finally(renderApp)
+}
+
+startApp()
 
 // Analytics is not load-bearing for anything on screen, so keep it off the
 // critical path: fetch the SDK once the browser is idle after first paint.

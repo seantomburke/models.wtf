@@ -1,4 +1,4 @@
-import { useState, Suspense } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import type { ReactNode } from 'react'
 import { NavLink, Outlet, Link } from 'react-router-dom'
 import { dataSourcedAt } from '../data/index.ts'
@@ -41,7 +41,11 @@ export function ClientSuspense({
   fallback: ReactNode
   children: ReactNode
 }) {
-  if (import.meta.env.SSR) return <>{children}</>
+  const [isHydrated, setIsHydrated] = useState(false)
+
+  useEffect(() => setIsHydrated(true), [])
+
+  if (!isHydrated) return <>{children}</>
   return <Suspense fallback={fallback}>{children}</Suspense>
 }
 
@@ -158,7 +162,7 @@ export function Layout() {
         )}
       </header>
 
-      <main id="main" className="mx-auto w-full max-w-5xl flex-1 px-4 py-10 sm:px-6">
+      <main id="main" className="mx-auto min-w-0 w-full max-w-5xl flex-1 px-4 py-10 sm:px-6">
         <ErrorBoundary>
           <ClientSuspense fallback={<p className="text-sm text-fg-muted">Loading…</p>}>
             <Outlet />
@@ -177,6 +181,7 @@ export function Layout() {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',
+                  timeZone: 'UTC',
                 })}
               </time>
             </p>

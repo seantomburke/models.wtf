@@ -13,6 +13,48 @@ const esc = (s) =>
   s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;')
 
 const template = readFileSync('dist/index.html', 'utf8')
+const manifest = JSON.parse(readFileSync('dist/.vite/manifest.json', 'utf8'))
+const assetBase = template.match(/<script[^>]+src="([^"]*\/assets\/)/)?.[1]
+if (!assetBase) throw new Error('could not determine the built asset base from dist/index.html')
+const templateAssets = new Set(
+  [...template.matchAll(/(?:href|src)="[^"]*\/assets\/([^"]+)"/g)].map((match) => `assets/${match[1]}`),
+)
+
+const entryByExactPath = {
+  '/search': 'src/pages/Search.tsx',
+  '/compare': 'src/pages/Compare.tsx',
+  '/graph': 'src/pages/Graph.tsx',
+  '/calculator': 'src/pages/Calculator.tsx',
+  '/quiz': 'src/pages/Quiz.tsx',
+  '/learn': 'src/pages/learn/Learn.tsx',
+  '/faq': 'src/pages/FAQ.tsx',
+  '/glossary': 'src/pages/Glossary.tsx',
+  '/whats-new': 'src/pages/WhatsNew.tsx',
+  '/models': 'src/pages/models/ModelsIndex.tsx',
+}
+
+function routePreloads(path) {
+  const entryKey = entryByExactPath[path]
+    ?? (path.startsWith('/learn/') ? 'src/pages/learn/LearnTopic.tsx' : undefined)
+    ?? (path.startsWith('/models/') ? 'src/pages/models/ModelDetail.tsx' : undefined)
+  if (!entryKey) return ''
+
+  const modules = new Set()
+  const styles = new Set()
+  const visit = (key) => {
+    const chunk = manifest[key]
+    if (!chunk || templateAssets.has(chunk.file) || modules.has(chunk.file)) return
+    modules.add(chunk.file)
+    for (const css of chunk.css ?? []) styles.add(css)
+    for (const dependency of chunk.imports ?? []) visit(dependency)
+  }
+  visit(entryKey)
+
+  return [
+    ...[...modules].map((file) => `<link rel="modulepreload" href="${assetBase}${file.replace(/^assets\//, '')}" />`),
+    ...[...styles].map((file) => `<link rel="stylesheet" href="${assetBase}${file.replace(/^assets\//, '')}" />`),
+  ].join('\n    ')
+}
 
 // 404 fallback for routes we did NOT prerender: keep the EMPTY root so the
 // client renders from scratch (no hydration mismatch against wrong content).
@@ -71,9 +113,11 @@ for (const meta of routeMeta) {
   if (main.includes('Loading…')) {
     throw new Error(`prerender emitted the loading fallback inside <main> for ${path}`)
   }
-  const headExtras = structuredData
+  const metadata = structuredData
     ? `${socialHead(meta)}\n    ${jsonLd(structuredData)}`
     : socialHead(meta)
+  const preloads = routePreloads(path)
+  const headExtras = preloads ? `${preloads}\n    ${metadata}` : metadata
   const out = template
     .replace(/<title>[^<]*<\/title>/, `<title>${esc(title)}</title>`)
     .replace('</head>', `  ${headExtras}\n  </head>`)

@@ -1,4 +1,5 @@
 import { lazy, useState, useCallback } from 'react'
+import type { ComponentType } from 'react'
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import { ErrorBoundary } from './components/ErrorBoundary.tsx'
 import { Layout, ClientSuspense } from './components/Layout.tsx'
@@ -13,32 +14,36 @@ import { usePostHog } from './lib/posthog-react.ts'
 import { exportComparison, EXPORT_SHORTCUT_EVENT } from './lib/export.ts'
 import { captureExport, captureExportFailed } from './lib/posthog-events.ts'
 import { models } from './data/index.ts'
+import { routeLoaders } from './routePreload.ts'
+import type { RetryableRouteLoader } from './routePreload.ts'
 
 // Every route but Home is lazy. Home stays static because it is the most
 // common landing route, and splitting it would only buy a round-trip.
 // Everything else was riding along in the entry bundle — a visitor landing on
 // Home was downloading the Learn labs' neural nets before the page could paint.
-const Graph = lazy(() => import('./pages/Graph.tsx').then((m) => ({ default: m.Graph })))
-const Calculator = lazy(() =>
-  import('./pages/Calculator.tsx').then((m) => ({ default: m.Calculator })),
-)
-const Search = lazy(() => import('./pages/Search.tsx').then((m) => ({ default: m.Search })))
-const Compare = lazy(() => import('./pages/Compare.tsx').then((m) => ({ default: m.Compare })))
-const Quiz = lazy(() => import('./pages/Quiz.tsx').then((m) => ({ default: m.Quiz })))
-const Learn = lazy(() => import('./pages/learn/Learn.tsx').then((m) => ({ default: m.Learn })))
-const LearnTopic = lazy(() =>
-  import('./pages/learn/LearnTopic.tsx').then((m) => ({ default: m.LearnTopic })),
-)
-const FAQ = lazy(() => import('./pages/FAQ.tsx').then((m) => ({ default: m.FAQ })))
-const Glossary = lazy(() => import('./pages/Glossary.tsx').then((m) => ({ default: m.Glossary })))
-const WhatsNew = lazy(() => import('./pages/WhatsNew.tsx').then((m) => ({ default: m.WhatsNew })))
-const ModelsIndex = lazy(() =>
-  import('./pages/models/ModelsIndex.tsx').then((m) => ({ default: m.ModelsIndex })),
-)
-const ModelDetail = lazy(() =>
-  import('./pages/models/ModelDetail.tsx').then((m) => ({ default: m.ModelDetail })),
-)
-const NotFound = lazy(() => import('./pages/NotFound.tsx').then((m) => ({ default: m.NotFound })))
+function createPreloadedRoute(
+  loader: RetryableRouteLoader<{ default: ComponentType }>,
+) {
+  const LazyRoute = lazy(loader)
+  return function PreloadedRoute() {
+    const Route = loader.loaded()?.default ?? LazyRoute
+    return <Route />
+  }
+}
+
+const Graph = createPreloadedRoute(routeLoaders.graph)
+const Calculator = createPreloadedRoute(routeLoaders.calculator)
+const Search = createPreloadedRoute(routeLoaders.search)
+const Compare = createPreloadedRoute(routeLoaders.compare)
+const Quiz = createPreloadedRoute(routeLoaders.quiz)
+const Learn = createPreloadedRoute(routeLoaders.learn)
+const LearnTopic = createPreloadedRoute(routeLoaders.learnTopic)
+const FAQ = createPreloadedRoute(routeLoaders.faq)
+const Glossary = createPreloadedRoute(routeLoaders.glossary)
+const WhatsNew = createPreloadedRoute(routeLoaders.whatsNew)
+const ModelsIndex = createPreloadedRoute(routeLoaders.models)
+const ModelDetail = createPreloadedRoute(routeLoaders.modelDetail)
+const NotFound = createPreloadedRoute(routeLoaders.notFound)
 
 function App() {
   usePostHogPageView()

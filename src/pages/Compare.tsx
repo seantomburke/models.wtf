@@ -113,9 +113,11 @@ export function Compare() {
   )
 
   const [bookmarks, setBookmarks] = useState<Set<string>>(new Set())
-  // 'table' during server prerender; the real preference loads client-side
-  // below. A ?view= param in the URL overrides the stored preference.
-  const [storedViewMode, setStoredViewMode] = useState<ViewMode>('table')
+  // Before the browser preference loads, prerender both layouts and let the
+  // breakpoint choose with CSS. This keeps mobile direct visits from swapping
+  // the tall table for cards after first paint (a very large layout shift).
+  // A ?view= param in the URL still overrides the stored preference.
+  const [storedViewMode, setStoredViewMode] = useState<ViewMode | null>(null)
   const viewMode = urlState.viewMode ?? storedViewMode
 
   useEffect(() => {
@@ -331,11 +333,11 @@ export function Compare() {
             </button>
           )}
         </div>
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="text-sm text-fg-muted">
             Showing {visible.length} of {models.length} models
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-end gap-2">
             <div
               className="flex rounded-lg border border-line p-0.5"
               role="group"
@@ -397,9 +399,9 @@ export function Compare() {
         </div>
       </div>
 
-      {viewMode === 'cards' ? (
+      {viewMode !== 'table' && (
         <div
-          className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+          className={`grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 ${viewMode === null ? 'md:hidden' : ''}`}
           role="list"
           aria-label="Model cards"
         >
@@ -415,8 +417,9 @@ export function Compare() {
             </div>
           ))}
         </div>
-      ) : (
-      <div className="overflow-x-auto rounded-xl border border-line bg-surface-raised">
+      )}
+      {viewMode !== 'cards' && (
+      <div className={`overflow-x-auto rounded-xl border border-line bg-surface-raised ${viewMode === null ? 'hidden md:block' : ''}`}>
         <table className="w-full min-w-[56rem] text-sm">
           <thead className="sticky top-0 z-10 bg-surface-raised">
             <tr className="border-b border-line text-left">

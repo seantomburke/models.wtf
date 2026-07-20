@@ -9,6 +9,11 @@ export default defineConfig({
   // seantomburke.github.io/models.fyi. Change to '/' once the
   // custom domain (models.fyi) is set up.
   base: '/models.fyi/',
+  build: {
+    // The prerender step uses this to add route-specific module/CSS preloads
+    // for direct visits without pulling chart assets into every page.
+    manifest: true,
+  },
   plugins: [react(), tailwindcss()],
   test: {
     environment: 'jsdom',

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { usePostHog } from '../lib/posthog-react.ts'
 import { ThemeAwareChart } from '../components/ThemeAwareChart.tsx'
 import '@opendata-ai/openchart-react/styles.css'
@@ -43,6 +43,7 @@ interface TokenTextareaProps {
   hint: string
   value: string
   onChange: (value: string) => void
+  onFocus: () => void
   tokens: number
   estimated: boolean
   placeholder?: string
@@ -54,6 +55,7 @@ function TokenTextarea({
   hint,
   value,
   onChange,
+  onFocus,
   tokens,
   estimated,
   placeholder,
@@ -73,6 +75,7 @@ function TokenTextarea({
         id={id}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        onFocus={onFocus}
         rows={6}
         placeholder={placeholder}
         className="mt-2 w-full resize-y rounded-lg border border-line bg-surface p-3 font-mono text-sm text-fg placeholder:text-fg-faint focus:border-accent focus:outline-none"
@@ -179,6 +182,7 @@ export function Calculator({ debounceMs = 200 }: CalculatorProps) {
   const [counter, setCounter] = useState<TokenCounter | null>(null)
   const [sort, setSort] = useState<SortState>({ key: 'totalCost', dir: 'asc' })
   const inputEnteredRef = useRef(false)
+  const tokenizerRequestedRef = useRef(false)
 
   const handleEffortChange = (id: EffortId) => {
     setEffort(id)
@@ -193,20 +197,19 @@ export function Calculator({ debounceMs = 200 }: CalculatorProps) {
     }
   }
 
-  // The real tokenizer is a large lazy chunk; until it lands (and during
-  // prerender, where effects never run) counts fall back to the estimate.
-  useEffect(() => {
-    let cancelled = false
+  // The real tokenizer is a large lazy chunk. Keep it off the initial page
+  // load and fetch it only when someone engages with an editable field.
+  const ensureTokenizer = useCallback(() => {
+    if (tokenizerRequestedRef.current) return
+    tokenizerRequestedRef.current = true
     loadTokenizer()
       .then((count) => {
-        if (!cancelled) setCounter(() => count)
+        setCounter(() => count)
       })
       .catch((error: unknown) => {
+        tokenizerRequestedRef.current = false
         console.error('Tokenizer failed to load; keeping the character-based estimate.', error)
       })
-    return () => {
-      cancelled = true
-    }
   }, [])
 
   const count = counter ?? estimateTokens
@@ -289,6 +292,7 @@ export function Calculator({ debounceMs = 200 }: CalculatorProps) {
             placeholder="Paste or type the text you'd send to the model…"
             value={inputText}
             onChange={handleInputTextChange}
+            onFocus={ensureTokenizer}
             tokens={inputTokens}
             estimated={counter === null}
           />
@@ -298,6 +302,7 @@ export function Calculator({ debounceMs = 200 }: CalculatorProps) {
             hint="A stand-in for the model's reply. Edit it to match how long you expect answers to be."
             value={outputText}
             onChange={setOutputText}
+            onFocus={ensureTokenizer}
             tokens={outputTokens}
             estimated={counter === null}
           />

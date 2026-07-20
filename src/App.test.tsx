@@ -1,7 +1,8 @@
-import { render, screen } from '@testing-library/react'
+import { cleanup, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { vi } from 'vitest'
 import App from './App'
+import { preloadInitialRoute } from './routePreload.ts'
 
 // openchart renders to canvas/SVG with real layout measurement — not jsdom-compatible.
 // The chart data logic is covered separately in lib/graph.test.ts.
@@ -9,7 +10,8 @@ vi.mock('@opendata-ai/openchart-react', () => ({
   Chart: () => <div data-testid="chart" />,
 }))
 
-function renderAt(path: string) {
+async function renderAt(path: string) {
+  await preloadInitialRoute(path)
   render(
     <MemoryRouter initialEntries={[path]}>
       <App />
@@ -17,8 +19,8 @@ function renderAt(path: string) {
   )
 }
 
-test('home page renders the value proposition', () => {
-  renderAt('/')
+test('home page renders the value proposition', async () => {
+  await renderAt('/')
   expect(
     screen.getByRole('heading', { level: 1, name: /pick the right ai model/i }),
   ).toBeInTheDocument()
@@ -33,17 +35,17 @@ test('every nav destination renders with a heading and page title', async () => 
     ['/learn', /learn how ai models work/i],
   ]
   for (const [path, heading] of routes) {
-    renderAt(path)
+    await renderAt(path)
     expect(
       await screen.findByRole('heading', { level: 1, name: heading }),
     ).toBeInTheDocument()
     expect(document.title).toMatch(/models\.fyi/i)
-    document.body.innerHTML = ''
+    cleanup()
   }
 })
 
 test('unknown routes show the not-found page', async () => {
-  renderAt('/nope')
+  await renderAt('/nope')
   expect(
     await screen.findByRole('heading', { level: 1, name: /page not found/i }), // lazy-loaded
   ).toBeInTheDocument()
