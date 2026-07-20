@@ -93,10 +93,9 @@ test('open-source models are footnoted, not priced', async () => {
 
 test('renders both the price chart and the total-cost chart', async () => {
   await renderCalculator()
-  const user = userEvent.setup()
-  expect(screen.getAllByRole('status', { name: 'Interactive chart not loaded' })).toHaveLength(2)
 
-  await user.click(screen.getAllByRole('button', { name: 'Load chart' })[0])
-
+  // Both charts defer until visible. Without IntersectionObserver (jsdom, SSR,
+  // old browsers) they fall back to loading immediately rather than stranding
+  // the reader on a placeholder.
   expect(await screen.findAllByTestId('chart')).toHaveLength(2)
 })

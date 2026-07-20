@@ -1,7 +1,6 @@
 import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { vi } from 'vitest'
-import { ThemeAwareChart } from './ThemeAwareChart'
 
 vi.mock('@opendata-ai/openchart-react', () => ({
   Chart: ({ darkMode }: { darkMode: string }) => (
@@ -16,17 +15,93 @@ vi.mock('@opendata-ai/openchart-react', () => ({
   ),
 }))
 
-beforeEach(() => {
+/**
+ * The chart runtime is cached at module scope so both Calculator charts share
+ * one download. That cache would otherwise leak across tests and hide the
+ * placeholder, so each test imports a fresh copy of the module.
+ */
+async function importFreshChart() {
+  vi.resetModules()
+  return (await import('./ThemeAwareChart')).ThemeAwareChart
+}
+
+let ThemeAwareChart: Awaited<ReturnType<typeof importFreshChart>>
+
+beforeEach(async () => {
   localStorage.clear()
   document.documentElement.classList.remove('dark')
+  ThemeAwareChart = await importFreshChart()
 })
 
-test('shows a stable accessible placeholder while the chart runtime loads', async () => {
-  const user = userEvent.setup()
+/**
+ * Drives the deferred-load path deliberately: jsdom has no
+ * IntersectionObserver, so tests that need the observer must install one.
+ */
+function stubIntersectionObserver() {
+  const observed: Element[] = []
+  let trigger: (() => void) | undefined
+
+  class FakeIntersectionObserver {
+    constructor(callback: IntersectionObserverCallback) {
+      trigger = () =>
+        callback(
+          [{ isIntersecting: true } as IntersectionObserverEntry],
+          this as unknown as IntersectionObserver,
+        )
+    }
+    observe(el: Element) {
+      observed.push(el)
+    }
+    disconnect() {}
+    unobserve() {}
+    takeRecords() {
+      return []
+    }
+  }
+
+  vi.stubGlobal('IntersectionObserver', FakeIntersectionObserver)
+  return {
+    observed,
+    scrollIntoView: () => act(() => trigger?.()),
+  }
+}
+
+afterEach(() => {
+  vi.unstubAllGlobals()
+})
+
+test('shows a stable accessible placeholder until the chart scrolls into view', async () => {
+  const io = stubIntersectionObserver()
   render(<ThemeAwareChart spec={{} as never} deferUntilInteraction />)
 
   expect(screen.getByRole('status', { name: 'Interactive chart not loaded' })).toBeInTheDocument()
+  expect(screen.queryByText('Chart theme: off')).not.toBeInTheDocument()
+
+  io.scrollIntoView()
+  expect(await screen.findByText('Chart theme: off')).toBeInTheDocument()
+})
+
+test('a deferred chart still loads from the explicit button without scrolling', async () => {
+  stubIntersectionObserver()
+  const user = userEvent.setup()
+  render(<ThemeAwareChart spec={{} as never} deferUntilInteraction />)
+
   await user.click(screen.getByRole('button', { name: 'Load chart' }))
+  expect(await screen.findByText('Chart theme: off')).toBeInTheDocument()
+})
+
+test('observes the chart placeholder itself, not a global scroll target', () => {
+  const io = stubIntersectionObserver()
+  render(<ThemeAwareChart spec={{} as never} deferUntilInteraction />)
+
+  // The regression: gating on window scroll left a chart that renders inside
+  // the initial viewport stuck on its placeholder forever.
+  expect(io.observed).toHaveLength(1)
+  expect(io.observed[0]).toBe(screen.getByRole('status', { name: 'Interactive chart not loaded' }))
+})
+
+test('loads immediately when IntersectionObserver is unavailable', async () => {
+  render(<ThemeAwareChart spec={{} as never} deferUntilInteraction />)
   expect(await screen.findByText('Chart theme: off')).toBeInTheDocument()
 })
 

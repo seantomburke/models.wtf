@@ -65,6 +65,7 @@ export function ThemeAwareChart<TData extends DataRow = DataRow>({
   const [loadError, setLoadError] = useState(false)
   const mountedRef = useRef(true)
   const chartRootRef = useRef<HTMLDivElement>(null)
+  const placeholderRef = useRef<HTMLDivElement>(null)
 
   const beginLoad = useCallback(() => {
     if (Chart) return
@@ -99,8 +100,28 @@ export function ThemeAwareChart<TData extends DataRow = DataRow>({
       return
     }
 
-    window.addEventListener('scroll', beginLoad, { once: true, passive: true })
-    return () => window.removeEventListener('scroll', beginLoad)
+    // No IntersectionObserver (SSR, jsdom, old browsers): load right away so a
+    // deferred chart never gets stuck showing its placeholder.
+    const placeholder = placeholderRef.current
+    if (typeof IntersectionObserver === 'undefined' || !placeholder) {
+      beginLoad()
+      return
+    }
+
+    // Gate on the chart's own visibility, not a global scroll event. A chart
+    // that renders inside the initial viewport must load without waiting for
+    // a scroll that may never happen.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer.disconnect()
+          beginLoad()
+        }
+      },
+      { rootMargin: '200px' },
+    )
+    observer.observe(placeholder)
+    return () => observer.disconnect()
   }, [beginLoad, Chart, deferUntilInteraction, loadError])
 
   useLayoutEffect(() => {
@@ -121,6 +142,7 @@ export function ThemeAwareChart<TData extends DataRow = DataRow>({
   if (!Chart) {
     return (
       <div
+        ref={placeholderRef}
         role={loadError ? 'alert' : 'status'}
         aria-label={loadError ? 'Interactive chart unavailable' : 'Interactive chart not loaded'}
         className="flex h-full min-h-40 items-center justify-center text-sm text-fg-muted"
