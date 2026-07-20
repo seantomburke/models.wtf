@@ -300,6 +300,31 @@ export const glossaryTerms: GlossaryTerm[] = [
     short: 'The numerical parameters that define what a trained model knows.',
     long: 'When people say "the model weights," they mean all the numbers inside the model. When you download an open source model, you\'re downloading a file full of billions of these numbers. The weights encode everything the model learned during training. Different weights = different model.',
   },
+  {
+    id: 'latency',
+    term: 'Latency',
+    short: 'How long an AI model takes to start or finish responding.',
+    long: 'Latency is the delay between sending a request and getting a response. A model can be very capable but still feel slow if it pauses for several seconds before answering. Low latency matters for live chat, voice assistants, and other interactive products; a slower model may be acceptable for background research or batch jobs.',
+  },
+  {
+    id: 'throughput',
+    term: 'Throughput',
+    short: 'How much work an AI service can process in a given amount of time.',
+    long: 'Throughput measures how many requests or output tokens a model service can handle per second or minute. It matters when you need to summarize thousands of documents or serve many users at once. A model with high throughput can finish that volume sooner, even if the wait for one individual response is not the shortest.',
+  },
+  {
+    id: 'tool-use',
+    term: 'Tool Use',
+    short: 'When an AI model can ask software or services to perform an action.',
+    long: 'Tool use lets a model do more than generate text. The model can choose a provided tool, such as searching a catalog, checking the weather, or calling your application\'s API, and supply the arguments that tool needs. Strong tool use matters when choosing a model for assistants and agents that must reliably take actions or retrieve information.',
+  },
+  {
+    id: 'knowledge-cutoff',
+    term: 'Knowledge Cutoff',
+    short: 'The latest date covered by an AI model\'s built-in training knowledge.',
+    long: 'A knowledge cutoff is the point after which events were too recent to be included in a model\'s training. The model may not know about newer products, rules, or news unless it can search the web or use another current source. Check the cutoff and available search tools when choosing a model for up-to-date questions.',
+    relatedLearnTopic: 'web-search-models',
+  },
 ]
 
 export function getGlossaryTerm(id: string): GlossaryTerm | undefined {

@@ -93,7 +93,7 @@ Phase 4A (search, tooltips, copy buttons) has been completed with 283 passing te
 
 - [x] 15+ new Learn topics published — **26 topics** live
 - [x] FAQ page with 20+ searchable questions — **24**
-- [ ] Glossary with 50+ terms, indexed for discovery — **47**, 3 short of target
+- [x] Glossary with 50+ terms, indexed for discovery — **50**
 - [ ] 30+ model detail pages live at `/models/:id` — **19**, gated on the model dataset having 19 entries
 - [x] Model pages include "why this model," related models, use cases
 - [x] SEO rich snippets (JSON-LD) on model pages — now on **55/56** prerendered pages, not just model pages
