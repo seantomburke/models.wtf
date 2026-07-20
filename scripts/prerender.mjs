@@ -12,7 +12,20 @@ import { render, routeMeta, canonicalUrl, faqs } from '../dist-server/entry-serv
 const esc = (s) =>
   s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;')
 
-const template = readFileSync('dist/index.html', 'utf8')
+// Vite KEEPS the template's <meta name="description">, it just reformats the
+// attributes onto separate lines. The 02ceb10 substitution regex missed it for
+// that reason alone — not because the tag was gone — so switching to injection
+// left the generic homepage boilerplate in place and every page shipped TWO
+// description tags. Crawlers that read the first one (the usual behaviour) saw
+// the same site-wide blurb on all 59 pages and the per-route snippet was dead.
+// Drop the template's tag here so injection below is the only source.
+const rawTemplate = readFileSync('dist/index.html', 'utf8')
+const template = rawTemplate.replace(/\s*<meta\s+name="description"[\s\S]*?\/>/, '')
+if (template.includes('name="description"')) {
+  throw new Error(
+    'failed to strip the template <meta name="description"> — prerendered pages would ship a duplicate, and crawlers reading the first tag get the generic site blurb instead of the per-route snippet.',
+  )
+}
 const manifest = JSON.parse(readFileSync('dist/.vite/manifest.json', 'utf8'))
 const assetBase = template.match(/<script[^>]+src="([^"]*\/assets\/)/)?.[1]
 if (!assetBase) throw new Error('could not determine the built asset base from dist/index.html')
@@ -63,10 +76,10 @@ writeFileSync('dist/404.html', template)
 // Social crawlers (Slack, iMessage, X, Facebook) never run JS, so OG/Twitter
 // tags and the canonical URL must be in the static head, not just set by
 // usePageMeta at runtime.
-// The description is INJECTED, not substituted: Vite strips the template's
-// <meta name="description"> during the client build, so a replace-in-place
-// regex silently matched nothing and every page shipped without a search
-// snippet. Emit the tag here and assert it below.
+// The description is INJECTED, not substituted: a replace-in-place regex could
+// not match the template's tag, which Vite reformats across several lines. The
+// template's copy is stripped above so this is the only description on the
+// page; both facts are asserted below.
 const socialHead = ({ path, title, description, type, image }) => {
   const url = canonicalUrl(path)
   return [
@@ -154,6 +167,7 @@ for (const meta of routeMeta) {
     !out.includes(`<div id="root" data-prerender-path="${esc(path)}">${body}</div>`) ||
     !out.includes(esc(title)) ||
     !out.includes(`<meta name="description" content="${esc(description)}" />`) ||
+    out.match(/<meta\s+name="description"/g)?.length !== 1 ||
     !out.includes('og:image') ||
     (structuredData && !out.includes('application/ld+json'))
   ) {
