@@ -1,0 +1,6 @@
+---
+description: Canonical repository guidance
+alwaysApply: true
+---
+
+Read and follow `AGENTS.md`. When working under `src/`, also follow `src/AGENTS.md`. Treat `.agents/` as the canonical source for reusable skills and agent roles.

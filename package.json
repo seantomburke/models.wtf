@@ -9,6 +9,7 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest",
+    "check:agents": "node scripts/check-agent-config.mjs",
     "validate": "node scripts/validate-data.ts",
     "check:links": "node scripts/check-links.mjs",
     "test:coverage": "vitest run --coverage"

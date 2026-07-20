@@ -31,8 +31,11 @@ npm run lint      # Lint
 This repo is agent-agnostic. Guidance lives in `AGENTS.md` files, not in any one agent's config format:
 
 - This file holds repo-wide guidance; `src/AGENTS.md` adds frontend rules (React, error handling, testing) for work under `src/`.
-- Reusable skills live in `.agents/skills/<name>/SKILL.md`. When a task matches a skill listed below, read its SKILL.md and follow it.
-- Agent-specific config stays in that agent's folder (`.claude/` for Claude Code permissions and subagents, `.codex/` for Codex agents). Don't put repo guidance there.
+- Reusable skills live in `.agents/skills/<name>/SKILL.md`. When a task matches a skill listed below, read its `SKILL.md` and follow it.
+- Reusable agent roles live in `.agents/agents/`. Vendor-specific definitions must be thin adapters that point to these canonical instructions rather than copying them.
+- Agent-specific discovery, permissions, and plugin config stays in that agent's folder. Don't put project guidance there.
+- Describe required capabilities (read, edit, search, run, monitor) instead of naming vendor-specific tools in shared guidance.
+- Run `npm run check:agents` after changing agent guidance, skills, or adapters.
 
 | Skill | Use when |
 |-------|----------|
@@ -61,5 +64,5 @@ Four-phase approach:
 ## Deployment
 
 - Always push finished work to `main` — every push to main triggers the GitHub Actions deploy to GitHub Pages. Don't leave completed work sitting on feature branches.
-- Watch the deploy with a background Monitor, not by polling or `gh run watch` in the foreground — it wastes context.
+- Monitor the deploy asynchronously using the agent's available background-job capability; don't occupy the foreground with continuous polling.
 - After the deploy succeeds, verify the change on the live site, then close the GitHub issue.
