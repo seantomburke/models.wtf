@@ -1,4 +1,5 @@
 import type { Model, Benchmark } from '../../data/types'
+import { formatBenchmarkScore } from '../../lib/benchmarkScore'
 
 interface Props {
   model: Model
@@ -90,7 +91,7 @@ export function ModelSpecs({ model, relevantBenchmarks }: Props) {
                 <div key={bench.id} className="flex justify-between items-center text-sm">
                   <span className="text-fg-muted">{bench.name}</span>
                   <span className="font-medium text-fg">
-                    {model.scores[bench.id]}%
+                    {formatBenchmarkScore(model.scores[bench.id]!, bench)}
                   </span>
                 </div>
               ))}

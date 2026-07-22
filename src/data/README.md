@@ -40,6 +40,14 @@ third-party harness runs; where a number is third-party or contested,
 
 2026-07-22 fifth-pass refresh notes:
 
+- **Artificial Analysis Intelligence Index added.** This actively refreshed,
+  points-based composite combines nine current evaluations, including
+  Terminal-Bench 2.1, HLE, GPQA Diamond, real-world work, tool-use, and
+  long-context tests. It appears as a distinct `pts` column so it cannot be
+  confused with a percentage. Initial independently measured scores are
+  included only where the exact model and effort configuration is published;
+  the score popover links to each live result.
+
 - **Two independently measured gaps are now filled with score-level links.**
   Grok 4.5 scores **52.2** on closed-book HLE, and Muse Spark 1.1 scores
   **82.0** on SWE-bench Verified (x-high mini-SWE-agent). The comparison

@@ -23,7 +23,7 @@ export const axisOptions: AxisOption[] = [
   ...benchmarks.map((b) => ({
     id: b.id,
     label: b.name,
-    axisTitle: `${b.name} (%)`,
+    axisTitle: `${b.name} (${b.unit})`,
     getValue: (m: Model) => m.scores[b.id],
     domainCap: 100,
   })),

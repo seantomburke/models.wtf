@@ -1,6 +1,7 @@
 import type { Model } from '../data/types.ts'
 import { formatPrice, formatTokens } from '../lib/format.ts'
-import { providerById } from '../data/index.ts'
+import { benchmarks, providerById } from '../data/index.ts'
+import { formatBenchmarkScore } from '../lib/benchmarkScore.ts'
 import { ProviderLogo } from './ProviderLogo.tsx'
 import { BookmarkButton } from './BookmarkButton.tsx'
 
@@ -115,6 +116,7 @@ export function ModelCard({
           <p className="font-medium text-fg-secondary">Top benchmarks:</p>
           {topBenchmarks.map(([benchId, score]) => {
             const isBest = score !== undefined && score === bestScores[benchId]
+            const benchmark = benchmarks.find((item) => item.id === benchId)
             return (
               <div key={benchId} className="flex justify-between">
                 <span className="text-fg-secondary capitalize">
@@ -125,7 +127,7 @@ export function ModelCard({
                     isBest ? 'font-semibold text-accent-deep' : 'text-fg'
                   }`}
                 >
-                  {score?.toFixed(1)}%
+                  {score !== undefined && benchmark ? formatBenchmarkScore(score, benchmark) : '—'}
                 </span>
               </div>
             )

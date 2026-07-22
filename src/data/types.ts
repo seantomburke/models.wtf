@@ -31,6 +31,7 @@ export type BenchmarkId =
   | 'gpqa-diamond'
   | 'terminal-bench'
   | 'hle'
+  | 'aa-intelligence-index'
 
 export type BenchmarkCategory =
   | 'Software Engineering'
@@ -52,8 +53,8 @@ export interface Benchmark {
   shortName?: string
   /** What this benchmark measures, in plain language. */
   eli5: string
-  /** All current benchmarks are 0-100 percentages, higher = better. */
-  unit: '%'
+  /** Display unit for scores. */
+  unit: '%' | 'points'
   /** Category that groups related benchmarks. */
   category: BenchmarkCategory
   /** URL to the benchmark source or documentation. */

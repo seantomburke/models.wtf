@@ -57,4 +57,14 @@ export const benchmarks: Benchmark[] = [
     sourceUrl: 'https://scale.com/leaderboard/humanitys_last_exam',
     sourceOrganization: 'Scale AI',
   },
+  {
+    id: 'aa-intelligence-index',
+    name: 'Artificial Analysis Intelligence Index',
+    shortName: 'AA Index',
+    eli5: 'A frequently refreshed overall score made from nine modern tests: real work, tool use, terminal tasks, science, hard questions, and long-context reasoning. It is a scorecard, not a percent correct.',
+    unit: 'points',
+    category: 'Reasoning',
+    sourceUrl: 'https://artificialanalysis.ai/evaluations/intelligence-index',
+    sourceOrganization: 'Artificial Analysis',
+  },
 ]

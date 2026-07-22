@@ -34,10 +34,16 @@ export const models: Model[] = [
       'gpqa-diamond': 92.6, // Anthropic-published (July 2026)
       'terminal-bench': 88.0, // vals.ai independent run (July 16, 2026)
       'hle': 53.3, // Artificial Analysis independent run (July 2026)
+      'aa-intelligence-index': 60.0, // Artificial Analysis v4.1, max effort with fallback
     },
     scoreProvenance: {
       'terminal-bench': { source: 'independent', runner: 'vals.ai' },
       'hle': { source: 'independent', runner: 'Artificial Analysis' },
+      'aa-intelligence-index': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/models/claude-fable-5/',
+      },
     },
     blurb:
       "Anthropic's most capable model. Built for the hardest reasoning and long autonomous work, at a premium price.",
@@ -186,6 +192,7 @@ export const models: Model[] = [
       'swe-bench-pro': 64.6, // OpenAI-published
       'gpqa-diamond': 94.6, // OpenAI-published (July 2026)
       'hle': 47.2, // Artificial Analysis independent run (July 2026; max effort)
+      'aa-intelligence-index': 59.0, // Artificial Analysis v4.1, max effort
     },
     scoreProvenance: {
       'swe-bench-verified': { source: 'independent', runner: 'Vals AI (mini-swe-agent)' },
@@ -195,6 +202,11 @@ export const models: Model[] = [
         independentRunner: 'Vals AI (Terminus 2)',
       },
       'hle': { source: 'independent', runner: 'Artificial Analysis' },
+      'aa-intelligence-index': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/models/gpt-5-6-sol/',
+      },
     },
     blurb:
       "OpenAI's brand-new flagship. State of the art on autonomous terminal work, strong all-rounder.",
@@ -348,6 +360,14 @@ export const models: Model[] = [
     scores: {
       'swe-bench-pro': 58.7, // Google-published (public subset)
       'terminal-bench': 78.0, // Google-published (Terminus-2 harness)
+      'aa-intelligence-index': 50.0, // Artificial Analysis v4.1, high effort
+    },
+    scoreProvenance: {
+      'aa-intelligence-index': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/models/gemini-3-6-flash/',
+      },
     },
     blurb:
       "Google's newest workhorse model. Stronger at agentic coding than 3.5 Flash while using fewer tokens and charging less for output.",
@@ -455,6 +475,7 @@ export const models: Model[] = [
       'terminal-bench': 83.3, // xAI-published; tbench.ai independent run (Cursor CLI) lands 79.3
       // Independent closed-book run, not xAI's tool-assisted headline result.
       'hle': 52.2,
+      'aa-intelligence-index': 54.0, // Artificial Analysis v4.1, high effort
     },
     scoreProvenance: {
       'swe-bench-verified': { source: 'independent', runner: 'Vals AI (mini-swe-agent)' },
@@ -463,6 +484,11 @@ export const models: Model[] = [
         source: 'independent',
         runner: 'Artificial Analysis',
         sourceUrl: 'https://benchmarklist.com/models/xai-grok-4-5/',
+      },
+      'aa-intelligence-index': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/models/grok-4-5/',
       },
       'terminal-bench': {
         source: 'provider',
@@ -583,6 +609,7 @@ export const models: Model[] = [
       'gpqa-diamond': 93.5, // Moonshot-published (July 2026)
       'terminal-bench': 88.3, // Moonshot-published; Vals independent run lands 80.90
       'hle': 56.0, // Moonshot-published (with tools) (July 2026)
+      'aa-intelligence-index': 57.0, // Artificial Analysis v4.1
     },
     scoreProvenance: {
       'swe-bench-verified': { source: 'independent', runner: 'Vals AI (mini-swe-agent)' },
@@ -590,6 +617,11 @@ export const models: Model[] = [
         source: 'provider',
         independentScore: 80.9,
         independentRunner: 'Vals AI (Terminus 2)',
+      },
+      'aa-intelligence-index': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/models/kimi-k3/',
       },
     },
     blurb:

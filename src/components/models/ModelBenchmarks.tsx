@@ -1,5 +1,6 @@
 import type { Model, Benchmark } from '../../data/types'
 import { provenanceFor } from '../../lib/scoreProvenance'
+import { formatBenchmarkScore } from '../../lib/benchmarkScore'
 
 interface Props {
   model: Model
@@ -42,7 +43,7 @@ export function ModelBenchmarks({ model, benchmarks }: Props) {
                         <p className="text-sm text-fg-muted">{bench.eli5}</p>
                       </div>
                       <span className="text-lg font-bold text-fg">
-                        {score.toFixed(1)}%
+                        {formatBenchmarkScore(score, bench)}
                       </span>
                     </div>
                     <div className="w-full bg-line-strong rounded-full h-2">

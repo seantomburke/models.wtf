@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import type { Benchmark } from '../data/types.ts'
 import type { ProvenanceDisplay } from '../lib/scoreProvenance.ts'
+import { formatBenchmarkScore } from '../lib/benchmarkScore.ts'
 
 interface BenchmarkCellProps {
   benchmark: Benchmark
@@ -34,7 +35,7 @@ export function BenchmarkCell({ benchmark, score, isBest, provenance }: Benchmar
         <span className="sr-only">no published score</span>
       </>
     ) : (
-      `${score.toFixed(1)}%`
+      formatBenchmarkScore(score, benchmark)
     )
 
   const provenanceDot =
@@ -126,7 +127,7 @@ export function BenchmarkCell({ benchmark, score, isBest, provenance }: Benchmar
             title={`${benchmark.name}: ${benchmark.eli5}`}
             aria-expanded={isPinned}
             aria-controls={isOpen ? cardId : undefined}
-            aria-label={`${benchmark.name} score: ${score.toFixed(1)}%. ${
+            aria-label={`${benchmark.name} score: ${formatBenchmarkScore(score, benchmark)}. ${
               isPinned ? 'Hide details' : 'Show details and source'
             }`}
           >
