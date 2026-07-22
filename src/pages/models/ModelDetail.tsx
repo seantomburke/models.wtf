@@ -51,13 +51,17 @@ function ModelDetailContent({ model }: { model: Model }) {
 
   return (
     <div className="mx-auto max-w-4xl space-y-12">
+        {/* Tailwind v4's space-y sets margin-bottom via a zero-specificity
+            :where() rule, so any mb-* here overrides the 3rem rhythm outright.
+            The old -mb-8 therefore became margin-bottom: -2rem and pulled the
+            title up over the breadcrumb (#97). */}
         <Breadcrumb
           items={[
             { name: 'Home', path: '/' },
             { name: 'Models', path: '/models' },
             { name: model.name },
           ]}
-          className="-mb-8"
+          className="mb-4"
         />
 
         <ModelHeader model={model} provider={provider} />
