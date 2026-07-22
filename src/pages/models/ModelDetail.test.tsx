@@ -1,10 +1,51 @@
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { models } from '../../data/models'
-import { providers } from '../../data'
+import { benchmarks, providers } from '../../data'
 import { ModelDetail } from './ModelDetail'
 
+const { capture } = vi.hoisted(() => ({ capture: vi.fn() }))
+
+vi.mock('../../lib/analytics', () => ({ capture }))
+
+beforeEach(() => {
+  capture.mockClear()
+})
+
 describe('ModelDetail page', () => {
+  test('records a privacy-minimal evaluation event for the model being viewed', () => {
+    const model = models[0]
+    const benchmarkCount = benchmarks.filter((benchmark) => model.scores[benchmark.id] !== undefined).length
+
+    render(
+      <MemoryRouter initialEntries={[`/models/${model.id}`]}>
+        <Routes>
+          <Route path="/models/:id" element={<ModelDetail />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    expect(capture).toHaveBeenCalledWith('model_detail_viewed', {
+      model_id: model.id,
+      provider_id: model.providerId,
+      benchmark_count: benchmarkCount,
+      is_open_source: model.openSource,
+    })
+  })
+
+  test('does not record a model evaluation event for a missing model', () => {
+    render(
+      <MemoryRouter initialEntries={['/models/not-a-model']}>
+        <Routes>
+          <Route path="/models/:id" element={<ModelDetail />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    expect(capture).not.toHaveBeenCalled()
+  })
+
   test('links to the pre-filtered provider comparison', () => {
     const model = models[0]
     const provider = providers.find((p) => p.id === model.providerId)!

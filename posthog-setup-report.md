@@ -1,24 +1,20 @@
 # PostHog post-wizard report
 
-The wizard completed a targeted PostHog integration review for this Vite/TypeScript application. The existing deferred browser initialization and event helpers were preserved, `posthog-js` was updated through npm, PostHog environment variables were written to local and production env files, and four high-value interaction events were added without capturing user-entered search text or URLs. The production build and scoped lint checks both pass.
+The wizard completed a targeted PostHog integration for this Vite/TypeScript application. The existing deferred browser initialization, default autocapture, session recording, and event helpers were preserved. The SDK dependency and environment configuration were verified, and two high-value events were added for model evaluation and interactive learning engagement. Run the verification commands below before merging; autocapture and session recording should also receive a separate consent, masking, and retention review.
 
 | Event | Description | File |
 |---|---|---|
-| `search_performed` | A visitor submitted a model search; only result volume is recorded, not user-entered text. | `src/pages/Search.tsx` |
-| `search_result_clicked` | A visitor selected a model from search results. | `src/pages/Search.tsx` |
-| `compare_link_copied` | A visitor successfully copied a shareable comparison link. | `src/pages/Compare.tsx` |
-| `benchmark_source_clicked` | A visitor opened the external source for a benchmark. | `src/components/BenchmarkSourceLink.tsx` |
+| `model_detail_viewed` | A visitor opened a specific model detail page, marking deeper evaluation intent. | `src/pages/models/ModelDetail.tsx` |
+| `learning_demo_trained` | A visitor trained the interactive gradient descent model in the browser. | `src/components/learn/GradientDescentDemo.tsx` |
 
 ## Next steps
 
-We've built insights and a dashboard to monitor discovery, selection, sharing, and source engagement:
+We've built insights and a dashboard to monitor model evaluation and interactive learning engagement:
 
-- [Analytics basics dashboard (wizard)](https://us.posthog.com/project/516228/dashboard/1887746)
-- [Search to model selection (wizard)](https://us.posthog.com/project/516228/insights/V7DT26dg)
-- [Searches over time (wizard)](https://us.posthog.com/project/516228/insights/JTwOYsY3)
-- [Search result selections (wizard)](https://us.posthog.com/project/516228/insights/msDIWqRL)
-- [Shared comparisons (wizard)](https://us.posthog.com/project/516228/insights/cYl8dhIm)
-- [Benchmark source engagement (wizard)](https://us.posthog.com/project/516228/insights/A3QDl8tp)
+- [Analytics basics dashboard (wizard)](https://us.posthog.com/project/516228/dashboard/1887940)
+- [Model detail views (wizard)](https://us.posthog.com/project/516228/insights/jxv7BRoI)
+- [Model evaluation to learning engagement (wizard)](https://us.posthog.com/project/516228/insights/VwWrbmGr)
+- [Learning demo training activity (wizard)](https://us.posthog.com/project/516228/insights/DsHY9zjW)
 
 ## Verify before merging
 

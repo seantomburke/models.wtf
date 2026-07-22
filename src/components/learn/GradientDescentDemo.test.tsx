@@ -1,9 +1,16 @@
-import { afterEach, describe, it, expect, vi } from 'vitest'
+import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent, within } from '@testing-library/react'
 import { GradientDescentDemo } from './GradientDescentDemo'
 import { PIXEL_COUNT, TRAINING_RUN } from './gradientDescent'
 
 const LAST_EPOCH = TRAINING_RUN.history.length - 1
+const { capture } = vi.hoisted(() => ({ capture: vi.fn() }))
+
+vi.mock('../../lib/analytics', () => ({ capture }))
+
+beforeEach(() => {
+  capture.mockClear()
+})
 
 afterEach(() => {
   vi.restoreAllMocks()
@@ -77,6 +84,25 @@ describe('GradientDescentDemo', () => {
     fireEvent.change(screen.getByLabelText('Training epoch'), { target: { value: '30' } })
     fireEvent.click(screen.getByRole('button', { name: 'Reset to random' }))
     expect(screen.getByText(/^Epoch /)).toHaveTextContent('Epoch 0')
+  })
+
+  it('records aggregate training results after a valid training run', () => {
+    render(<GradientDescentDemo />)
+    fireEvent.click(screen.getByRole('button', { name: 'Train model' }))
+
+    expect(capture).toHaveBeenCalledExactlyOnceWith('learning_demo_trained', {
+      epoch_count: LAST_EPOCH,
+      final_accuracy: TRAINING_RUN.history.at(-1)?.accuracy,
+      final_loss: TRAINING_RUN.history.at(-1)?.loss,
+    })
+  })
+
+  it('does not record a training event when the seed is invalid', () => {
+    render(<GradientDescentDemo />)
+    fireEvent.change(screen.getByRole('spinbutton', { name: 'Random seed' }), { target: { value: '' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Train model' }))
+
+    expect(capture).not.toHaveBeenCalled()
   })
 
   it('generates another seed and reports invalid seed input', () => {

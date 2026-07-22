@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { models } from '../../data/models'
 import { benchmarks, providers } from '../../data'
@@ -12,6 +13,7 @@ import { ProsCons } from '../../components/models/ProsCons'
 import { RelatedModels } from '../../components/models/RelatedModels'
 import { Breadcrumb } from '../../components/Breadcrumb'
 import { NotFound } from '../NotFound'
+import { capture } from '../../lib/analytics'
 
 export function ModelDetail() {
   const { id } = useParams<{ id: string }>()
@@ -37,6 +39,15 @@ function ModelDetailContent({ model }: { model: Model }) {
     pathname: `/models/${model.id}`,
     structuredData: meta.structuredData,
   })
+
+  useEffect(() => {
+    capture('model_detail_viewed', {
+      model_id: model.id,
+      provider_id: model.providerId,
+      benchmark_count: relevantBenchmarks.length,
+      is_open_source: model.openSource,
+    })
+  }, [model.id, model.openSource, model.providerId, relevantBenchmarks.length])
 
   return (
     <div className="mx-auto max-w-4xl space-y-12">

@@ -13,6 +13,7 @@ import {
 import { LossSurface3D } from './LossSurface3D'
 import { PolynomialDescent2D } from './PolynomialDescent2D'
 import { TrainablePixelClassifier } from './TrainablePixelClassifier'
+import { capture } from '../../lib/analytics'
 
 const CHART_W = 640
 const CHART_H = 270
@@ -141,6 +142,11 @@ export function GradientDescentDemo() {
     setEpoch(0)
     setPlaying(false)
     setSeedError('')
+    capture('learning_demo_trained', {
+      epoch_count: nextRun.history.length - 1,
+      final_accuracy: nextRun.history.at(-1)?.accuracy,
+      final_loss: nextRun.history.at(-1)?.loss,
+    })
   }
 
   const reset = () => {
