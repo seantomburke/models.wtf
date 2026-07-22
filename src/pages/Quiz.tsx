@@ -96,8 +96,12 @@ function ResultCard({ role, task, budget, pref }: { role: Role; task: Task; budg
         </ul>
         {runnerUp && (
           <p className="mt-4 border-t border-line pt-3 text-sm text-fg-muted">
-            Close second: <span className="font-medium text-fg-secondary">{runnerUp.name}</span>.{' '}
-            {runnerUp.blurb}
+            Close second:{' '}
+            <span className="inline-flex items-center gap-1 font-medium text-fg-secondary">
+              <ProviderLogo providerId={runnerUp.providerId} size={13} />
+              {runnerUp.name}
+            </span>
+            . {runnerUp.blurb}
           </p>
         )}
       </div>
@@ -123,7 +127,10 @@ function ReverseFlow() {
       <div className="flex flex-wrap gap-1.5">
         {models.map((m) => (
           <Chip key={m.id} selected={selected?.id === m.id} onClick={() => handleModelSelect(m)}>
-            {m.name}
+            <span className="inline-flex items-center gap-1.5">
+              <ProviderLogo providerId={m.providerId} size={14} />
+              {m.name}
+            </span>
           </Chip>
         ))}
       </div>

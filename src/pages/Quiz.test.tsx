@@ -66,6 +66,15 @@ test('reverse mode shows provider, pricing, and links for the chosen model', asy
   expect(screen.getByRole('link', { name: /graph/i })).toHaveAttribute('href', '/graph')
 })
 
+test('model chips carry their provider logo', async () => {
+  const user = userEvent.setup()
+  renderQuiz()
+  await user.click(screen.getByRole('button', { name: 'Start from a model' }))
+  const chip = screen.getByRole('button', { name: 'Claude Fable 5' })
+  // The logo is decorative (aria-hidden), so query the rendered SVG directly.
+  expect(chip.querySelector('svg[aria-hidden="true"]')).not.toBeNull()
+})
+
 test('the free budget chip names open source honestly', async () => {
   const user = userEvent.setup()
   renderQuiz()
