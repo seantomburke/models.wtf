@@ -86,6 +86,22 @@ export function addCard(state: SwipeDeckState, card: number): SwipeDeckState {
 }
 
 /**
+ * Add a brand-new card straight into the labelled set, skipping the deck —
+ * the author already told us what their drawing is, so making them swipe it
+ * would just be homework.
+ */
+export function addLabelledCard(
+  state: SwipeDeckState,
+  card: number,
+  label: SwipeLabel
+): SwipeDeckState {
+  if (state.queue.includes(card) || card in state.labels || state.deleted.includes(card)) {
+    return state
+  }
+  return { ...state, labels: { ...state.labels, [card]: label } }
+}
+
+/**
  * Label many cards in one stroke (the shortcut buttons). Cards for which
  * `labelFor` returns null — a custom drawing whose truth only its author
  * knows — stay in the queue. Deleted cards stay deleted.

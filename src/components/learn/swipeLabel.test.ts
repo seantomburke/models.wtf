@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import {
   addCard,
+  addLabelledCard,
   createDeck,
   currentCard,
   deleteCurrent,
@@ -99,6 +100,30 @@ describe('swipe deck state machine', () => {
     expect(deck.labels).toEqual({ 0: 'E', 2: '3', 3: '3' })
     expect(deck.queue).toEqual([4])
     expect(deck.deleted).toEqual([1])
+  })
+})
+
+describe('addLabelledCard', () => {
+  it('adds a new card straight into the labelled set, skipping the queue', () => {
+    const deck = addLabelledCard(createDeck(2), 2, '3')
+    expect(deck.queue).toEqual([0, 1])
+    expect(deck.labels[2]).toBe('3')
+    expect(labelledCount(deck)).toBe(1)
+  })
+
+  it('refuses cards that are already queued, labelled, or deleted', () => {
+    const base = createDeck(2)
+    expect(addLabelledCard(base, 0, 'E')).toBe(base)
+    const labelled = labelCurrent(base, '3')
+    expect(addLabelledCard(labelled, 0, 'E')).toBe(labelled)
+    const deleted = deleteCurrent(base)
+    expect(addLabelledCard(deleted, 0, 'E')).toBe(deleted)
+  })
+
+  it('relabelling sends a directly-added card back through the deck like any other', () => {
+    const deck = unlabelCard(addLabelledCard(createDeck(1), 1, 'E'), 1)
+    expect(currentCard(deck)).toBe(1)
+    expect(labelledCount(deck)).toBe(0)
   })
 })
 

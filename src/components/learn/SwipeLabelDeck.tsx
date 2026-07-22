@@ -6,20 +6,85 @@ import { resolveSwipe, type SwipeLabel } from './swipeLabel'
 /** How far (px) a card must travel before release counts as a swipe. */
 export const SWIPE_THRESHOLD = 72
 
-interface SwipeCard {
+export interface SwipeCard {
   /** Stable key for the card being shown. */
   id: number
   name: string
   pixels: boolean[]
 }
 
+/** How many queued drawings the conveyor previews beside the deck. */
+export const CONVEYOR_SIZE = 5
+
 interface SwipeLabelDeckProps {
   /** The card facing the user; null renders the all-done state. */
   card: SwipeCard | null
+  /** The next cards waiting in the queue, nearest first, for the conveyor. */
+  upcoming: SwipeCard[]
   /** How many cards wait behind this one, for the stacked edges. */
   remaining: number
   onLabel: (label: SwipeLabel) => void
   onDelete: () => void
+  /** Invoked from the all-done state's "draw your own" invitation. */
+  onAddYourOwn: () => void
+}
+
+/**
+ * The queue made visible: the next few unlabelled drawings ride in from the
+ * right and step left toward the deck as each card is judged. The step is one
+ * translate transition on the whole strip — set to a slot width without
+ * transition, then released to zero — so it stays cheap, and it is skipped
+ * entirely under prefers-reduced-motion.
+ */
+function ConveyorStrip({ upcoming }: { upcoming: SwipeCard[] }) {
+  const [shifted, setShifted] = useState(false)
+  const headIdRef = useRef<number | null>(upcoming[0]?.id ?? null)
+  const frameRef = useRef<number | null>(null)
+
+  useEffect(() => {
+    const headId = upcoming[0]?.id ?? null
+    if (headId === headIdRef.current) return
+    headIdRef.current = headId
+    if (headId === null || prefersReducedMotion()) return
+    // Start one slot to the right, then let the transition carry it home.
+    setShifted(true)
+    frameRef.current = requestAnimationFrame(() => {
+      frameRef.current = requestAnimationFrame(() => setShifted(false))
+    })
+  }, [upcoming])
+
+  useEffect(() => {
+    return () => {
+      if (frameRef.current !== null) cancelAnimationFrame(frameRef.current)
+    }
+  }, [])
+
+  if (upcoming.length === 0) return null
+
+  return (
+    <div className="mb-3 overflow-hidden" data-testid="conveyor-strip" aria-hidden="true">
+      <p className="text-center text-[11px] text-fg-faint">Up next</p>
+      <div
+        className={`mt-1 flex justify-center gap-2 ${shifted ? 'translate-x-9' : 'translate-x-0 transition-transform duration-300 ease-out'}`}
+      >
+        {upcoming.map((card, index) => (
+          <span
+            key={card.id}
+            data-testid="conveyor-card"
+            className="grid gap-px rounded border border-line bg-surface-raised p-0.5"
+            style={{ gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)`, opacity: 1 - index * 0.15 }}
+          >
+            {card.pixels.map((on, pixelIndex) => (
+              <span
+                key={pixelIndex}
+                className={`h-0.5 w-0.5 ${on ? 'bg-accent-deep' : 'bg-surface'}`}
+              />
+            ))}
+          </span>
+        ))}
+      </div>
+    </div>
+  )
 }
 
 /**
@@ -30,7 +95,7 @@ interface SwipeLabelDeckProps {
  * mouse and touch. The three buttons underneath fire the exact same actions,
  * and are the whole interface for keyboard and screen-reader users.
  */
-export function SwipeLabelDeck({ card, remaining, onLabel, onDelete }: SwipeLabelDeckProps) {
+export function SwipeLabelDeck({ card, upcoming, remaining, onLabel, onDelete, onAddYourOwn }: SwipeLabelDeckProps) {
   const [drag, setDrag] = useState<{ dx: number; dy: number } | null>(null)
   // Where the pointer went down, in refs: pointermove fires between renders.
   const originRef = useRef<{ x: number; y: number; pointerId: number } | null>(null)
@@ -101,6 +166,7 @@ export function SwipeLabelDeck({ card, remaining, onLabel, onDelete }: SwipeLabe
 
   return (
     <div>
+      <ConveyorStrip upcoming={upcoming} />
       <div className="relative mx-auto h-56 w-44 select-none" data-testid="swipe-deck">
         {/* The stacked edges: cards waiting their turn, purely decorative. */}
         {Array.from({ length: Math.min(remaining, 2) }, (_, index) => (
@@ -142,8 +208,15 @@ export function SwipeLabelDeck({ card, remaining, onLabel, onDelete }: SwipeLabe
             </p>
           </div>
         ) : (
-          <div className="absolute inset-0 z-10 flex items-center justify-center rounded-xl border border-dashed border-line p-4 text-center text-sm text-fg-muted">
-            Every remaining drawing has a label. Ready to train.
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-line p-4 text-center text-sm text-fg-muted">
+            <p>Every remaining drawing has a label. Do you want to add your own?</p>
+            <button
+              type="button"
+              onClick={onAddYourOwn}
+              className="rounded border border-line px-3 py-2 text-xs font-medium text-fg-secondary hover:border-line-strong hover:text-fg"
+            >
+              Draw your own
+            </button>
           </div>
         )}
       </div>

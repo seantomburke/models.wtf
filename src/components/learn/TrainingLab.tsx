@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   EPOCHS,
   GRID_SIZE,
@@ -10,10 +10,12 @@ import {
 } from './gradientDescent'
 import { LearnedNetworkDiagram } from './LearnedNetworkDiagram'
 import { PixelGrid } from './PixelGrid'
-import { SwipeLabelDeck } from './SwipeLabelDeck'
+import { CONVEYOR_SIZE, SwipeLabelDeck } from './SwipeLabelDeck'
+import { prefersReducedMotion } from './useCardAnimation'
 import { WeightTrajectoryChart } from './WeightTrajectoryChart'
 import {
   addCard,
+  addLabelledCard,
   createDeck,
   currentCard,
   deleteCurrent,
@@ -112,6 +114,10 @@ export function TrainingLab() {
   const assignedCount = labelledCount(deck)
   const keptCount = examples.length - deck.deleted.length
   const card = currentCard(deck)
+  const upcoming = deck.queue
+    .slice(1, 1 + CONVEYOR_SIZE)
+    .map((index) => ({ id: index, name: examples[index].label, pixels: examples[index].pixels }))
+  const addYourOwnRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     if (!playing || !run) return
@@ -154,16 +160,28 @@ export function TrainingLab() {
     invalidateRun()
   }
 
-  const addDrawing = () => {
+  /**
+   * Add the current drawing to the training set. With a label it lands
+   * straight in that bucket — the author knows what they drew — and without
+   * one it joins the front of the deck to be judged like any other card.
+   */
+  const addDrawing = (label?: SwipeLabel) => {
     if (!drawing.some(Boolean)) return
     const index = examples.length
     setCustomExamples((current) => [
       ...current,
       { label: `Your drawing #${current.length + 1}`, pixels: drawing, target: 0 },
     ])
-    setDeck((current) => addCard(current, index))
+    setDeck((current) => (label ? addLabelledCard(current, index, label) : addCard(current, index)))
     setDrawing(Array(PIXEL_COUNT).fill(false))
     invalidateRun()
+  }
+
+  const scrollToAddYourOwn = () => {
+    addYourOwnRef.current?.scrollIntoView({
+      behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+      block: 'center',
+    })
   }
 
   const train = () => {
@@ -210,9 +228,11 @@ export function TrainingLab() {
           <div className="md:order-2">
             <SwipeLabelDeck
               card={card !== null ? { id: card, name: examples[card].label, pixels: examples[card].pixels } : null}
+              upcoming={upcoming}
               remaining={Math.max(deck.queue.length - 1, 0)}
               onLabel={(label) => { setDeck((current) => labelCurrent(current, label)); invalidateRun() }}
               onDelete={() => { setDeck(deleteCurrent); invalidateRun() }}
+              onAddYourOwn={scrollToAddYourOwn}
             />
           </div>
           <div className="md:order-1">
@@ -224,14 +244,16 @@ export function TrainingLab() {
         </div>
       </section>
 
-      <section className="rounded-lg border border-line p-4" aria-labelledby="add-your-own-title">
-        <h2 id="add-your-own-title" className="text-lg font-semibold tracking-tight">Add your own drawing</h2>
-        <p className="mt-2 text-sm text-fg-secondary">Draw an E, a 3, or anything in between, then add it to the deck and label it the same way. It trains alongside the generated set.</p>
+      <section ref={addYourOwnRef} className="rounded-lg border border-line p-4" aria-labelledby="add-your-own-title">
+        <h2 id="add-your-own-title" className="text-lg font-semibold tracking-tight">Add your own images</h2>
+        <p className="mt-2 text-sm text-fg-secondary">Draw an E, a 3, or anything in between on the same 8-by-8 grid the training set uses. If you know what you drew, label it right here and it joins that bucket; if you'd rather judge it like the others, send it to the deck and swipe. Either way it trains alongside the generated drawings.</p>
         <div className="mt-4 max-w-72">
           <PixelGrid pixels={drawing} onChange={setDrawing} gridSize={GRID_SIZE} />
         </div>
         <div className="mt-3 flex flex-wrap gap-2">
-          <button type="button" onClick={addDrawing} disabled={!drawing.some(Boolean)} className="rounded bg-accent px-3 py-2 text-sm font-medium text-white enabled:hover:bg-accent-deep disabled:cursor-not-allowed disabled:opacity-50">Add to deck</button>
+          <button type="button" onClick={() => addDrawing('E')} disabled={!drawing.some(Boolean)} className="rounded bg-accent px-3 py-2 text-sm font-medium text-white enabled:hover:bg-accent-deep disabled:cursor-not-allowed disabled:opacity-50">Add as E</button>
+          <button type="button" onClick={() => addDrawing('3')} disabled={!drawing.some(Boolean)} className="rounded bg-accent px-3 py-2 text-sm font-medium text-white enabled:hover:bg-accent-deep disabled:cursor-not-allowed disabled:opacity-50">Add as 3</button>
+          <button type="button" onClick={() => addDrawing()} disabled={!drawing.some(Boolean)} className="rounded border border-line px-3 py-2 text-sm font-medium hover:border-line-strong disabled:cursor-not-allowed disabled:opacity-50">Send to the deck</button>
           <button type="button" onClick={() => setDrawing(Array(PIXEL_COUNT).fill(false))} className="rounded border border-line px-3 py-2 text-sm font-medium hover:border-line-strong">Clear drawing</button>
         </div>
         {customExamples.length > 0 && <p className="mt-3 text-xs text-fg-muted" role="status">{customExamples.length} of your drawings in the training set.</p>}

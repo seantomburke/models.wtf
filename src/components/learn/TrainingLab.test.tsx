@@ -172,10 +172,10 @@ describe('TrainingLab', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Label all correctly' }))
 
     // The custom drawing section owns the only visible pixel grid before training.
-    expect(screen.getByRole('button', { name: 'Add to deck' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Send to the deck' })).toBeDisabled()
     fireEvent.click(screen.getByLabelText('Pixel 0'))
     fireEvent.click(screen.getByLabelText('Pixel 9'))
-    fireEvent.click(screen.getByRole('button', { name: 'Add to deck' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Send to the deck' }))
 
     // It joins the count and is the next card to judge.
     expect(screen.getByText('50 of 51 labelled')).toBeInTheDocument()
@@ -196,7 +196,7 @@ describe('TrainingLab', () => {
     vi.useFakeTimers()
     render(<TrainingLab />)
     fireEvent.click(screen.getByLabelText('Pixel 0'))
-    fireEvent.click(screen.getByRole('button', { name: 'Add to deck' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Send to the deck' }))
 
     fireEvent.click(screen.getByRole('button', { name: 'Label all correctly' }))
 
@@ -208,12 +208,53 @@ describe('TrainingLab', () => {
   it('resets custom drawings when generating a new training set', () => {
     render(<TrainingLab />)
     fireEvent.click(screen.getByLabelText('Pixel 0'))
-    fireEvent.click(screen.getByRole('button', { name: 'Add to deck' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Send to the deck' }))
     expect(screen.getByText('0 of 51 labelled')).toBeInTheDocument()
 
     fireEvent.change(screen.getByLabelText('Training random seed'), { target: { value: '7' } })
     fireEvent.click(screen.getByRole('button', { name: 'Make new drawings' }))
 
     expect(screen.getByText('0 of 50 labelled')).toBeInTheDocument()
+  })
+
+  it('previews the upcoming queue on the conveyor and advances it per swipe', () => {
+    vi.useFakeTimers()
+    render(<TrainingLab />)
+    const strip = screen.getByTestId('conveyor-strip')
+    expect(within(strip).getAllByTestId('conveyor-card')).toHaveLength(5)
+
+    // Judge the whole set: the conveyor drains as the queue empties, then
+    // disappears once nothing is waiting behind the face card.
+    fireEvent.click(screen.getByRole('button', { name: 'Label all correctly' }))
+    expect(screen.queryByTestId('conveyor-strip')).not.toBeInTheDocument()
+  })
+
+  it('adds a pre-labelled drawing straight to its tray and trains with it', () => {
+    render(<TrainingLab />)
+    fireEvent.click(screen.getByLabelText('Pixel 0'))
+    fireEvent.click(screen.getByRole('button', { name: 'Add as 3' }))
+
+    // It never visits the deck: labelled immediately, listed in the 3 tray.
+    expect(screen.getByText('1 of 51 labelled')).toBeInTheDocument()
+    expect(screen.getByText('1 of your drawings in the training set.')).toBeInTheDocument()
+    const tray = screen.getByRole('list', { name: 'Drawings labelled 3' })
+    expect(within(tray).getByRole('button', { name: /Your drawing #1, labelled 3/ })).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Train on 1 labelled drawing' }))
+    expect(screen.getByText(/Epoch \d+ of 120/)).toBeInTheDocument()
+  })
+
+  it('invites drawing your own once everything is labelled', () => {
+    render(<TrainingLab />)
+    fireEvent.click(screen.getByRole('button', { name: 'Label all correctly' }))
+    expect(screen.getByText(/Do you want to add your own\?/)).toBeInTheDocument()
+
+    // The invitation leads to the drawing panel; a pre-labelled add then
+    // grows the set without reopening the deck.
+    fireEvent.click(screen.getByRole('button', { name: 'Draw your own' }))
+    fireEvent.click(screen.getByLabelText('Pixel 12'))
+    fireEvent.click(screen.getByRole('button', { name: 'Add as E' }))
+    expect(screen.getByText('51 of 51 labelled')).toBeInTheDocument()
+    expect(screen.getByText(/Do you want to add your own\?/)).toBeInTheDocument()
   })
 })
