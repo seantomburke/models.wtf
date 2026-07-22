@@ -46,3 +46,26 @@ test('includes the requested agent and protocol jargon with plain-language expla
   expect(glossaryTerms.find((entry) => entry.id === 'lsp')?.term).toContain('Language Server Protocol')
   expect(glossaryTerms.find((entry) => entry.id === 'mcp')?.term).toContain('Model Context Protocol')
 })
+
+test('includes common LLM jargon terms with plain-language explanations', () => {
+  const jargonTerms = [
+    'system-prompt',
+    'chain-of-thought',
+    'few-shot-prompting',
+    'distillation',
+    'quantization',
+    'mixture-of-experts',
+    'streaming',
+    'jailbreak',
+  ]
+
+  for (const id of jargonTerms) {
+    const term = glossaryTerms.find((entry) => entry.id === id)
+    expect(term).toBeDefined()
+    expect(term?.short).not.toBe('')
+    expect(term?.long).not.toBe('')
+  }
+
+  expect(glossaryTerms.find((entry) => entry.id === 'few-shot-prompting')?.long).toContain('Zero-shot')
+  expect(glossaryTerms.find((entry) => entry.id === 'mixture-of-experts')?.long).toContain('MoE')
+})

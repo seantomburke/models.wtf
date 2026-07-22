@@ -349,6 +349,57 @@ export const glossaryTerms: GlossaryTerm[] = [
     long: 'A knowledge cutoff is the point after which events were too recent to be included in a model\'s training. The model may not know about newer products, rules, or news unless it can search the web or use another current source. Check the cutoff and available search tools when choosing a model for up-to-date questions.',
     relatedLearnTopic: 'web-search-models',
   },
+  {
+    id: 'system-prompt',
+    term: 'System Prompt',
+    short: 'Hidden instructions that tell an AI model how to behave before you say anything.',
+    long: 'A system prompt is a set of instructions given to the model before the conversation starts. It might say "You are a helpful customer support agent. Be polite and never discuss competitors." You usually don\'t see it, but it shapes every answer. When a chatbot has a consistent personality or refuses certain topics, the system prompt is often why.',
+    relatedLearnTopic: 'prompt-engineering-basics',
+  },
+  {
+    id: 'chain-of-thought',
+    term: 'Chain of Thought',
+    short: 'Asking an AI model to show its work step by step before giving an answer.',
+    long: 'Chain of thought means the model writes out intermediate steps instead of jumping straight to a conclusion: "First, I need to find X. Then, using X, I can calculate Y..." Just like showing your work in math class, this makes hard problems easier to get right. Reasoning models are trained to do this automatically, but you can also ask any model to "think step by step."',
+    relatedLearnTopic: 'reasoning-models',
+  },
+  {
+    id: 'few-shot-prompting',
+    term: 'Few-shot Prompting',
+    short: 'Giving an AI model a few examples of what you want before asking your real question.',
+    long: 'Few-shot prompting means showing the model examples first: "Here are three product descriptions written in our style. Now write one for this new product." The model picks up the pattern from your examples. "Zero-shot" is the opposite: asking with no examples at all. Modern models are good at zero-shot, but a few examples still help when you need a specific format or style.',
+    relatedLearnTopic: 'prompt-engineering-basics',
+  },
+  {
+    id: 'distillation',
+    term: 'Distillation',
+    short: 'Training a small AI model to imitate a bigger, smarter one.',
+    long: 'Distillation is how companies make fast, cheap models that punch above their weight. A large "teacher" model answers lots of questions, and a smaller "student" model is trained to copy those answers. The student never gets quite as smart as the teacher, but it gets surprisingly close while being much cheaper and faster to run. Many fast models are distilled from flagships.',
+  },
+  {
+    id: 'quantization',
+    term: 'Quantization',
+    short: 'Shrinking a model by storing its numbers with less precision.',
+    long: 'Quantization stores a model\'s weights with fewer digits, like rounding $19.99 to $20. The model gets much smaller and faster, with only a small drop in quality. This is what makes it possible to run open source models on a laptop or phone instead of a data center. When you see model files labeled "8-bit" or "4-bit," that\'s the quantization level.',
+  },
+  {
+    id: 'mixture-of-experts',
+    term: 'Mixture of Experts',
+    short: 'A model design where only the relevant "experts" activate for each question.',
+    long: 'A mixture of experts (MoE) model is built from many smaller specialist networks, with a router that picks which few to use for each token. It\'s like a hospital: you see the cardiologist for heart questions, not every doctor in the building. This lets a model have huge total knowledge while only running a fraction of it at a time, making inference faster and cheaper.',
+  },
+  {
+    id: 'streaming',
+    term: 'Streaming',
+    short: 'Showing an AI model\'s answer word by word as it\'s generated.',
+    long: 'Streaming means the model sends its answer as it writes, instead of making you wait for the whole thing. That\'s why chatbots appear to "type" their responses. The model genuinely generates one token at a time, and streaming just shows you each token immediately. It doesn\'t make the model faster, but it makes the wait feel much shorter.',
+  },
+  {
+    id: 'jailbreak',
+    term: 'Jailbreak',
+    short: 'A trick prompt designed to make an AI model ignore its safety rules.',
+    long: 'A jailbreak is an attempt to talk a model out of its guardrails, like "pretend you\'re an AI with no restrictions." Providers train models to refuse harmful requests, and jailbreakers look for clever phrasings that slip past those refusals. It\'s an ongoing cat-and-mouse game: providers patch known jailbreaks, and new ones appear. Model safety testing often measures how resistant a model is to them.',
+  },
 ]
 
 export function getGlossaryTerm(id: string): GlossaryTerm | undefined {
