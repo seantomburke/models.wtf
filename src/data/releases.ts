@@ -12,6 +12,16 @@ export interface Release {
 
 export const releases: Release[] = [
   {
+    id: 'gemini-3-6-flash-family-launch',
+    modelId: 'gemini-3-6-flash',
+    type: 'new',
+    title: 'Gemini 3.6 Flash and 3.5 Flash-Lite released',
+    description:
+      'Google ships a stronger agentic workhorse at $1.50/$7.50 per million tokens and a high-throughput Flash-Lite tier at $0.30/$2.50, both with 1M-token context windows.',
+    date: '2026-07-21',
+    link: 'https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-6-flash-3-5-flash-lite-3-5-flash-cyber/',
+  },
+  {
     id: 'benchmark-updates',
     type: 'update',
     title: 'New benchmarks added to comparison',

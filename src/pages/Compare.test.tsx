@@ -173,13 +173,11 @@ test('sorting by name reorders models alphabetically', async () => {
   await user.click(modelHeader)
   const table = screen.getByRole('table')
   const rows = within(table).getAllByRole('row')
-  // Skip header row, get model names from first column
-  const names = rows.slice(1).map((row) => {
-    const cells = within(row).getAllByRole('cell')
-    const firstCellText = cells[0]?.textContent || ''
-    // Extract first line (model name)
-    return firstCellText.split('\n')[0] || ''
-  })
+  // Skip the header and read the visible model name, excluding the date,
+  // provider, and capability text that share its table cell.
+  const names = rows.slice(1).map((row) =>
+    models.find((model) => within(row).queryByText(model.name))!.name,
+  )
   // Verify alphabetical order
   for (let i = 1; i < names.length; i++) {
     if (names[i] && names[i - 1]) {

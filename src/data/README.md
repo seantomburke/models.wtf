@@ -31,12 +31,31 @@ All model and benchmark data is static and hardcoded here. This is deliberate
 3. Bump `dataSourcedAt` in `index.ts`.
 4. Run `npm run validate` (schema + sanity checks; also runs in CI).
 
-Last refreshed: **2026-07-20, fourth pass** (gap-filling sweep over the 22
-remaining empty benchmark cells: three resolved and added, one stale score
-corrected, and the other 19 confirmed unpublished or protocol-incompatible).
-Provider-published evals win over
+Last refreshed: **2026-07-21** (Gemini 3.6 Flash and Gemini 3.5 Flash-Lite
+added). Provider-published evals win over
 third-party harness runs; where a number is third-party or contested,
 `models.ts` carries an inline comment saying so.
+
+2026-07-21 refresh notes:
+
+- **Gemini 3.6 Flash added** from Google's GA launch and model documentation:
+  $1.50/$7.50 per million input/output tokens, 1,048,576-token input and
+  65,536-token output limits, SWE-bench Pro public 58.7, and Terminal-Bench
+  2.1 78.0 using the Terminus-2 harness.
+- **Gemini 3.5 Flash-Lite added** as Google's new high-throughput tier:
+  $0.30/$2.50 per million input/output tokens, the same input/output limits,
+  SWE-bench Pro public 54.2, and Terminal-Bench 2.1 54.0.
+- Google published no comparable SWE-bench Verified, GPQA Diamond, or HLE
+  numbers for either release, so those scores remain absent. Gemini 3.5 Flash
+  Cyber is restricted to government and trusted-partner deployments and was
+  excluded from the general-purpose comparison.
+
+Sources used (2026-07-21): blog.google (official launch),
+deepmind.google/models/gemini (official comparison table and methodology),
+and ai.google.dev/gemini-api/docs (GA status, model IDs, prices, capabilities,
+and token limits). Artificial Analysis, Vals AI, the LMSYS Chatbot Arena, and
+the Hugging Face Open LLM Leaderboard were checked for independent scores;
+none had comparable runs for the two models at refresh time.
 
 2026-07-20 fourth-pass refresh notes (new leaderboard results):
 
@@ -167,7 +186,6 @@ roster), plus web searches for Muse Spark 1.1 and Kimi K3 eval tables.
   GLM-5.2 multimodal. Z.AI's own model card lists it under Text Generation
   with no image input, and NVIDIA's mirror of the card lists text-only input
   types. The provider card wins; GLM-5.2 is recorded `vision: false`.
-
 2026-07-20 second-pass refresh notes:
 
 - **HLE column filled for five models**, all closed-book to match the

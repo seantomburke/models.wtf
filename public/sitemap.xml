@@ -236,6 +236,16 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://seantomburke.github.io/models.fyi/models/gemini-3-6-flash/</loc>
+    <lastmod>2026-07-21</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://seantomburke.github.io/models.fyi/models/gemini-3-5-flash-lite/</loc>
+    <lastmod>2026-07-21</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://seantomburke.github.io/models.fyi/models/gemini-3-5-flash/</loc>
     <lastmod>2026-07-20</lastmod>
     <changefreq>monthly</changefreq>

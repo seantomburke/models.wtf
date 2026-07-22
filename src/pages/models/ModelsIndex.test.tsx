@@ -18,7 +18,7 @@ describe('ModelsIndex page', () => {
 
     // The whole point of this page: no model page is left orphaned.
     for (const model of models) {
-      expect(screen.getByRole('link', { name: new RegExp(model.name, 'i') })).toHaveAttribute(
+      expect(screen.getByRole('heading', { level: 3, name: model.name }).closest('a')).toHaveAttribute(
         'href',
         `/models/${model.id}`,
       )

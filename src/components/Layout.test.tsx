@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
+import { dataSourcedAt } from '../data/index.ts'
 import { Layout } from './Layout.tsx'
 
 describe('Layout', () => {
@@ -15,10 +16,16 @@ describe('Layout', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByText('July 20, 2026')).toBeVisible()
-    expect(screen.getByText('July 20, 2026')).toHaveAttribute(
+    const date = new Date(dataSourcedAt).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      timeZone: 'UTC',
+    })
+    expect(screen.getByText(date)).toBeVisible()
+    expect(screen.getByText(date)).toHaveAttribute(
       'datetime',
-      '2026-07-20T00:00:00.000Z',
+      new Date(dataSourcedAt).toISOString(),
     )
   })
 })

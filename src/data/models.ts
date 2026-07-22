@@ -1,7 +1,7 @@
 import type { Model } from './types.ts'
 
 /**
- * Model facts researched 2026-07-20. Scores are provider-published evals
+ * Model facts researched 2026-07-21. Scores are provider-published evals
  * where available, otherwise independent leaderboard runs (noted below).
  * A missing score means no reliable published number was found, not zero.
  * Sources are listed in src/data/README.md.
@@ -328,7 +328,67 @@ export const models: Model[] = [
       'Claude Fable 5': 'Gemini is cheaper and faster; Fable has a slight reasoning edge.',
       'GPT-5.6 Sol': 'Gemini is more aggressive on pricing; Sol leads on terminal/agentic work.',
     },
-    relatedModelIds: ['gemini-3-5-flash', 'claude-fable-5'],
+    relatedModelIds: ['gemini-3-6-flash', 'claude-fable-5'],
+  },
+  {
+    id: 'gemini-3-6-flash',
+    name: 'Gemini 3.6 Flash',
+    providerId: 'google',
+    apiId: 'gemini-3.6-flash',
+    tier: 'balanced',
+    openSource: false,
+    inputPricePerMTok: 1.5,
+    outputPricePerMTok: 7.5,
+    contextWindowTokens: 1_048_576,
+    maxOutputTokens: 65_536,
+    reasoning: true,
+    internetAccess: true,
+    vision: true,
+    releaseDate: '2026-07-21',
+    scores: {
+      'swe-bench-pro': 58.7, // Google-published (public subset)
+      'terminal-bench': 78.0, // Google-published (Terminus-2 harness)
+    },
+    blurb:
+      "Google's newest workhorse model. Stronger at agentic coding than 3.5 Flash while using fewer tokens and charging less for output.",
+    useCases: ['coding', 'analysis', 'research'],
+    whyChooseThis:
+      'Gemini 3.6 Flash improves coding, computer use, and long-running agent workflows while cutting output cost and token usage versus 3.5 Flash. Its 1M-token context and built-in Google tools make it a strong value pick for iterative work.',
+    prosVsCompetitors: {
+      'Gemini 3.5 Flash': '3.6 Flash scores higher on coding and terminal work, uses fewer tokens, and costs less for output.',
+      'Claude Sonnet 5': '3.6 Flash is cheaper and tightly integrated with Google tools; Sonnet remains stronger on several coding evaluations.',
+    },
+    relatedModelIds: ['gemini-3-5-flash', 'gemini-3-1-pro'],
+  },
+  {
+    id: 'gemini-3-5-flash-lite',
+    name: 'Gemini 3.5 Flash-Lite',
+    providerId: 'google',
+    apiId: 'gemini-3.5-flash-lite',
+    tier: 'fast',
+    openSource: false,
+    inputPricePerMTok: 0.3,
+    outputPricePerMTok: 2.5,
+    contextWindowTokens: 1_048_576,
+    maxOutputTokens: 65_536,
+    reasoning: true,
+    internetAccess: true,
+    vision: true,
+    releaseDate: '2026-07-21',
+    scores: {
+      'swe-bench-pro': 54.2, // Google-published (public subset)
+      'terminal-bench': 54.0, // Google-published (Terminus-2 harness)
+    },
+    blurb:
+      "Google's fastest, lowest-cost 3.5 model. Built for high-volume extraction, analysis, and autonomous subagent work.",
+    useCases: ['summarization', 'analysis', 'translation'],
+    whyChooseThis:
+      'Flash-Lite is designed for workloads where throughput and cost matter most. It keeps a 1M-token context window, reasoning, multimodal input, and built-in tools at a fraction of flagship pricing.',
+    prosVsCompetitors: {
+      'Gemini 3.6 Flash': 'Flash-Lite is five times cheaper on input and three times cheaper on output; 3.6 Flash is stronger for demanding agentic work.',
+      'Claude Haiku 4.5': 'Flash-Lite is cheaper with a much larger context window; Haiku posts a stronger published SWE-bench Verified score.',
+    },
+    relatedModelIds: ['gemini-3-6-flash', 'gemini-3-5-flash'],
   },
   {
     id: 'gemini-3-5-flash',
@@ -369,7 +429,7 @@ export const models: Model[] = [
       'Gemini 3.1 Pro': 'Flash is cheaper and often outperforms Pro on coding; Pro is more consistent.',
       'Claude Sonnet 5': 'Flash is more aligned with Google services; Sonnet is cheaper at intro pricing.',
     },
-    relatedModelIds: ['gemini-3-1-pro', 'claude-sonnet-5'],
+    relatedModelIds: ['gemini-3-6-flash', 'gemini-3-5-flash-lite'],
   },
 
   // ─── xAI ─────────────────────────────────────────────────────
