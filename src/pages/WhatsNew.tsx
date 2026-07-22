@@ -81,6 +81,15 @@ export function WhatsNew() {
           Latest model releases, feature announcements, and pricing updates. Check back regularly to stay informed about
           the latest developments in AI models.
         </p>
+        <a
+          href={`${import.meta.env.BASE_URL}feed.xml`}
+          className="mt-3 inline-flex min-h-6 items-center gap-1.5 text-sm font-medium text-accent-deep hover:text-accent-deep/80 transition-colors duration-150"
+        >
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true">
+            <path d="M2 13a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm-.5-5.5a1 1 0 0 1 1-1A7.5 7.5 0 0 1 10 14a1 1 0 1 1-2 0 5.5 5.5 0 0 0-5.5-5.5 1 1 0 0 1-1-1Zm0-4.5a1 1 0 0 1 1-1A12 12 0 0 1 14.5 14a1 1 0 1 1-2 0A10 10 0 0 0 2.5 4a1 1 0 0 1-1-1Z" />
+          </svg>
+          Subscribe to the feed
+        </a>
       </div>
 
       <div className="flex flex-wrap gap-2">

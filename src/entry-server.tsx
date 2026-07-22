@@ -11,6 +11,9 @@ import { releases } from './data/releases.ts'
 export { routeMeta, notFoundMeta, SITE_URL, canonicalUrl } from './lib/routeMeta.ts'
 // The prerender guard asserts every FAQ answer reaches /faq's <main>.
 export { faqs } from './data/faqs.ts'
+// scripts/generate-feed.mjs builds the Atom feed from the release log.
+export { releases } from './data/releases.ts'
+export { buildAtomFeed } from './lib/feed.ts'
 
 // The client leaves these corpora to the pages that own them, so no single
 // client bundle carries all three. Prerendering emits JSON-LD for every route

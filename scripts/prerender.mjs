@@ -7,7 +7,7 @@
  */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname } from 'node:path'
-import { render, routeMeta, notFoundMeta, canonicalUrl, faqs } from '../dist-server/entry-server.js'
+import { render, routeMeta, notFoundMeta, canonicalUrl, faqs, SITE_URL } from '../dist-server/entry-server.js'
 
 const esc = (s) =>
   s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;')
@@ -80,6 +80,9 @@ const socialHead = ({ path, title, description, type, image }, { canonical = tru
   const url = canonical ? canonicalUrl(path) : undefined
   return [
     `<meta name="description" content="${esc(description)}" />`,
+    // Feed autodiscovery: readers and browser extensions find the Atom feed
+    // (scripts/generate-feed.mjs) from any page, not just /whats-new.
+    `<link rel="alternate" type="application/atom+xml" title="Models.fyi — What&#x27;s new" href="${SITE_URL}/feed.xml" />`,
     ...(url ? [`<link rel="canonical" href="${url}" />`] : []),
     `<meta property="og:title" content="${esc(title)}" />`,
     `<meta property="og:description" content="${esc(description)}" />`,
@@ -176,6 +179,7 @@ for (const meta of routeMeta) {
     !out.includes(`<meta name="description" content="${esc(description)}" />`) ||
     out.match(/<meta\s+name="description"/g)?.length !== 1 ||
     !out.includes('og:image') ||
+    !out.includes('type="application/atom+xml"') ||
     (structuredData && !out.includes('application/ld+json'))
   ) {
     throw new Error(`prerender injection failed for ${path}`)

@@ -40,6 +40,12 @@ describe('WhatsNew', () => {
     expect(badges.length).toBeGreaterThan(0)
   })
 
+  it('links to the Atom feed', () => {
+    renderWithRouter(<WhatsNew />)
+    const feedLink = screen.getByRole('link', { name: /subscribe to the feed/i })
+    expect(feedLink).toHaveAttribute('href', expect.stringMatching(/feed\.xml$/))
+  })
+
   it('shows breadcrumbs', () => {
     renderWithRouter(<WhatsNew />)
     expect(screen.getByText('Home')).toBeInTheDocument()
