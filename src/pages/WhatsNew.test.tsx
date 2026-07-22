@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import userEvent from '@testing-library/user-event'
@@ -61,6 +61,29 @@ describe('WhatsNew', () => {
     renderWithRouter(<WhatsNew />)
     const dateElements = screen.getAllByText(/ago|Today|Yesterday/)
     expect(dateElements.length).toBeGreaterThan(0)
+  })
+
+  it('pluralizes relative dates correctly at a count of one', () => {
+    // Pin "now" to 8 days after the 2026-07-21 release so it lands in the
+    // one-week bucket — the case that used to render "1 weeks ago".
+    vi.useFakeTimers({ now: new Date('2026-07-29T12:00:00Z'), toFake: ['Date'] })
+    try {
+      renderWithRouter(<WhatsNew />)
+      expect(screen.getAllByText('1 week ago').length).toBeGreaterThan(0)
+      expect(screen.queryByText(/\b1 (days|weeks|months|years) ago/)).not.toBeInTheDocument()
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it('displays the exact release date under each title', () => {
+    renderWithRouter(<WhatsNew />)
+    const articles = screen.getAllByRole('article')
+    // Every article carries a full "Month D, YYYY" date line.
+    const exactDates = screen.getAllByText(
+      /^(January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2}, \d{4}$/,
+    )
+    expect(exactDates.length).toBe(articles.length)
   })
 
   it('shows empty state when no releases match filter', async () => {

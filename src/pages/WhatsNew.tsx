@@ -25,12 +25,26 @@ function getRelativeDate(dateStr: string): string {
   const diffMs = now.getTime() - date.getTime()
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
 
+  const ago = (count: number, unit: string) =>
+    `${count} ${unit}${count === 1 ? '' : 's'} ago`
+
   if (diffDays === 0) return 'Today'
   if (diffDays === 1) return 'Yesterday'
-  if (diffDays < 7) return `${diffDays} days ago`
-  if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`
-  if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`
-  return `${Math.floor(diffDays / 365)} years ago`
+  if (diffDays < 7) return ago(diffDays, 'day')
+  if (diffDays < 30) return ago(Math.floor(diffDays / 7), 'week')
+  if (diffDays < 365) return ago(Math.floor(diffDays / 30), 'month')
+  return ago(Math.floor(diffDays / 365), 'year')
+}
+
+// Release dates are date-only strings ("2026-07-15"), which parse as midnight
+// UTC — format in UTC so viewers west of Greenwich don't see the prior day.
+function formatReleaseDate(dateStr: string): string {
+  return new Date(dateStr).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  })
 }
 
 // This page already loads the release feed to render it, so it supplies the
@@ -137,6 +151,7 @@ export function WhatsNew() {
                       )}
                     </div>
                     <h2 className="mt-2 text-lg font-semibold text-fg">{release.title}</h2>
+                    <p className="mt-1 text-xs text-fg-muted">{formatReleaseDate(release.date)}</p>
                     <p className="mt-2 leading-relaxed text-fg-secondary">{release.description}</p>
                     {release.link && (
                       <div className="mt-3">
