@@ -35,11 +35,25 @@ export const graphPresets: GraphPreset[] = [
     yId: 'gpqa-diamond',
   },
   {
-    id: 'context-quality',
-    label: 'Context vs quality',
-    question: 'Which models handle the most text without giving up accuracy?',
-    xId: 'context',
-    yId: 'swe-bench-verified',
+    id: 'small-tasks',
+    label: 'Cost of small tasks',
+    question: 'Which models are smart enough for everyday questions without costing much?',
+    xId: 'price-input',
+    yId: 'aa-intelligence-index',
+  },
+  {
+    id: 'building-an-app',
+    label: 'Cost of building an app',
+    question: 'Which models can build real software, and what does all that generated code cost?',
+    xId: 'price-output',
+    yId: 'swe-bench-pro',
+  },
+  {
+    id: 'ai-agents',
+    label: 'Cost of AI agents',
+    question: 'Which models can run multi-step tasks on their own, and at what price?',
+    xId: 'price-output',
+    yId: 'terminal-bench',
   },
   {
     id: 'hard-problems',
@@ -47,6 +61,15 @@ export const graphPresets: GraphPreset[] = [
     question: 'What do you pay for the models that crack the toughest exams?',
     xId: 'price-output',
     yId: 'hle',
+  },
+  // Demoted to last: still shareable and linkable, but the cost-of-task
+  // questions above are what most visitors actually come to answer.
+  {
+    id: 'context-quality',
+    label: 'Context vs quality',
+    question: 'Which models handle the most text without giving up accuracy?',
+    xId: 'context',
+    yId: 'swe-bench-verified',
   },
 ]
 

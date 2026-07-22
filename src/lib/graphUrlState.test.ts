@@ -16,6 +16,17 @@ test('every preset points at axes that actually exist', () => {
   }
 })
 
+test('the cost-of-task presets pair a price axis with a task benchmark', () => {
+  // Issue #92: the tab row leads with cost-of-task questions. Each one must
+  // keep a price on x and a benchmark on y, or the question stops making sense.
+  const costPresets = graphPresets.filter((p) => p.label.startsWith('Cost of'))
+  expect(costPresets.length).toBeGreaterThanOrEqual(3)
+  for (const preset of costPresets) {
+    expect(preset.xId).toMatch(/^price-/)
+    expect(preset.yId).not.toMatch(/^price-/)
+  }
+})
+
 test('presets have unique ids and human-readable labels', () => {
   expect(new Set(graphPresets.map((p) => p.id)).size).toBe(graphPresets.length)
   for (const preset of graphPresets) {
