@@ -35,6 +35,20 @@ describe('provenanceFor', () => {
     expect(result.detail).toBe('Independently measured by vals.ai.')
   })
 
+  it('carries a direct score citation through to the display data', () => {
+    const model: Model = {
+      ...baseModel,
+      scoreProvenance: {
+        'terminal-bench': {
+          source: 'independent',
+          runner: 'vals.ai',
+          sourceUrl: 'https://example.com/evaluation',
+        },
+      },
+    }
+    expect(provenanceFor(model, 'terminal-bench').sourceUrl).toBe('https://example.com/evaluation')
+  })
+
   it('surfaces diverging independent runs of provider-reported scores', () => {
     const model: Model = {
       ...baseModel,

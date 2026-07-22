@@ -31,10 +31,29 @@ All model and benchmark data is static and hardcoded here. This is deliberate
 3. Bump `dataSourcedAt` in `index.ts`.
 4. Run `npm run validate` (schema + sanity checks; also runs in CI).
 
-Last refreshed: **2026-07-21** (Gemini 3.6 Flash and Gemini 3.5 Flash-Lite
-added). Provider-published evals win over
+Last refreshed: **2026-07-22, fifth pass** (gap-filling sweep over the 22
+remaining empty benchmark cells: three resolved and added, one stale score
+corrected, and the other 19 confirmed unpublished or protocol-incompatible).
+Provider-published evals win over
 third-party harness runs; where a number is third-party or contested,
 `models.ts` carries an inline comment saying so.
+
+2026-07-22 fifth-pass refresh notes:
+
+- **Two independently measured gaps are now filled with score-level links.**
+  Grok 4.5 scores **52.2** on closed-book HLE, and Muse Spark 1.1 scores
+  **82.0** on SWE-bench Verified (x-high mini-SWE-agent). The comparison
+  score popover now links directly to the result page for both values rather
+  than only the benchmark's general documentation.
+- **The remaining empty cells remain empty.** The previous sweep's primary
+  source checks still rule out the available near-matches: unsupported
+  benchmark versions, different model variants, tool-assisted-only results,
+  and figures with no reproducible harness. This is deliberate: the site
+  shows “—” instead of turning an incomparable score into a false comparison.
+
+Sources: [Grok 4.5 benchmark results](https://benchmarklist.com/models/xai-grok-4-5/)
+and [Muse Spark 1.1 benchmark results](https://benchmarklist.com/models/meta-muse-spark-1-1/),
+checked 2026-07-22.
 
 2026-07-21 refresh notes:
 

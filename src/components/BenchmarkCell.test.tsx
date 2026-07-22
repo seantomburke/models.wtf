@@ -21,6 +21,11 @@ const independentProvenance: ProvenanceDisplay = {
   detail: 'Independently measured by vals.ai.',
 }
 
+const citedIndependentProvenance: ProvenanceDisplay = {
+  ...independentProvenance,
+  sourceUrl: 'https://example.com/score-source',
+}
+
 const providerProvenance: ProvenanceDisplay = {
   kind: 'provider',
   label: 'provider-reported',
@@ -111,6 +116,18 @@ describe('BenchmarkCell', () => {
     render(<BenchmarkCell benchmark={mockBenchmark} score={90.0} isBest={false} />)
     const button = screen.getByRole('button')
     expect(button).toHaveAttribute('title', expect.stringContaining('Test Benchmark'))
+  })
+
+  it('uses a score-level citation when one is available', async () => {
+    const user = userEvent.setup()
+    render(
+      <table><tbody><tr><BenchmarkCell benchmark={mockBenchmark} score={90.0} isBest={false} provenance={citedIndependentProvenance} /></tr></tbody></table>,
+    )
+    await user.click(screen.getByRole('button'))
+    expect(screen.getByRole('link', { name: /view source/i })).toHaveAttribute(
+      'href',
+      'https://example.com/score-source',
+    )
   })
 
   it('no dot without provenance', () => {

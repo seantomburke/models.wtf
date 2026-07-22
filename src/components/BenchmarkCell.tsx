@@ -165,7 +165,7 @@ export function BenchmarkCell({ benchmark, score, isBest, provenance }: Benchmar
                 )}
                 <div className="mt-3">
                   <a
-                    href={benchmark.sourceUrl}
+                    href={provenance?.sourceUrl ?? benchmark.sourceUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-accent-deep hover:text-accent-deep/80 text-xs font-medium transition-colors"

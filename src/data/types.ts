@@ -71,6 +71,8 @@ export interface ScoreProvenance {
   source: 'provider' | 'independent'
   /** Org that ran the eval, when source is 'independent' (e.g. 'vals.ai'). */
   runner?: string
+  /** Direct, public page supporting the displayed score, when available. */
+  sourceUrl?: string
   /**
    * An independent run of the same benchmark, when the displayed score is
    * provider-reported. Equal to the score = independently reproduced;

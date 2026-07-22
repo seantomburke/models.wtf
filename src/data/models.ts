@@ -453,10 +453,17 @@ export const models: Model[] = [
       'swe-bench-pro': 64.7, // xAI-published (July 2026)
       'gpqa-diamond': 93.1, // Artificial Analysis independent run (July 2026)
       'terminal-bench': 83.3, // xAI-published; tbench.ai independent run (Cursor CLI) lands 79.3
+      // Independent closed-book run, not xAI's tool-assisted headline result.
+      'hle': 52.2,
     },
     scoreProvenance: {
       'swe-bench-verified': { source: 'independent', runner: 'Vals AI (mini-swe-agent)' },
       'gpqa-diamond': { source: 'independent', runner: 'Artificial Analysis' },
+      'hle': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://benchmarklist.com/models/xai-grok-4-5/',
+      },
       'terminal-bench': {
         source: 'provider',
         independentScore: 79.3,
@@ -527,12 +534,19 @@ export const models: Model[] = [
     imageGeneration: false, // same post: text output; Muse Image is the separate image model
     releaseDate: '2026-07-09',
     scores: {
+      // Independent x-high mini-SWE-agent evaluation, published 2026-07-13.
+      'swe-bench-verified': 82.0,
       'swe-bench-pro': 61.5, // Meta-published; no independent run yet
       'gpqa-diamond': 88.4, // Artificial Analysis independent run (Meta published none)
       'terminal-bench': 76.2, // tbench.ai independent run (mini-SWE-agent); Meta itself published only a 2.0 number
       'hle': 62.1, // BenchLM independent run (July 2026)
     },
     scoreProvenance: {
+      'swe-bench-verified': {
+        source: 'independent',
+        runner: 'BenchmarkList (mini-SWE-agent)',
+        sourceUrl: 'https://benchmarklist.com/models/meta-muse-spark-1-1/',
+      },
       'gpqa-diamond': { source: 'independent', runner: 'Artificial Analysis' },
       'terminal-bench': { source: 'independent', runner: 'tbench.ai (mini-SWE-agent)' },
       'hle': { source: 'independent', runner: 'BenchLM' },

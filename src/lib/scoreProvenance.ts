@@ -12,6 +12,8 @@ export interface ProvenanceDisplay {
   label: string
   /** Full sentence for tooltips and detail rows. */
   detail: string
+  /** Direct evidence for this score; omitted when only the benchmark's own page is available. */
+  sourceUrl?: string
 }
 
 /**
@@ -30,6 +32,7 @@ export function provenanceFor(model: Model, benchmarkId: BenchmarkId): Provenanc
       detail: prov.runner
         ? `Independently measured by ${prov.runner}.`
         : 'Independently measured.',
+      sourceUrl: prov.sourceUrl,
     }
   }
 
@@ -39,12 +42,14 @@ export function provenanceFor(model: Model, benchmarkId: BenchmarkId): Provenanc
         kind: 'provider-reproduced',
         label: 'independently reproduced',
         detail: `Provider-reported and independently reproduced by ${prov.independentRunner}.`,
+        sourceUrl: prov.sourceUrl,
       }
     }
     return {
       kind: 'provider-diverging',
       label: 'provider-reported',
       detail: `Provider-reported; an independent run by ${prov.independentRunner} lands at ${prov.independentScore}%.`,
+      sourceUrl: prov.sourceUrl,
     }
   }
 
@@ -52,5 +57,6 @@ export function provenanceFor(model: Model, benchmarkId: BenchmarkId): Provenanc
     kind: 'provider',
     label: 'provider-reported',
     detail: 'Provider-reported; no independent run recorded yet.',
+    sourceUrl: prov?.sourceUrl,
   }
 }
