@@ -10,22 +10,32 @@ import {
   type TrainingRun,
 } from './gradientDescent'
 import { PixelGrid } from './PixelGrid'
+import { SwipeLabelDeck } from './SwipeLabelDeck'
+import {
+  addCard,
+  createDeck,
+  currentCard,
+  labelAll,
+  labelCurrent,
+  labelledCount,
+  skipCurrent,
+  unlabelCard,
+  type SwipeDeckState,
+  type SwipeLabel,
+} from './swipeLabel'
 import { patternE, patternThree } from './pixelClassifierModel'
-
-type Label = 'E' | '3'
-type Assignments = Record<number, Label | undefined>
 
 const DEFAULT_SEED = 20260722
 
-function labelFor(example: TrainingExample): Label {
+function labelFor(example: TrainingExample): SwipeLabel {
   return example.target === 1 ? '3' : 'E'
 }
 
-function SamplePixels({ pixels }: { pixels: boolean[] }) {
+function SamplePixels({ pixels, cellClass = 'h-1.5 w-1.5' }: { pixels: boolean[]; cellClass?: string }) {
   return (
     <span className="grid gap-px rounded border border-line bg-surface p-1" style={{ gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)` }} aria-hidden="true">
       {pixels.map((on, index) => (
-        <span key={index} className={`h-1.5 w-1.5 rounded-[1px] ${on ? 'bg-accent-deep' : 'bg-surface-raised'}`} />
+        <span key={index} className={`${cellClass} rounded-[1px] ${on ? 'bg-accent-deep' : 'bg-surface-raised'}`} />
       ))}
     </span>
   )
@@ -46,16 +56,60 @@ function WeightMap({ weights }: { weights: number[] }) {
   )
 }
 
+/** The labelled cards, packed into a dense tray instead of a long column. */
+function LabelledTray({
+  label,
+  examples,
+  deck,
+  onUnlabel,
+}: {
+  label: SwipeLabel
+  examples: TrainingExample[]
+  deck: SwipeDeckState
+  onUnlabel: (card: number) => void
+}) {
+  const cards = examples
+    .map((example, index) => ({ example, index }))
+    .filter(({ index }) => deck.labels[index] === label)
+  return (
+    <div className="rounded border border-line p-3">
+      <h3 className="text-sm font-semibold">
+        Labelled {label} <span className="font-normal text-fg-muted">({cards.length})</span>
+      </h3>
+      <ul className="mt-2 flex flex-wrap gap-1" aria-label={`Drawings labelled ${label}`}>
+        {cards.map(({ example, index }) => (
+          <li key={example.label}>
+            <button
+              type="button"
+              onClick={() => onUnlabel(index)}
+              title={`${example.label} — send back to the deck`}
+              aria-label={`${example.label}, labelled ${label}. Send back to the deck.`}
+              className="rounded border border-transparent hover:border-accent"
+            >
+              <SamplePixels pixels={example.pixels} cellClass="h-1 w-1" />
+            </button>
+          </li>
+        ))}
+      </ul>
+      {cards.length === 0 && <p className="mt-1 text-xs text-fg-muted">Nothing here yet.</p>}
+    </div>
+  )
+}
+
 export function TrainingLab() {
   const [seedText, setSeedText] = useState(String(DEFAULT_SEED))
   const [seed, setSeed] = useState(DEFAULT_SEED)
-  const examples = useMemo(() => buildTrainingSet(seed), [seed])
-  const [assignments, setAssignments] = useState<Assignments>({})
+  const generated = useMemo(() => buildTrainingSet(seed), [seed])
+  const [customExamples, setCustomExamples] = useState<TrainingExample[]>([])
+  const examples = useMemo(() => [...generated, ...customExamples], [generated, customExamples])
+  const [deck, setDeck] = useState<SwipeDeckState>(() => createDeck(generated.length))
   const [run, setRun] = useState<TrainingRun | null>(null)
   const [epoch, setEpoch] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [pixels, setPixels] = useState<boolean[]>(Array(PIXEL_COUNT).fill(false))
-  const assignedCount = Object.values(assignments).filter(Boolean).length
+  const [drawing, setDrawing] = useState<boolean[]>(Array(PIXEL_COUNT).fill(false))
+  const assignedCount = labelledCount(deck)
+  const card = currentCard(deck)
 
   useEffect(() => {
     if (!playing || !run) return
@@ -71,8 +125,7 @@ export function TrainingLab() {
     return () => window.clearInterval(timer)
   }, [playing, run])
 
-  const assign = (index: number, label: Label) => {
-    setAssignments((current) => ({ ...current, [index]: label }))
+  const invalidateRun = () => {
     setRun(null)
     setPlaying(false)
   }
@@ -81,20 +134,39 @@ export function TrainingLab() {
     const next = Number(seedText)
     if (!Number.isInteger(next) || next < 0 || next > 0xffffffff) return
     setSeed(next)
-    setAssignments({})
-    setRun(null)
-    setPlaying(false)
+    setCustomExamples([])
+    setDeck(createDeck(buildTrainingSet(next).length))
+    invalidateRun()
   }
 
-  const labelAll = (inverted = false) => {
-    setAssignments(Object.fromEntries(examples.map((example, index) => [index, inverted ? (labelFor(example) === 'E' ? '3' : 'E') : labelFor(example)])))
-    setRun(null)
-    setPlaying(false)
+  const labelEverything = (inverted = false) => {
+    setDeck((current) =>
+      labelAll(current, (index) => {
+        // Only the generated drawings have a known truth; a visitor's own
+        // drawing stays in the deck for them to judge.
+        if (index >= generated.length) return null
+        const truth = labelFor(examples[index])
+        return inverted ? (truth === 'E' ? '3' : 'E') : truth
+      })
+    )
+    invalidateRun()
+  }
+
+  const addDrawing = () => {
+    if (!drawing.some(Boolean)) return
+    const index = examples.length
+    setCustomExamples((current) => [
+      ...current,
+      { label: `Your drawing #${current.length + 1}`, pixels: drawing, target: 0 },
+    ])
+    setDeck((current) => addCard(current, index))
+    setDrawing(Array(PIXEL_COUNT).fill(false))
+    invalidateRun()
   }
 
   const train = () => {
     if (assignedCount !== examples.length) return
-    const data = examples.map((example, index) => ({ ...example, target: assignments[index] === '3' ? 1 : 0 }))
+    const data = examples.map((example, index) => ({ ...example, target: deck.labels[index] === '3' ? 1 : 0 }))
     const nextRun = trainGradientDescent({ seed, data })
     setRun(nextRun)
     setEpoch(0)
@@ -103,30 +175,50 @@ export function TrainingLab() {
 
   const snapshot = run?.history[epoch]
   const result = run && pixels.some(Boolean) ? classifyWithLearnedWeights(run.finalWeights, run.bias, pixels) : null
-  const groups: Array<{ label: Label; title: string }> = [
-    { label: 'E', title: 'E bucket' },
-    { label: '3', title: '3 bucket' },
-  ]
 
   return (
     <div className="space-y-8">
       <section className="rounded-lg border border-line p-4" aria-labelledby="training-lab-title">
-        <h2 id="training-lab-title" className="text-lg font-semibold tracking-tight">Teach the model with 50 drawings</h2>
-        <p className="mt-2 text-sm leading-relaxed text-fg-secondary">Each tiny picture is an E or a 3. Drag it into a bucket, or use its two label buttons. The model only learns the labels you give it.</p>
+        <h2 id="training-lab-title" className="text-lg font-semibold tracking-tight">Teach the model, one card at a time</h2>
+        <p className="mt-2 text-sm leading-relaxed text-fg-secondary">Each card is an E or a 3. Swipe it left for E, right for 3, or up to skip it for later — or use the buttons under the deck. The model only learns the labels you give it.</p>
         <div className="mt-4 flex flex-wrap items-end gap-3">
           <label className="text-sm font-medium">Random seed<input aria-label="Training random seed" type="number" min="0" max="4294967295" value={seedText} onChange={(event) => setSeedText(event.target.value)} className="mt-1 block w-44 rounded border border-line bg-surface-raised px-3 py-2 font-mono" /></label>
           <button type="button" onClick={generate} className="rounded border border-line px-3 py-2 text-sm font-medium hover:border-line-strong">Make new drawings</button>
-          <button type="button" onClick={() => labelAll()} className="rounded border border-line px-3 py-2 text-sm font-medium hover:border-line-strong">Label all correctly</button>
-          <button type="button" onClick={() => labelAll(true)} className="rounded border border-line px-3 py-2 text-sm font-medium hover:border-line-strong">Invert every label</button>
+          <button type="button" onClick={() => labelEverything()} className="rounded border border-line px-3 py-2 text-sm font-medium hover:border-line-strong">Label all correctly</button>
+          <button type="button" onClick={() => labelEverything(true)} className="rounded border border-line px-3 py-2 text-sm font-medium hover:border-line-strong">Invert every label</button>
         </div>
       </section>
 
       <section aria-labelledby="label-drawings-title">
-        <div className="flex flex-wrap items-baseline justify-between gap-2"><h2 id="label-drawings-title" className="text-lg font-semibold tracking-tight">Label the training set</h2><p className="text-sm text-fg-muted">{assignedCount} of {examples.length} labelled</p></div>
-        <div className="mt-4 grid gap-4 lg:grid-cols-3">
-          <div className="rounded border border-line p-3"><h3 className="text-sm font-semibold">Unlabelled</h3><ul className="mt-3 grid grid-cols-2 gap-2" aria-label="Unlabelled drawings">{examples.map((example, index) => !assignments[index] && <li key={example.label} draggable onDragStart={(event) => event.dataTransfer.setData('text/plain', String(index))} className="rounded border border-line bg-surface-raised p-2"><div className="flex items-center gap-2"><SamplePixels pixels={example.pixels} /><span className="text-xs text-fg-muted">Drawing {index + 1}</span></div><div className="mt-2 flex gap-1"><button type="button" onClick={() => assign(index, 'E')} className="rounded border border-line px-2 py-1 text-xs">E</button><button type="button" onClick={() => assign(index, '3')} className="rounded border border-line px-2 py-1 text-xs">3</button></div></li>)}</ul></div>
-          {groups.map(({ label, title }) => <div key={label} className="rounded border border-line p-3" onDragOver={(event) => event.preventDefault()} onDrop={(event) => { event.preventDefault(); const index = Number(event.dataTransfer.getData('text/plain')); if (Number.isInteger(index)) assign(index, label) }}><h3 className="text-sm font-semibold">{title}</h3><p className="mt-1 text-xs text-fg-muted">Drop drawings here, or use the buttons.</p><ul className="mt-3 grid grid-cols-3 gap-2" aria-label={title}>{examples.map((example, index) => assignments[index] === label && <li key={example.label} draggable onDragStart={(event) => event.dataTransfer.setData('text/plain', String(index))} className="rounded border border-line bg-surface-raised p-2"><SamplePixels pixels={example.pixels} /><button type="button" onClick={() => setAssignments((current) => ({ ...current, [index]: undefined }))} className="mt-1 text-xs text-accent-deep underline">Remove</button></li>)}</ul></div>)}
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 id="label-drawings-title" className="text-lg font-semibold tracking-tight">Label the training set</h2>
+          <p className="text-sm text-fg-muted" role="status">{assignedCount} of {examples.length} labelled</p>
         </div>
+        <div className="mt-4 grid items-start gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+          <SwipeLabelDeck
+            card={card !== null ? { id: card, name: examples[card].label, pixels: examples[card].pixels } : null}
+            remaining={Math.max(deck.queue.length - 1, 0)}
+            onLabel={(label) => { setDeck((current) => labelCurrent(current, label)); invalidateRun() }}
+            onSkip={() => setDeck(skipCurrent)}
+          />
+          <div className="space-y-3">
+            <LabelledTray label="E" examples={examples} deck={deck} onUnlabel={(index) => { setDeck((current) => unlabelCard(current, index)); invalidateRun() }} />
+            <LabelledTray label="3" examples={examples} deck={deck} onUnlabel={(index) => { setDeck((current) => unlabelCard(current, index)); invalidateRun() }} />
+          </div>
+        </div>
+      </section>
+
+      <section className="rounded-lg border border-line p-4" aria-labelledby="add-your-own-title">
+        <h2 id="add-your-own-title" className="text-lg font-semibold tracking-tight">Add your own drawing</h2>
+        <p className="mt-2 text-sm text-fg-secondary">Draw an E, a 3, or anything in between, then add it to the deck and label it the same way. It trains alongside the generated set.</p>
+        <div className="mt-4 max-w-72">
+          <PixelGrid pixels={drawing} onChange={setDrawing} gridSize={GRID_SIZE} />
+        </div>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <button type="button" onClick={addDrawing} disabled={!drawing.some(Boolean)} className="rounded bg-accent px-3 py-2 text-sm font-medium text-white enabled:hover:bg-accent-deep disabled:cursor-not-allowed disabled:opacity-50">Add to deck</button>
+          <button type="button" onClick={() => setDrawing(Array(PIXEL_COUNT).fill(false))} className="rounded border border-line px-3 py-2 text-sm font-medium hover:border-line-strong">Clear drawing</button>
+        </div>
+        {customExamples.length > 0 && <p className="mt-3 text-xs text-fg-muted" role="status">{customExamples.length} of your drawings in the training set.</p>}
       </section>
 
       <section className="rounded-lg border border-line p-4" aria-labelledby="start-training-title">
@@ -137,7 +229,7 @@ export function TrainingLab() {
         {snapshot && <div className="mt-5 grid gap-5 md:grid-cols-2"><div><p className="text-sm font-medium" aria-live="polite">Epoch {epoch} of {EPOCHS} · loss {snapshot.loss.toFixed(3)} · accuracy {(snapshot.accuracy * 100).toFixed(0)}%</p><input className="mt-3 w-full accent-accent" aria-label="Training progress" type="range" min="0" max={run!.history.length - 1} value={epoch} onChange={(event) => { setPlaying(false); setEpoch(Number(event.target.value)) }} /><button type="button" onClick={() => { setEpoch(0); setPlaying(true) }} className="mt-3 rounded border border-line px-3 py-2 text-sm font-medium hover:border-line-strong">Replay training</button></div><WeightMap weights={snapshot.weights} /></div>}
       </section>
 
-      {run && <section className="rounded-lg border border-line p-4" aria-labelledby="use-trained-model-title"><h2 id="use-trained-model-title" className="text-lg font-semibold tracking-tight">Use your trained weights</h2><p className="mt-2 text-sm text-fg-secondary">Draw a fresh input. If you inverted the buckets, the trained model should invert its answers too.</p><div className="mt-4 max-w-72"><PixelGrid pixels={pixels} onChange={setPixels} gridSize={GRID_SIZE} /></div><div className="mt-3 flex flex-wrap gap-2"><button type="button" onClick={() => setPixels(patternE())} className="rounded border border-line px-3 py-2 text-sm">Example: E</button><button type="button" onClick={() => setPixels(patternThree())} className="rounded border border-line px-3 py-2 text-sm">Example: 3</button><button type="button" onClick={() => setPixels(Array(PIXEL_COUNT).fill(false))} className="rounded border border-line px-3 py-2 text-sm">Clear</button></div><p className="mt-4 text-xl font-semibold" aria-live="polite">{result ? `Prediction: ${result.prediction} (${(result.confidence * 100).toFixed(0)}%)` : 'Draw a shape to classify it.'}</p></section>}
+      {run && <section className="rounded-lg border border-line p-4" aria-labelledby="use-trained-model-title"><h2 id="use-trained-model-title" className="text-lg font-semibold tracking-tight">Use your trained weights</h2><p className="mt-2 text-sm text-fg-secondary">Draw a fresh input. If you inverted the deck, the trained model should invert its answers too.</p><div className="mt-4 max-w-72"><PixelGrid pixels={pixels} onChange={setPixels} gridSize={GRID_SIZE} /></div><div className="mt-3 flex flex-wrap gap-2"><button type="button" onClick={() => setPixels(patternE())} className="rounded border border-line px-3 py-2 text-sm">Example: E</button><button type="button" onClick={() => setPixels(patternThree())} className="rounded border border-line px-3 py-2 text-sm">Example: 3</button><button type="button" onClick={() => setPixels(Array(PIXEL_COUNT).fill(false))} className="rounded border border-line px-3 py-2 text-sm">Clear</button></div><p className="mt-4 text-xl font-semibold" aria-live="polite">{result ? `Prediction: ${result.prediction} (${(result.confidence * 100).toFixed(0)}%)` : 'Draw a shape to classify it.'}</p></section>}
     </div>
   )
 }

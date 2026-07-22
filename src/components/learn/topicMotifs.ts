@@ -46,7 +46,7 @@ export const TOPIC_MOTIFS: Record<string, Motif> = {
   'understand-image-classification': 'pixels',
   'how-neural-networks-recognize-digits': 'digits',
   'what-is-gradient-descent': 'descent',
-  'train-a-neural-network': 'pixels',
+  'train-a-neural-network': 'training',
   'how-llms-predict-the-next-word': 'nextWord',
   'why-neural-networks-need-more-layers': 'layers',
 }
@@ -72,6 +72,7 @@ export const MOTIF_LABELS: Record<Motif, string> = {
   hallucination: 'Confident output where one claim is flagged as wrong',
   openSource: 'A closed model box next to an open one',
   chooser: 'Options narrowing down to a single pick',
+  training: 'Documents riding a conveyor belt into a machine that trains the model',
 }
 
 /** Every topic should have a motif; fall back to the most generic one. */

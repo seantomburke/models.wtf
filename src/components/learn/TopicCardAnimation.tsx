@@ -37,6 +37,7 @@ export type Motif =
   | 'hallucination'
   | 'openSource'
   | 'chooser'
+  | 'training'
 
 const W = 200
 const H = 56
@@ -604,6 +605,72 @@ function Chooser({ phase }: { phase: number }) {
   )
 }
 
+/** Training data riding a conveyor belt into the machine that learns from it. */
+function Training({ phase }: { phase: number }) {
+  const beltY = 40
+  const machineX = W - 62
+  // Two documents on the belt, staggered so one is always in view. Each rides
+  // from the left edge to the machine's intake, then slips inside and fades.
+  const docs = Array.from({ length: 2 }, (_, i) => {
+    const local = stagger(phase, i, 2)
+    const x = -14 + local * (machineX + 6 - -14)
+    const entering = x > machineX - 12
+    return { x, opacity: entering ? Math.max(0, 1 - (x - (machineX - 12)) / 16) : 0.95 }
+  })
+  // The machine chews while a document is inside: its light pulses.
+  const chewing = docs.some((d) => d.opacity < 0.95)
+  const light = pulse((phase * 3) % 1)
+  return (
+    <>
+      {/* Documents riding the belt: a page with text lines. */}
+      {docs.map((doc, i) => (
+        <g key={i} opacity={doc.opacity}>
+          <rect x={doc.x} y={beltY - 20} width={14} height={17} rx={2} fill="var(--color-surface-raised)" stroke={ACCENT} strokeWidth={1.4} />
+          <line x1={doc.x + 3} y1={beltY - 15} x2={doc.x + 11} y2={beltY - 15} stroke={ACCENT} strokeWidth={1.2} opacity={0.8} />
+          <line x1={doc.x + 3} y1={beltY - 11} x2={doc.x + 11} y2={beltY - 11} stroke={ACCENT} strokeWidth={1.2} opacity={0.55} />
+          <line x1={doc.x + 3} y1={beltY - 7} x2={doc.x + 8} y2={beltY - 7} stroke={ACCENT} strokeWidth={1.2} opacity={0.35} />
+        </g>
+      ))}
+      {/* The belt: a strip over rollers that spin with the phase. */}
+      <rect x={2} y={beltY} width={machineX + 4} height={5} rx={2.5} fill={MUTED} opacity={0.3} />
+      {Array.from({ length: 5 }, (_, i) => {
+        const cx = 14 + i * ((machineX - 20) / 4)
+        const angle = phase * Math.PI * 4
+        return (
+          <g key={i}>
+            <circle cx={cx} cy={beltY + 8} r={4} fill="none" stroke={MUTED} strokeWidth={1.4} opacity={0.5} />
+            <line
+              x1={cx - Math.cos(angle) * 3}
+              y1={beltY + 8 - Math.sin(angle) * 3}
+              x2={cx + Math.cos(angle) * 3}
+              y2={beltY + 8 + Math.sin(angle) * 3}
+              stroke={MUTED}
+              strokeWidth={1.2}
+              opacity={0.5}
+            />
+          </g>
+        )
+      })}
+      {/* The machine: a box with an intake slot, a status light, and weight bars. */}
+      <rect x={machineX} y={8} width={54} height={40} rx={6} fill={ACCENT_DEEP} opacity={0.85} />
+      <rect x={machineX - 3} y={beltY - 22} width={5} height={22} rx={2} fill={ACCENT_DEEP} opacity={0.5} />
+      <circle cx={machineX + 44} cy={16} r={3.5} fill={chewing ? GREEN : 'white'} opacity={chewing ? 0.5 + light * 0.5 : 0.35} />
+      {Array.from({ length: 3 }, (_, i) => (
+        <rect
+          key={i}
+          x={machineX + 8}
+          y={22 + i * 7}
+          width={16 + pulse(stagger(phase, i, 3)) * 14}
+          height={4}
+          rx={2}
+          fill="white"
+          opacity={0.75}
+        />
+      ))}
+    </>
+  )
+}
+
 const MOTIFS: Record<Motif, (props: { phase: number }) => React.ReactElement> = {
   tokens: Tokens,
   weights: Weights,
@@ -624,11 +691,13 @@ const MOTIFS: Record<Motif, (props: { phase: number }) => React.ReactElement> = 
   hallucination: Hallucination,
   openSource: OpenSource,
   chooser: Chooser,
+  training: Training,
 }
 
 /** How long one full cycle of each motif takes. Slower where motion is large. */
 const PERIOD_MS: Partial<Record<Motif, number>> = {
   digits: 5000,
+  training: 5200,
   descent: 3200,
   layers: 3400,
   reasoning: 3600,

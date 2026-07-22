@@ -86,6 +86,11 @@ describe('topic motif mapping', () => {
     expect(TOPIC_MOTIFS['why-neural-networks-need-more-layers']).toBe('layers')
     expect(TOPIC_MOTIFS['how-llms-predict-the-next-word']).toBe('nextWord')
   })
+
+  it('shows the training topic as data on a conveyor belt into the machine', () => {
+    expect(TOPIC_MOTIFS['train-a-neural-network']).toBe('training')
+    expect(MOTIF_LABELS.training).toMatch(/conveyor belt/)
+  })
 })
 
 describe('TopicCardAnimation', () => {
