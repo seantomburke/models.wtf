@@ -17,6 +17,7 @@ import {
   captureExportFailed,
   captureViewModeChange,
   captureBookmarkToggle,
+  captureCompareLinkCopied,
 } from '../lib/posthog-events.ts'
 import { ProviderLogo } from '../components/ProviderLogo.tsx'
 import { SortableHeader } from '../components/SortableHeader.tsx'
@@ -45,13 +46,14 @@ type Filter = CompareFilter
  * so a comparison can be shared as-is. Reads location at click time because the
  * page is prerendered without a window.
  */
-function ShareLinkButton() {
+function ShareLinkButton({ onCopied }: { onCopied: () => void }) {
   const [copied, setCopied] = useState(false)
 
   const handleShare = async () => {
     const url = window.location.href
     try {
       await navigator.clipboard.writeText(url)
+      onCopied()
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch (error) {
@@ -359,7 +361,7 @@ export function Compare() {
                 </button>
               ))}
             </div>
-            <ShareLinkButton />
+            <ShareLinkButton onCopied={() => captureCompareLinkCopied(posthog, visible.length)} />
             <button
               type="button"
               onClick={handleExport}

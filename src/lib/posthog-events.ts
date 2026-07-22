@@ -15,6 +15,11 @@ export const EVENTS = {
   COMPARE_BENCHMARK_CLICKED: 'compare_benchmark_clicked',
   COMPARE_VIEW_MODE_CHANGED: 'compare_view_mode_changed',
   COMPARE_BOOKMARK_TOGGLED: 'compare_bookmark_toggled',
+  COMPARE_LINK_COPIED: 'compare_link_copied',
+
+  // Search events
+  SEARCH_PERFORMED: 'search_performed',
+  SEARCH_RESULT_CLICKED: 'search_result_clicked',
 
   // Graph page events
   GRAPH_AXES_CHANGED: 'graph_axes_changed',
@@ -187,6 +192,39 @@ export function captureBookmarkToggle(
   posthog?.capture?.(EVENTS.COMPARE_BOOKMARK_TOGGLED, {
     model_id: modelId,
     action,
+  })
+}
+
+/** Capture a successful comparison link copy without sending the URL. */
+export function captureCompareLinkCopied(
+  posthog: ReturnType<typeof usePostHog>,
+  modelCount: number,
+): void {
+  posthog?.capture?.(EVENTS.COMPARE_LINK_COPIED, {
+    model_count: modelCount,
+  })
+}
+
+/** Capture a submitted search without sending user-entered search text. */
+export function captureSearchPerformed(
+  posthog: ReturnType<typeof usePostHog>,
+  resultCount: number,
+): void {
+  posthog?.capture?.(EVENTS.SEARCH_PERFORMED, {
+    result_count: resultCount,
+    has_results: resultCount > 0,
+  })
+}
+
+/** Capture selection of a model from search results. */
+export function captureSearchResultClicked(
+  posthog: ReturnType<typeof usePostHog>,
+  modelId: string,
+  matchType: string,
+): void {
+  posthog?.capture?.(EVENTS.SEARCH_RESULT_CLICKED, {
+    model_id: modelId,
+    match_type: matchType,
   })
 }
 

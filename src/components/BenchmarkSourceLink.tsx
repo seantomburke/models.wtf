@@ -1,3 +1,5 @@
+import { capture } from '../lib/analytics.ts'
+
 interface BenchmarkSourceLinkProps {
   sourceUrl?: string
   benchmarkName: string
@@ -28,11 +30,15 @@ export function BenchmarkSourceLink({
   }
 
   const urlWithUtm = addUtmSource(sourceUrl)
+  const captureSourceClick = () => {
+    capture('benchmark_source_clicked', { benchmark_name: benchmarkName })
+  }
 
   if (variant === 'wrapper') {
     return (
       <a
         href={urlWithUtm}
+        onClick={captureSourceClick}
         target="_blank"
         rel="noopener noreferrer"
         className={`transition-colors duration-150 hover:text-accent-deep ${className}`}
@@ -48,6 +54,7 @@ export function BenchmarkSourceLink({
     return (
       <a
         href={urlWithUtm}
+        onClick={captureSourceClick}
         target="_blank"
         rel="noopener noreferrer"
         className={`inline-flex shrink-0 items-center rounded text-[10px] font-medium text-fg-faint transition-colors duration-150 hover:text-accent-deep focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-deep ${className}`}
@@ -62,6 +69,7 @@ export function BenchmarkSourceLink({
   return (
     <a
       href={urlWithUtm}
+      onClick={captureSourceClick}
       target="_blank"
       rel="noopener noreferrer"
       className={`ml-1 inline-flex items-center gap-0.5 text-[10px] font-medium text-fg-muted transition-colors duration-150 hover:text-accent-deep ${className}`}

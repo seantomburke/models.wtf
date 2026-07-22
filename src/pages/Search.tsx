@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import { usePostHog } from '../lib/posthog-react.ts'
 import { usePageMeta } from '../lib/meta.ts'
 import { metaFor } from '../lib/routeMeta.ts'
 import { searchModels, groupSearchResults } from '../lib/search.ts'
@@ -9,8 +10,10 @@ import { SearchInput } from '../components/SearchInput.tsx'
 import { Breadcrumb } from '../components/Breadcrumb.tsx'
 import { ProviderLogo } from '../components/ProviderLogo.tsx'
 import { formatPrice } from '../lib/format.ts'
+import { captureSearchPerformed, captureSearchResultClicked } from '../lib/posthog-events.ts'
 
 export function Search() {
+  const posthog = usePostHog()
   const meta = metaFor('/search')
   usePageMeta({
     title: meta.title,
@@ -31,8 +34,9 @@ export function Search() {
       // Replace rather than push: typing a word shouldn't bury the previous
       // page under a dozen history entries.
       setSearchParams(serializeSearchParams({ query: next }), { replace: true })
+      captureSearchPerformed(posthog, next ? searchModels(models, next).length : models.length)
     },
-    [setSearchParams],
+    [posthog, setSearchParams],
   )
 
   const results = useMemo(() => {
@@ -85,7 +89,11 @@ export function Search() {
               <h2 className="mb-3 text-lg font-semibold">By Name</h2>
               <div className="space-y-2">
                 {grouped.name.map((result) => (
-                  <SearchResultCard key={result.model.id} result={result} />
+                  <SearchResultCard
+                    key={result.model.id}
+                    result={result}
+                    onSelect={() => captureSearchResultClicked(posthog, result.model.id, result.matchType)}
+                  />
                 ))}
               </div>
             </section>
@@ -96,7 +104,11 @@ export function Search() {
               <h2 className="mb-3 text-lg font-semibold">By Provider</h2>
               <div className="space-y-2">
                 {grouped.provider.map((result) => (
-                  <SearchResultCard key={result.model.id} result={result} />
+                  <SearchResultCard
+                    key={result.model.id}
+                    result={result}
+                    onSelect={() => captureSearchResultClicked(posthog, result.model.id, result.matchType)}
+                  />
                 ))}
               </div>
             </section>
@@ -107,7 +119,11 @@ export function Search() {
               <h2 className="mb-3 text-lg font-semibold">By Description</h2>
               <div className="space-y-2">
                 {grouped.description.map((result) => (
-                  <SearchResultCard key={result.model.id} result={result} />
+                  <SearchResultCard
+                    key={result.model.id}
+                    result={result}
+                    onSelect={() => captureSearchResultClicked(posthog, result.model.id, result.matchType)}
+                  />
                 ))}
               </div>
             </section>
@@ -120,15 +136,17 @@ export function Search() {
 
 interface SearchResultCardProps {
   result: ReturnType<typeof searchModels>[number]
+  onSelect: () => void
 }
 
-function SearchResultCard({ result }: SearchResultCardProps) {
+function SearchResultCard({ result, onSelect }: SearchResultCardProps) {
   const { model } = result
   const provider = providerById.get(model.providerId)
 
   return (
     <Link
       to={`/models/${model.id}`}
+      onClick={onSelect}
       className="block rounded-lg border border-line bg-surface-raised p-4 transition-colors hover:border-accent-deep hover:bg-surface"
     >
       <div className="flex items-start justify-between gap-4">
