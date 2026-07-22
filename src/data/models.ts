@@ -1,7 +1,7 @@
 import type { Model } from './types.ts'
 
 /**
- * Model facts researched 2026-07-21. Scores are provider-published evals
+ * Model facts researched 2026-07-22. Scores are provider-published evals
  * where available, otherwise independent leaderboard runs (noted below).
  * A missing score means no reliable published number was found, not zero.
  * Sources are listed in src/data/README.md.
@@ -320,7 +320,7 @@ export const models: Model[] = [
       'swe-bench-verified': 80.6, // Google-published
       'swe-bench-pro': 54.2, // from Anthropic's comparison table; Google published none
       'gpqa-diamond': 94.3, // Artificial Analysis independent run (July 2026)
-      'terminal-bench': 70.79, // vals.ai independent run (July 16, 2026)
+      'terminal-bench': 73.8, // Google-published (Terminus-2 harness, July 2026)
       // Google-published model card, "No tools" column (2026-07-20). The same
       // row publishes 51.4 under "Search (blocklist) + Code"; the column is
       // closed-book across the dataset, so the 44.4 run is the comparable one.
@@ -329,7 +329,6 @@ export const models: Model[] = [
     scoreProvenance: {
       'swe-bench-pro': { source: 'independent', runner: "Anthropic's comparison table" },
       'gpqa-diamond': { source: 'independent', runner: 'Artificial Analysis' },
-      'terminal-bench': { source: 'independent', runner: 'vals.ai' },
     },
     blurb:
       "Google's flagship. A top-tier reasoner with strong long-context skills at an aggressive price.",

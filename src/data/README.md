@@ -63,6 +63,28 @@ Sources: [Grok 4.5 benchmark results](https://benchmarklist.com/models/xai-grok-
 and [Muse Spark 1.1 benchmark results](https://benchmarklist.com/models/meta-muse-spark-1-1/),
 checked 2026-07-22.
 
+2026-07-22 sixth-pass refresh notes:
+
+- **Gemini 3.1 Pro Terminal-Bench 2.1 corrected from 70.79 to 73.8.** The
+  prior independent Vals result has been superseded in the canonical dataset
+  by Google's provider-published Terminus-2 result from its current Gemini
+  comparison table. The explicit provider score follows this dataset's
+  provider-wins convention, so the old independent-run provenance is removed.
+- **No new broadly available general-purpose model was added.** Gemini 3.5
+  Flash Cyber launched on July 21, but Google limits it to a government and
+  trusted-partner CodeMender pilot. The current general-purpose additions,
+  Gemini 3.6 Flash and Gemini 3.5 Flash-Lite, were already included in the
+  July 21 refresh. Google still publishes no comparable SWE-bench Verified,
+  GPQA Diamond, or HLE score for either new public model.
+- **Quiz audit:** the quiz has no duplicated scores or static model-ranking
+  options; it derives every recommendation and score explanation from the
+  canonical `models` array. No separate quiz-data edit is needed.
+
+Sources: [Google's current Gemini comparison table](https://deepmind.google/models/gemini/),
+[the July 21 Gemini launch](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-6-flash-3-5-flash-lite-3-5-flash-cyber/),
+and provider and leaderboard rechecks for the current OpenAI, Anthropic, Meta,
+and open-model lineups, checked 2026-07-22.
+
 2026-07-21 refresh notes:
 
 - **Gemini 3.6 Flash added** from Google's GA launch and model documentation:
