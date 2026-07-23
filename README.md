@@ -40,9 +40,9 @@ npm run build     # tsc + vite build + prerender + sitemap
 npm run preview   # serve the production build
 ```
 
-Data lives in `src/data/` (models, benchmarks, releases). If you add a model, add its benchmark scores, score provenance, and a What's New entry together — CI validates the release data.
+Data lives in `src/data/` (models, benchmarks, releases). If you add a model, add its benchmark scores, score provenance, and a What's New entry together. CI validates the release data.
 
 ## Docs
 
-- [docs/initial-plan.md](docs/initial-plan.md) — the original product vision and requirements this repo was built from
-- [AGENTS.md](AGENTS.md) — conventions and setup for coding agents working in this repo
+- [docs/initial-plan.md](docs/initial-plan.md): the original product vision and requirements this repo was built from
+- [AGENTS.md](AGENTS.md): conventions and setup for coding agents working in this repo

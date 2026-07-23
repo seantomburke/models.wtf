@@ -28,14 +28,32 @@ npm run lint      # Lint
 
 ## Agent Setup
 
-This repo is agent-agnostic. Guidance lives in `AGENTS.md` files, not in any one agent's config format:
+This repo is agent-agnostic. Guidance lives in `AGENTS.md` files, never in any one agent's config format:
 
-- This file holds repo-wide guidance; `src/AGENTS.md` adds frontend rules (React, error handling, testing) for work under `src/`.
+- This file holds repo-wide guidance. Nested `AGENTS.md` files add area rules: `src/AGENTS.md` (frontend), `src/data/AGENTS.md` (data refresh), `src/lib/AGENTS.md` (routeMeta, search, URL state), `src/pages/learn/AGENTS.md` (Learn content), `scripts/AGENTS.md` (build pipeline). Read the nearest one for the files you touch.
+- Cross-cutting rules live in `.agents/rules/`. Read the matching rule before working in its area (table below).
 - Reusable skills live in `.agents/skills/<name>/SKILL.md`. When a task matches a skill listed below, read its `SKILL.md` and follow it.
 - Reusable agent roles live in `.agents/agents/`. Vendor-specific definitions must be thin adapters that point to these canonical instructions rather than copying them.
 - Agent-specific discovery, permissions, and plugin config stays in that agent's folder. Don't put project guidance there.
 - Describe required capabilities (read, edit, search, run, monitor) instead of naming vendor-specific tools in shared guidance.
-- Run `npm run check:agents` after changing agent guidance, skills, or adapters.
+- Run `npm run check:agents` after changing agent guidance, skills, rules, or adapters.
+
+## Memory
+
+The repo IS the persistent memory for every agent. When you learn a durable, non-obvious fact (a gotcha, an invariant, a dead end), write it into the nearest nested `AGENTS.md` or the matching `.agents/rules/` file. Follow `.agents/rules/memory.md` for the conventions. Never park project knowledge in agent-private storage.
+
+## Rules
+
+| Rule | Read when |
+|------|-----------|
+| `.agents/rules/writing-style.md` | Writing or editing ANY user-facing copy, titles, or prose |
+| `.agents/rules/performance-budget.md` | Adding imports, routes, or heavy components |
+| `.agents/rules/prerender-seo.md` | Touching meta tags, prerender, OG images, sitemap, or head content |
+| `.agents/rules/frontend-gotchas.md` | Styling, accessibility, charts, or interaction work |
+| `.agents/rules/workflow.md` | Committing, deploying, or auditing |
+| `.agents/rules/memory.md` | Recording a learned fact for future agents |
+
+## Skills
 
 | Skill | Use when |
 |-------|----------|
@@ -44,6 +62,10 @@ This repo is agent-agnostic. Guidance lives in `AGENTS.md` files, not in any one
 | `.agents/skills/handling-errors/` | Designing try/catch, error propagation, Result patterns |
 | `.agents/skills/systematic-debugging/` | Investigating bugs, errors, unexpected behavior |
 | `.agents/skills/design/` | Building data-heavy or dashboard-style UI |
+
+## Copy
+
+Any task that writes or edits user-facing copy MUST follow the copywriter role (`.agents/agents/copywriter.md`) and `.agents/rules/writing-style.md`. Highlights: patient-teacher ELI5 voice, no em dashes anywhere in the repo, no "X, not Y" contrast framing, prefer visuals and animations over paragraphs, math through the KaTeX `MathBlock` component. `src/lib/copy-style.test.ts` enforces the bans.
 
 ## Debugging
 
@@ -58,11 +80,10 @@ Four-phase approach:
 ## Conventions
 
 - SEO is a first-class requirement: semantic HTML, meta tags, and accessible markup on every page.
-- Keep the stack light. The initial plan (`docs/initial-plan.md`) explicitly avoids heavy frameworks — prefer simple, composable components.
+- Keep the stack light. The initial plan (`docs/initial-plan.md`) explicitly avoids heavy frameworks; prefer simple, composable components.
 - Model and benchmark data are hardcoded for now. Isolate data behind a typed module so migrating to a database later is a contained change.
+- Style: oxlint, single quotes, no semicolons. No prettier in this repo.
 
 ## Deployment
 
-- Always push finished work to `main` — every push to main triggers the GitHub Actions deploy to GitHub Pages. Don't leave completed work sitting on feature branches.
-- Monitor the deploy asynchronously using the agent's available background-job capability; don't occupy the foreground with continuous polling.
-- After the deploy succeeds, verify the change on the live site, then close the GitHub issue.
+Follow `.agents/rules/workflow.md`. Short version: run the preflight checks, push finished work to `main` (that triggers the GitHub Pages deploy), monitor the deploy in the background, verify on the live site, close the issue.

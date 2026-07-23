@@ -1,0 +1,20 @@
+# Learn Guidance (src/pages/learn/)
+
+Extends the root `AGENTS.md` and `src/AGENTS.md`. The Learn section teaches AI concepts to normal people. Follow `.agents/rules/writing-style.md` for every word of copy.
+
+## Content rules
+
+- Prefer interactive visuals, diagrams, and animations over paragraph blocks. Three consecutive paragraphs without a visual is a smell; build a component instead.
+- Math renders through `MathBlock` (`src/components/MathBlock.tsx`) with LaTeX. No unicode-art equations in prose strings.
+- Long prose lives in `topicProse.ts`, which loads lazily. Never import it top-level into `topics.ts`; that ships it on every route (see `.agents/rules/performance-budget.md`).
+
+## Lab models
+
+- The lab lineup (Doodle-64/525/918, Parrot-43) is named in the hardcoded lab level blurb in `topics.ts`. Adding a lab model means updating that blurb.
+- Changing Parrot's training corpus means renaming Parrot (the number encodes the corpus).
+
+## Adding a topic
+
+- New topics need the sitemap rebuilt (and copied to `public/`) plus prerender coverage. `routeMeta.ts` drives both.
+- Give the topic card a motif animation (`topicMotifs.ts` + `TopicCardAnimation.tsx`) and respect `prefers-reduced-motion`.
+- Heavy interactive components gate their chunks on IntersectionObserver visibility with an always-load fallback.

@@ -2,20 +2,17 @@
 
 Rewrite corporate or AI-heavy prose as warm, clear explanations in the voice of a patient teacher speaking to a bright 10-year-old.
 
-## Voice
+The canonical style rules live in `.agents/rules/writing-style.md`. Read that file first and apply it. This role adds the rewrite workflow and scope.
 
-- Be concrete and specific. Prefer examples and analogies to abstractions.
-- Use short sentences.
-- Address one reader warmly and directly.
-- Remove filler so every word earns its place.
+## Summary of the rules
 
-## Patterns to avoid
-
-1. Em dashes used as structural crutches. Split the thought into sentences or use a comma.
-2. "Not X, but Y" contrast framing. State the intended claim directly.
-3. Filler intensifiers such as "real," "actually," "really," "genuinely," and "truly" when they add no meaning.
-4. Rhetorical questions that merely introduce the next sentence.
-5. Parenthetical analogies that could be integrated into the main sentence.
+- Concrete, specific, short sentences. One warm reader. Every word earns its place.
+- No em dashes or en dashes anywhere. Split the thought or use a comma.
+- No "X, not Y" contrast framing. State the intended claim directly.
+- No filler intensifiers or throat-clearing rhetorical questions.
+- Prefer visuals, diagrams, and animations over paragraph blocks. Flag any run of three or more paragraphs without a visual.
+- Math goes through the `MathBlock` KaTeX component with a plain-text fallback.
+- Page titles use the pipe separator: `Page name | Models.fyi`.
 
 ## Preserve
 
@@ -32,6 +29,8 @@ Rewrite existing prose in place. Do not create new prose sections or change data
 Relevant prose currently lives in:
 
 - `src/pages/learn/topics.ts`
+- `src/pages/learn/topicProse.ts`
+- `src/pages/learn/*.tsx`
 - `src/data/models.ts`
 - `src/data/glossary.ts`
 - `src/data/faqs.ts`
@@ -46,18 +45,18 @@ Relevant prose currently lives in:
 
 ## Examples
 
-Before: "An AI model is different — nobody writes the steps. Instead, you show it millions of examples and it figures out the patterns by itself."
+Before: "An AI model is different (nobody writes the steps). Instead, you show it millions of examples and it figures out the patterns by itself."
 
-After: "An AI model doesn't get written like a recipe. Instead, you show it millions of examples, and it learns the patterns on its own."
+After: "Nobody writes step-by-step instructions for an AI model. You show it millions of examples, and it learns the patterns on its own."
 
-Before: "It's not a reasoning model (no step-by-step thinking phase), which keeps it fast — fine for this kind of task."
+Before: "It's a direct-answer model (no step-by-step thinking phase), which keeps it fast. Fine for this kind of task."
 
-After: "It doesn't think through steps. It just answers directly, which keeps it fast. That's perfectly fine for this kind of work."
+After: "It answers directly without a thinking phase, which keeps it fast. That works well for this kind of task."
 
 ## Workflow
 
-1. Read each target file completely.
-2. Identify prose strings and scan them for the patterns above.
+1. Read `.agents/rules/writing-style.md`, then each target file completely.
+2. Identify prose strings and scan them for the banned patterns.
 3. Make targeted in-place edits using the available file-editing capability.
-4. Run the relevant test suite after editing.
+4. Run the test suite, including `src/lib/copy-style.test.ts`, after editing.
 5. Report the changed files and summarize the patterns fixed.
