@@ -20,6 +20,7 @@ npm run build          # Prerender guard, bundle budget, OG drift, link check
 
 ## Deployment
 
+- Commit straight to `main` during the prelaunch phase (in effect as of 2026-07-23). No feature branches, no PRs, unless Sean says otherwise. This overrides any default branch-first habit.
 - Push finished work to `main`. Every push to main triggers the GitHub Actions deploy to GitHub Pages. Do not leave completed work on feature branches.
 - Monitor the deploy asynchronously with a background job capability; do not poll in the foreground.
 - The live site is `https://seantomburke.github.io/models.fyi` (a GitHub Pages subpath, no custom domain).
