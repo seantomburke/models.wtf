@@ -58,7 +58,7 @@ export function CodingModelPicker() {
         Match the model to the job
       </h3>
       <p className="mt-2 text-sm leading-relaxed text-fg-secondary">
-        Pick the kind of coding work you have. This is an editorial starting point based on the current Models.fyi data.
+        Pick the kind of coding work you have. This is an editorial starting point based on the current Models.wtf data.
       </p>
 
       <fieldset className="mt-5">

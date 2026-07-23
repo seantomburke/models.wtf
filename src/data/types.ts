@@ -1,5 +1,5 @@
 /**
- * Core types for the Models.fyi static data layer.
+ * Core types for the Models.wtf static data layer.
  *
  * All model/benchmark facts are web-researched and hardcoded here.
  * See src/data/README.md for the refresh process.

@@ -697,6 +697,6 @@ After completing Phases 1-3 (SEO, UX/Export, Analytics/Accessibility), models.wt
 
 ## Conclusion
 
-Models.fyi has a solid foundation from Phases 1-3. Phase 4 builds on this with content, features, and polish that will significantly improve user experience and business value. 
+Models.wtf has a solid foundation from Phases 1-3. Phase 4 builds on this with content, features, and polish that will significantly improve user experience and business value. 
 
 **Recommended starting point:** Begin with **Phase 4A (Quick Wins)** for immediate high-value improvements, then move to **Phase 4B (Content)** for long-term SEO and engagement benefits.

@@ -54,7 +54,7 @@ These are style rules applied with judgment. There is no regex guard for them, b
 
 ## Page titles
 
-- Title separator is a pipe: `Compare AI models | Models.fyi`. Changing the separator has three sync points beyond routeMeta: the JSON-LD name-strip regexes in `routeMeta.ts`, the OG title-strip regex in `scripts/generate-og-images.mjs`, and the feed titles (`src/lib/feed.ts` plus the autodiscovery title in `scripts/prerender.mjs`).
+- Title separator is a pipe: `Compare AI models | Models.wtf`. Changing the separator has three sync points beyond routeMeta: the JSON-LD name-strip regexes in `routeMeta.ts`, the OG title-strip regex in `scripts/generate-og-images.mjs`, and the feed titles (`src/lib/feed.ts` plus the autodiscovery title in `scripts/prerender.mjs`).
 - Preserve SEO length constraints when rewriting titles or meta descriptions.
 
 ## Preserve when rewriting

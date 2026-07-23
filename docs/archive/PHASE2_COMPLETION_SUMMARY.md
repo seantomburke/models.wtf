@@ -6,7 +6,7 @@
 
 ## Overview
 
-Successfully implemented Phase 2 of the Models.fyi improvement plan, adding comprehensive user experience enhancements and data export capabilities to the Compare page.
+Successfully implemented Phase 2 of the Models.wtf improvement plan, adding comprehensive user experience enhancements and data export capabilities to the Compare page.
 
 ## Features Implemented
 

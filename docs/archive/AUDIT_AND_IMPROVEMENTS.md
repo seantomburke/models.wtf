@@ -1,4 +1,4 @@
-# Models.fyi Audit and Improvements Plan
+# Models.wtf Audit and Improvements Plan
 
 ## Current State
 The website is a React + Vite SPA that helps users select AI models. It includes:

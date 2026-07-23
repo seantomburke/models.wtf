@@ -41,7 +41,7 @@ test('every nav destination renders with a heading and page title', async () => 
     expect(
       await screen.findByRole('heading', { level: 1, name: heading }),
     ).toBeInTheDocument()
-    expect(document.title).toMatch(/models\.fyi/i)
+    expect(document.title).toMatch(/models\.wtf/i)
     cleanup()
   }
 })

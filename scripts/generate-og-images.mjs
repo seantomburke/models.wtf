@@ -101,7 +101,7 @@ const frame = (content) => `<svg xmlns="http://www.w3.org/2000/svg" width="${WID
   <circle cx="100" cy="100" r="50" fill="${ACCENT}" opacity="0.1"/>
   <circle cx="1100" cy="530" r="70" fill="${ACCENT}" opacity="0.1"/>
 ${content}
-  <text x="${MARGIN}" y="578" font-family="${FONT}" font-size="26" font-weight="600" fill="${INK}">models<tspan fill="${ACCENT}">.fyi</tspan></text>
+  <text x="${MARGIN}" y="578" font-family="${FONT}" font-size="26" font-weight="600" fill="${INK}">models<tspan fill="${ACCENT}">.wtf</tspan></text>
 </svg>`
 
 const titleBlock = (kicker, title, subLines) => {
@@ -157,7 +157,7 @@ const learnSvg = (topic) => frame(titleBlock('Learn', topic.question, [truncateL
 
 /** Everything else: the page title (site suffix stripped) plus its description. */
 const genericSvg = (meta) => {
-  const title = meta.title.replace(/\s*\|\s*Models\.fyi$/, '')
+  const title = meta.title.replace(/\s*\|\s*Models\.wtf$/, '')
   const allLines = wrapText(meta.description, 30, MAX_TEXT_WIDTH)
   const descLines = allLines.slice(0, 2)
   // Descriptions longer than two lines are cut; make the cut visible rather

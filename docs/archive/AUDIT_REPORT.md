@@ -1,4 +1,4 @@
-# Models.fyi Audit & Improvement Strategy
+# Models.wtf Audit & Improvement Strategy
 **Date:** 2026-07-18  
 **Current:** 283 tests, 8 pages, Phase 4A complete  
 **Opportunity:** +25-40% organic traffic, +15-20% engagement

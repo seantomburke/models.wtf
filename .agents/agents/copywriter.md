@@ -15,7 +15,7 @@ The canonical style rules live in `.agents/rules/writing-style.md`. Read that fi
 - No filler intensifiers or throat-clearing rhetorical questions.
 - Prefer visuals, diagrams, and animations over paragraph blocks. Flag any run of three or more paragraphs without a visual.
 - Math goes through the `MathBlock` KaTeX component with a plain-text fallback.
-- Page titles use the pipe separator: `Page name | Models.fyi`.
+- Page titles use the pipe separator: `Page name | Models.wtf`.
 
 ## Preserve
 

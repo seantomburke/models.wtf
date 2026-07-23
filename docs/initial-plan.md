@@ -1,8 +1,8 @@
-# [Models.fyi](http://Models.fyi)
+# [Models.wtf](http://Models.wtf)
 
 Selecting the right model to use for your AI tasks is cumbersome and requires a lot of in-depth knowledge and understanding about the history of LLMs and the current state of LLMs.
 
-[Models.fyi](http://Models.fyi) aims to simplify this model selection process for the regular user.
+[Models.wtf](http://Models.wtf) aims to simplify this model selection process for the regular user.
 
 ## Overview
 

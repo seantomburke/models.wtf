@@ -432,7 +432,7 @@ npm run dev
    - `src/components/ProsCons.tsx` - Strengths/weaknesses vs competitors
 
 4. [ ] SEO & Schema:
-   - Set `<title>` dynamically: "{Model Name} | Models.fyi"
+   - Set `<title>` dynamically: "{Model Name} | Models.wtf"
    - Set meta description from whyChooseThis
    - Generate JSON-LD schema for model (Product schema)
 
@@ -878,7 +878,7 @@ npm run dev
    - [ ] Mobile (iPhone SE, Android): Cards show, sticky header works
    - [ ] Accessibility: Keyboard nav, screen reader (WAVE)
    - [ ] Performance: Lighthouse ≥90 (all pages)
-   - [ ] SEO: Rich snippets (Models.fyi on Google Search Console)
+   - [ ] SEO: Rich snippets (Models.wtf on Google Search Console)
 
 **Verify:**
 ```bash

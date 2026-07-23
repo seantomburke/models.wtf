@@ -1,4 +1,4 @@
-# Models.fyi data layer
+# Models.wtf data layer
 
 All model and benchmark data is static and hardcoded here. This is deliberate
 (see the root README): no database until the product needs one.

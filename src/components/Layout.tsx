@@ -74,7 +74,7 @@ export function Layout() {
             className="mr-4 text-base font-semibold tracking-tight text-fg transition-colors duration-150 hover:text-accent-deep focus:outline-none focus:ring-2 focus:ring-accent rounded-lg"
             title="Home (go to compare)"
           >
-            models<span className="text-accent-deep">.fyi</span>
+            models<span className="text-accent-deep">.wtf</span>
           </Link>
 
           {/* Desktop Navigation */}

@@ -1,6 +1,6 @@
 # PostHog analytics
 
-Models.fyi uses PostHog for anonymous product analytics, session recordings, and client-side performance signals.
+Models.wtf uses PostHog for anonymous product analytics, session recordings, and client-side performance signals.
 
 ## What we track
 

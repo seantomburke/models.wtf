@@ -57,12 +57,12 @@ export function buildAtomFeed(releaseLog: readonly Release[]): string {
   return `<?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>${esc(pageUrl)}</id>
-  <title>Models.fyi | What's new</title>
+  <title>Models.wtf | What's new</title>
   <subtitle>Model releases, feature announcements, and pricing changes across AI models.</subtitle>
   <link rel="alternate" href="${esc(pageUrl)}" />
   <link rel="self" href="${esc(`${SITE_URL}/feed.xml`)}" />
   <updated>${updated}</updated>
-  <author><name>Models.fyi</name></author>
+  <author><name>Models.wtf</name></author>
 ${entries}
 </feed>`
 }

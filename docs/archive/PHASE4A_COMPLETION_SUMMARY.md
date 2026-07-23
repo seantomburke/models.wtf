@@ -204,7 +204,7 @@ Added 13 new tests covering:
 - Added route metadata for SEO (`src/lib/routeMeta.ts`)
 
 ### Search Page SEO
-- Title: "Search AI models — Models.fyi"
+- Title: "Search AI models — Models.wtf"
 - Description: "Search and find AI models by name, provider, or capability..."
 - Breadcrumb navigation included
 - Canonical URL structure maintained
@@ -409,7 +409,7 @@ The implementation demonstrates:
 - No performance regressions
 - Extensible design for future enhancements
 
-Models.fyi now has enterprise-grade search and flexible export capabilities, improving its value for both casual users and power users integrating with external tools.
+Models.wtf now has enterprise-grade search and flexible export capabilities, improving its value for both casual users and power users integrating with external tools.
 
 ### By The Numbers
 

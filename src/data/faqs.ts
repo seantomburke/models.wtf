@@ -13,15 +13,15 @@ export const faqs: FAQItem[] = [
   // Getting Started
   {
     category: 'Getting Started',
-    question: 'What is Models.fyi?',
+    question: 'What is Models.wtf?',
     answer:
-      'Models.fyi simplifies AI model selection for everyone. We compare flagship models from OpenAI, Anthropic, Google, xAI, and others across benchmarks, cost, and capability. Our goal: help you pick the right model for your task without needing a PhD in machine learning.',
+      'Models.wtf simplifies AI model selection for everyone. We compare flagship models from OpenAI, Anthropic, Google, xAI, and others across benchmarks, cost, and capability. Our goal: help you pick the right model for your task without needing a PhD in machine learning.',
   },
   {
     category: 'Getting Started',
     question: 'Do I need technical knowledge to use this site?',
     answer:
-      'No. Everything on Models.fyi is written in plain language, with simple analogies and no jargon. The Learn section teaches you what an LLM is, what a context window means, and what benchmarks measure. Start there if you\'re new to AI.',
+      'No. Everything on Models.wtf is written in plain language, with simple analogies and no jargon. The Learn section teaches you what an LLM is, what a context window means, and what benchmarks measure. Start there if you\'re new to AI.',
   },
   {
     category: 'Getting Started',
@@ -33,7 +33,7 @@ export const faqs: FAQItem[] = [
     category: 'Getting Started',
     question: 'What is the difference between this site and ChatGPT?',
     answer:
-      'ChatGPT is one AI model made by OpenAI. Models.fyi is an educational site that compares ChatGPT with Claude, Gemini, Grok, and open-source alternatives, showing you the pros and cons of each so you can pick the best fit for your task.',
+      'ChatGPT is one AI model made by OpenAI. Models.wtf is an educational site that compares ChatGPT with Claude, Gemini, Grok, and open-source alternatives, showing you the pros and cons of each so you can pick the best fit for your task.',
   },
 
   // Model Selection
@@ -155,7 +155,7 @@ export const faqs: FAQItem[] = [
     category: 'Benchmarks',
     question: 'How often are benchmarks updated?',
     answer:
-      'As models improve and new benchmarks emerge, scores change constantly. Models.fyi updates its benchmark data regularly as providers publish new scores. Check the data refresh date at the bottom of the site to see how current the numbers are.',
+      'As models improve and new benchmarks emerge, scores change constantly. Models.wtf updates its benchmark data regularly as providers publish new scores. Check the data refresh date at the bottom of the site to see how current the numbers are.',
   },
 ]
 

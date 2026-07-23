@@ -26,7 +26,7 @@ export function ProviderDetail() {
 
 /**
  * The releases relevant to a provider: every release entry whose model belongs
- * to it. Site-wide releases (no modelId) are news about Models.fyi itself, not
+ * to it. Site-wide releases (no modelId) are news about Models.wtf itself, not
  * about any provider, so they stay off these pages.
  */
 export function releasesForProvider(providerModels: Model[]): Release[] {

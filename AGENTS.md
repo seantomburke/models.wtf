@@ -1,4 +1,4 @@
-# Models.fyi
+# Models.wtf
 
 An educational website that simplifies AI model selection for non-experts. Tracks flagship models from OpenAI, Anthropic, Google, xAI, and others, compares them across benchmarks, and guides users to the right model for their task via interactive graphs and decision flows.
 

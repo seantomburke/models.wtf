@@ -1,5 +1,5 @@
 /**
- * Single entry point for all Models.fyi data.
+ * Single entry point for all Models.wtf data.
  * Import from here, never from the individual files.
  */
 export type {

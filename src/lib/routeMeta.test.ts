@@ -36,7 +36,7 @@ function nodeOfType(path: string, type: string): Node {
 
 test('covers every route in the sitemap, and nothing extra', () => {
   const sitemap = readFileSync('public/sitemap.xml', 'utf8')
-  const sitemapPaths = [...sitemap.matchAll(/models\.fyi(\/[^<]*)<\/loc>/g)]
+  const sitemapPaths = [...sitemap.matchAll(/models\.wtf(\/[^<]*)<\/loc>/g)]
     .map((m) => (m[1] === '/' ? '/' : m[1].replace(/\/$/, '')))
     .sort()
   expect(routeMeta.map((r) => r.path).sort()).toEqual(sitemapPaths)
@@ -45,7 +45,7 @@ test('covers every route in the sitemap, and nothing extra', () => {
 test('every route has a unique title and a real description', () => {
   const titles = new Set<string>()
   for (const r of routeMeta) {
-    expect(r.title).toMatch(/Models\.fyi/i)
+    expect(r.title).toMatch(/Models\.wtf/i)
     expect(r.description.length).toBeGreaterThan(50)
     expect(titles.has(r.title)).toBe(false)
     titles.add(r.title)
@@ -241,7 +241,7 @@ test('compare lists every model, each linked to its own detail page', () => {
 test('the interactive tools are WebApplications with a name and description', () => {
   for (const path of ['/calculator', '/quiz', '/graph']) {
     const node = nodeOfType(path, 'WebApplication')
-    expect(node.name).toBe(metaFor(path).title.replace(/ \| Models\.fyi$/, ''))
+    expect(node.name).toBe(metaFor(path).title.replace(/ \| Models\.wtf$/, ''))
     expect(node.url).toBe(canonicalUrl(path))
     expect(node.description).toBe(metaFor(path).description)
     expect(node.applicationCategory).toBeDefined()

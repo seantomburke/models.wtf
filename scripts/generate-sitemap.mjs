@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Generate sitemap.xml for all hardcoded routes in the Models.fyi static site.
+ * Generate sitemap.xml for all hardcoded routes in the Models.wtf static site.
  * Runs as part of the build process after prerender.mjs.
  *
  * Routes included:

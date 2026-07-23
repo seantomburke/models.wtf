@@ -83,13 +83,13 @@ const socialHead = ({ path, title, description, type, image }, { canonical = tru
     `<meta name="description" content="${esc(description)}" />`,
     // Feed autodiscovery: readers and browser extensions find the Atom feed
     // (scripts/generate-feed.mjs) from any page, not just /whats-new.
-    `<link rel="alternate" type="application/atom+xml" title="Models.fyi | What&#x27;s new" href="${SITE_URL}/feed.xml" />`,
+    `<link rel="alternate" type="application/atom+xml" title="Models.wtf | What&#x27;s new" href="${SITE_URL}/feed.xml" />`,
     ...(url ? [`<link rel="canonical" href="${url}" />`] : []),
     `<meta property="og:title" content="${esc(title)}" />`,
     `<meta property="og:description" content="${esc(description)}" />`,
     ...(url ? [`<meta property="og:url" content="${url}" />`] : []),
     `<meta property="og:type" content="${type ?? 'website'}" />`,
-    `<meta property="og:site_name" content="Models.fyi" />`,
+    `<meta property="og:site_name" content="Models.wtf" />`,
     ...(image ? [
       `<meta property="og:image" content="${image}" />`,
       `<meta property="og:image:width" content="1200" />`,
