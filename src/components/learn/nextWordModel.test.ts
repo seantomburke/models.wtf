@@ -1,4 +1,13 @@
-import { CORPUS, START, END, bigramCounts, nextWords, parameterCount } from './nextWordModel'
+import {
+  CORPUS,
+  START,
+  END,
+  bigramCounts,
+  nextWords,
+  parameterCount,
+  candidatesAt,
+  rechooseWordAt,
+} from './nextWordModel'
 import { topics } from '../../pages/learn/topics'
 
 test('training is counting: bigram counts match the corpus', () => {
@@ -34,6 +43,27 @@ test('every word in the corpus has a continuation, so generation never dead-ends
   for (const word of vocab) {
     expect(nextWords(word).length).toBeGreaterThan(0)
   }
+})
+
+test('candidatesAt gives sentence openers for the first word and bigram continuations after', () => {
+  const words = ['the', 'cat', 'sat']
+  expect(candidatesAt(words, 0)).toEqual(nextWords(START))
+  expect(candidatesAt(words, 1)).toEqual(nextWords('the'))
+  expect(candidatesAt(words, 2)).toEqual(nextWords('cat'))
+  // Every chosen word appears among its own position's candidates.
+  words.forEach((word, i) => {
+    expect(candidatesAt(words, i).map((c) => c.word)).toContain(word)
+  })
+})
+
+test('rechooseWordAt keeps the prefix, applies the new word, and drops the rest', () => {
+  expect(rechooseWordAt(['the', 'cat', 'sat'], 1, 'dog')).toEqual(['the', 'dog'])
+  expect(rechooseWordAt(['the', 'cat', 'sat'], 0, 'a')).toEqual(['a'])
+  expect(rechooseWordAt(['the', 'cat', 'sat'], 2, 'ate')).toEqual(['the', 'cat', 'ate'])
+})
+
+test('rechooseWordAt with END truncates without appending — the sentence stops there', () => {
+  expect(rechooseWordAt(['the', 'cat', 'sat'], 2, END)).toEqual(['the', 'cat'])
 })
 
 test('the parameter count matches the name Parrot-43 used across the learn content', () => {

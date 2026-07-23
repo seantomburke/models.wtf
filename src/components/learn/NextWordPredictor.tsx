@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CORPUS, START, END, nextWords } from './nextWordModel'
+import { CORPUS, START, END, nextWords, candidatesAt, rechooseWordAt } from './nextWordModel'
 
 /** Matches TokenVisualization's fixed light highlights: readable in both themes. */
 const PREV_STYLE = { backgroundColor: '#FDE68A', color: '#1f2937' }
@@ -46,6 +46,18 @@ export function NextWordPredictor() {
     setDone(false)
   }
 
+  /**
+   * Re-choose the word at `index` from its dropdown. Everything after it is
+   * dropped — those words were predicted from a word that no longer exists —
+   * and prediction picks up from the new choice.
+   */
+  const rechoose = (index: number, word: string) => {
+    if (word === words[index]) return
+    const rebuilt = rechooseWordAt(words, index, word)
+    setWords(rebuilt)
+    setDone(word === END || rebuilt.length >= MAX_WORDS)
+  }
+
   const highlightPrev = done ? null : prev
 
   return (
@@ -88,16 +100,53 @@ export function NextWordPredictor() {
 
       <div className="rounded-lg border border-line bg-surface p-4">
         <h3 className="text-sm font-semibold text-fg">Your sentence so far</h3>
-        <p className="mt-2 min-h-7 text-lg leading-relaxed" data-testid="sentence">
+        <div className="mt-2 flex min-h-10 flex-wrap items-center gap-1.5" data-testid="sentence">
           {words.length === 0 ? (
-            <span className="text-fg-faint">(empty: pick the first word below)</span>
+            <span className="text-lg text-fg-faint">(empty: pick the first word below)</span>
           ) : (
             <>
-              {words.join(' ')}
-              {done ? '.' : <span className="text-fg-faint"> …</span>}
+              {words.map((word, wi) => (
+                <span
+                  key={wi}
+                  className="group relative inline-flex rounded-lg focus-within:outline focus-within:outline-2 focus-within:outline-offset-1 focus-within:outline-accent-deep"
+                >
+                  {/* Visible chip: just the word. The transparent select on top
+                      is the real control; its options carry the percentages. */}
+                  <span
+                    aria-hidden="true"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface-raised py-1 pl-2.5 pr-2 text-lg font-medium text-fg transition-colors duration-150 group-hover:border-line-strong"
+                  >
+                    {word}
+                    <svg width="10" height="6" viewBox="0 0 10 6" className="text-fg-secondary">
+                      <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                    </svg>
+                  </span>
+                  <select
+                    value={word}
+                    onChange={(e) => rechoose(wi, e.target.value)}
+                    aria-label={`word ${wi + 1}: ${word}. Change it to rebuild the sentence from here`}
+                    className="absolute inset-0 h-full w-full cursor-pointer appearance-none opacity-0"
+                  >
+                    {candidatesAt(words, wi).map((c) => (
+                      <option key={c.word} value={c.word}>
+                        {c.word === END
+                          ? `end here . — ${Math.round(c.prob * 100)}%`
+                          : `${c.word} — ${Math.round(c.prob * 100)}%`}
+                      </option>
+                    ))}
+                  </select>
+                </span>
+              ))}
+              <span className="text-lg">{done ? '.' : <span className="text-fg-faint">…</span>}</span>
             </>
           )}
-        </p>
+        </div>
+        {words.length > 0 && (
+          <p className="mt-2 text-sm text-fg-secondary">
+            Each word is a dropdown of everything the model could have picked there, most likely
+            first. Change one and the sentence rebuilds from that point.
+          </p>
+        )}
       </div>
 
       {!done && predictions.length > 0 && (

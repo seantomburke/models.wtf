@@ -81,3 +81,22 @@ export function parameterCount(): number {
   for (const row of COUNTS.values()) n += row.size
   return n
 }
+
+/**
+ * The candidates the model offered at position `index` of `words`:
+ * everything that can follow the word before it (or START for the first
+ * word), most likely first.
+ */
+export function candidatesAt(words: string[], index: number): NextWord[] {
+  return nextWords(index === 0 ? START : words[index - 1])
+}
+
+/**
+ * Re-choose the word at `index`: keep everything before it, apply the new
+ * choice, and drop everything after — later words were predicted from a
+ * word that no longer exists. Choosing END ends the sentence at `index`.
+ */
+export function rechooseWordAt(words: string[], index: number, word: string): string[] {
+  const kept = words.slice(0, index)
+  return word === END ? kept : [...kept, word]
+}
