@@ -40,6 +40,8 @@ export const TOPIC_MOTIFS: Record<string, Motif> = {
   'embedding-models': 'embedding',
   'fine-tuning-models': 'tuning',
   'context-window-strategies': 'context',
+  // The Bayesian lesson ends on next-word prediction, so its card previews it.
+  'bayesian-statistics': 'nextWord',
 
   // The model lab: each card mirrors its own interactive pane.
   'how-do-neural-network-weights-work': 'weights',

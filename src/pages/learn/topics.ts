@@ -454,6 +454,37 @@ const authored: Topic[] = [
     ],
   },
   {
+    slug: 'bayesian-statistics',
+    level: 'advanced',
+    question: 'What is Bayesian statistics?',
+    metaTitle: 'Bayesian statistics explained with an interactive probability tree - Models.fyi',
+    metaDescription:
+      'Bayes\' theorem explained with an interactive probability tree: drag the prior and test accuracy, watch the posterior update, then see how the same math predicts the next word in a sentence.',
+    hook: 'One formula for changing your mind with evidence — and it\'s hiding inside next-word prediction.',
+    sections: [
+      {
+        heading: 'Beliefs as numbers',
+      },
+      {
+        heading: 'The theorem, in one line',
+      },
+      // The two interactive components mount via sectionComponents.ts (see
+      // LearnTopic) so their code stays out of the chunk every route preloads.
+      {
+        heading: 'Walk the tree',
+      },
+      {
+        heading: 'Why the answer feels wrong',
+      },
+      {
+        heading: 'The same math predicts the next word',
+      },
+      {
+        heading: 'From two topics to a trillion parameters',
+      },
+    ],
+  },
+  {
     slug: 'prompt-engineering-basics',
     level: 'intermediate',
     question: 'Prompt engineering basics: how to get better answers',

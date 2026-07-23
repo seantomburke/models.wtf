@@ -5,6 +5,7 @@ import { usePageMeta } from '../../lib/meta.ts'
 import { metaFor } from '../../lib/routeMeta.ts'
 import { topics, levels } from './topics.ts'
 import { topicProse } from './topicProse.ts'
+import { sectionComponents } from './sectionComponents.ts'
 import { Breadcrumb } from '../../components/Breadcrumb.tsx'
 
 const crossLinks = [
@@ -108,21 +109,27 @@ export function LearnTopic() {
         </div>
       )}
 
-      {topic.sections.map((s) => (
-        <section key={s.heading} className="mt-8">
-          <h2 className="text-xl font-semibold tracking-tight">{s.heading}</h2>
-          {(topicProse[`${topic.slug}::${s.heading}`] ?? []).map((p) => (
-            <p key={p.slice(0, 40)} className="mt-3 leading-relaxed text-fg-secondary">
-              {p}
-            </p>
-          ))}
-          {s.component && (
-            <div className="mt-6">
-              <s.component />
-            </div>
-          )}
-        </section>
-      ))}
+      {topic.sections.map((s) => {
+        // Interactive components live either on the section itself (older
+        // topics) or in sectionComponents.ts, which keeps their code out of
+        // the chunk every route preloads.
+        const SectionDemo = s.component ?? sectionComponents[`${topic.slug}::${s.heading}`]
+        return (
+          <section key={s.heading} className="mt-8">
+            <h2 className="text-xl font-semibold tracking-tight">{s.heading}</h2>
+            {(topicProse[`${topic.slug}::${s.heading}`] ?? []).map((p) => (
+              <p key={p.slice(0, 40)} className="mt-3 leading-relaxed text-fg-secondary">
+                {p}
+              </p>
+            ))}
+            {SectionDemo && (
+              <div className="mt-6">
+                <SectionDemo />
+              </div>
+            )}
+          </section>
+        )
+      })}
 
       <div className="mt-10 rounded-xl border border-line bg-accent-soft/60 p-5">
         <h2 className="text-sm font-semibold">Put it to use</h2>

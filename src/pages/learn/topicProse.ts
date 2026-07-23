@@ -392,6 +392,30 @@ export const topicProse: Record<string, string[]> = {
   "how-llms-predict-the-next-word::Where the hallucinations come from": [
       'Parrot-43 also demonstrates the famous LLM failure mode in miniature. Ask it to continue "my" and it says "cat" or "homework". Neither is true. They\'re just the likeliest continuations of its training data. Likely and true are different things. An LLM with billions of parameters blurs that line much more convincingly, but the gap never fully closes. That\'s a hallucination, and now you\'ve watched one get built.',
   ],
+  "bayesian-statistics::Beliefs as numbers": [
+      'Bayesian statistics starts from one idea: a probability is a degree of belief, and evidence should move it. You begin with a prior — what you believed before the new evidence — and end with a posterior — what you believe after. The rule for getting from one to the other is Bayes\' theorem, published in Thomas Bayes\' posthumous 1763 essay and in use ever since, from spam filters to medical screening to language models.',
+      'The classic setup is a medical test. Suppose 1% of people have an illness, the test catches 90% of the people who have it, and it also flags 10% of the people who don\'t. You test positive. How worried should you be? Most people guess "about 90%". The real answer is 1 in 12, and the tree below shows exactly why.',
+  ],
+  "bayesian-statistics::The theorem, in one line": [
+      'Bayes\' theorem says: P(A | B) = P(B | A) · P(A) / P(B). Read it as "the probability of A given that you observed B". For the test: P(sick | positive) = P(positive | sick) · P(sick) / P(positive). Three numbers you know — how accurate the test is, how common the illness is, how often the test comes back positive overall — combine into the one number you want.',
+      'The denominator, P(positive), is the piece people forget. It counts every way a positive can happen: true positives from the sick and false positives from the healthy. When the illness is rare, the healthy group is enormous, and even a small false-positive rate produces a crowd of false alarms that swamps the genuine cases.',
+  ],
+  "bayesian-statistics::Walk the tree": [
+      'The tree makes the formula physical. The first fork splits 1000 people into sick and healthy. The second fork splits each group by test result. Multiply the probabilities along a path and you get the joint probability at the leaf: with the default numbers, 10 people are sick and 9 of them test positive, while 990 are healthy and 99 of them test positive anyway.',
+      'Now Bayes\' theorem is just reading the tree: of the 108 people holding a positive result, 9 are actually sick. 9 / 108 = 1/12 ≈ 8.3%. Drag the prior up and watch the posterior climb — a positive test means much more when the illness is common. Drag the false-positive rate to zero and the posterior snaps to 100%, because a test that never cries wolf is believed absolutely.',
+  ],
+  "bayesian-statistics::Why the answer feels wrong": [
+      'The mistake the 90% guess makes has a name: base-rate neglect. It reads P(sick | positive) and P(positive | sick) as the same number, when the whole point of Bayes\' theorem is that they aren\'t. The test is 90% accurate about sick people; that says nothing by itself about how many positive results are sick people.',
+      'Psychologists Daniel Kahneman and Amos Tversky documented this bias in the 1970s, and Gerd Gigerenzer later showed the fix the tree uses: translate probabilities into natural frequencies — counts of people — and the confusion mostly disappears. "9 real cases out of 108 positives" is hard to misread in a way "90% sensitive" is not.',
+  ],
+  "bayesian-statistics::The same math predicts the next word": [
+      'Language models live on conditional probability too: P(next word | words so far) is the quantity every LLM computes, over and over. The demo below adds the Bayesian twist. Its training data has a hidden variable — is this a weather sentence or a cooking sentence? — and every word you pick is evidence about it.',
+      'Watch the belief bar. "the" opens sentences in both corpora, so it moves nothing. "rain" appears only in weather sentences, so Bayes\' theorem drops the cooking belief to zero, and the next-word prediction sharpens from a 50/50 blend of two topics into one confident voice.',
+  ],
+  "bayesian-statistics::From two topics to a trillion parameters": [
+      'This is the standard probabilistic view of language modeling — the chain rule of probability factors a sentence into next-word conditionals, the framing textbooks like Jurafsky and Martin\'s Speech and Language Processing build on. Our demo\'s two-topic mixture is the same trick at doll-house scale: infer what kind of text you\'re in, then predict accordingly.',
+      'A modern LLM doesn\'t keep an explicit topic variable or apply Bayes\' theorem symbol by symbol. It learns one giant conditional distribution directly from data. But the behavior you just produced by hand — early words acting as evidence that reshapes the probability of later words — is exactly what makes an LLM finish "the rain" differently from "the pan". Condition on evidence, update, predict. That\'s Bayes\' idea, running at a trillion parameters.',
+  ],
   "why-neural-networks-need-more-layers::Meet Doodle-918": [
       'Doodle-918 reads the same 8×8 grid as Doodle-525 and answers the same question. The difference is entirely in the middle. Where Doodle-525 goes pixels → strokes → digits, this one goes pixels → stroke primitives → shapes → digits, and that one extra stop is worth 393 parameters and a jump from 94% confidence on its worst digit to over 99%.',
       'This is the third and last model in our vision lab, and the three of them together are the whole story of depth in about a thousand parameters. Doodle-64 maps pixels straight to an answer. Doodle-525 puts one layer of parts in between. Doodle-918 puts two, and the second one is where the model stops counting and starts seeing.',
