@@ -2,7 +2,7 @@ import { topics, levels } from '../pages/learn/topics.ts'
 import type { Topic } from '../pages/learn/topics.ts'
 import { models } from '../data/models.ts'
 import { providers } from '../data/providers.ts'
-import type { Model } from '../data/types.ts'
+import type { Model, Provider } from '../data/types.ts'
 import { ogImageKey } from './ogImage.ts'
 
 /**
@@ -152,6 +152,13 @@ export const routeMeta: RouteMeta[] = [
     image: ogImageFor(`/models/${m.id}`),
     structuredData: modelSchema(m),
   })),
+  ...providers.map((p) => ({
+    path: `/providers/${p.id}`,
+    title: `${p.name} AI models — lineup, pricing, and releases — Models.fyi`,
+    description: p.blurb,
+    type: 'article' as const,
+    image: ogImageFor(`/providers/${p.id}`),
+  })),
 ]
 
 export function metaFor(path: string): RouteMeta {
@@ -202,6 +209,31 @@ export function modelSchema(model: Model): Record<string, unknown> {
     schema.isAccessibleForFree = true
   }
   return schema
+}
+
+/**
+ * Generate Organization schema for a provider detail page: the lab itself,
+ * with its tracked models attached as an ItemList via subjectOf on the page.
+ * Only facts from the data layer are claimed — no founding dates or locations
+ * we don't record.
+ */
+export function providerSchema(provider: Provider): Record<string, unknown> {
+  const providerModels = models.filter((m) => m.providerId === provider.id)
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: provider.name,
+    url: canonicalUrl(`/providers/${provider.id}`),
+    description: provider.blurb,
+    ...(providerModels.length > 0 && {
+      owns: providerModels.map((m) => ({
+        '@type': 'SoftwareApplication',
+        name: m.name,
+        url: canonicalUrl(`/models/${m.id}`),
+        applicationCategory: 'DeveloperApplication',
+      })),
+    }),
+  }
 }
 
 /**
@@ -561,6 +593,16 @@ const pageSchemas: Record<string, () => Record<string, unknown>> = {
         graph(
           modelSchema(m),
           trail({ name: 'Models', path: '/models' }, { name: m.name, path: `/models/${m.id}` }),
+        ),
+    ]),
+  ),
+  ...Object.fromEntries(
+    providers.map((p) => [
+      `/providers/${p.id}`,
+      () =>
+        graph(
+          providerSchema(p),
+          trail({ name: 'Models', path: '/models' }, { name: p.name, path: `/providers/${p.id}` }),
         ),
     ]),
   ),

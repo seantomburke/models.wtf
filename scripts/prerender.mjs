@@ -50,6 +50,7 @@ function routePreloads(path) {
   const entryKey = entryByExactPath[path]
     ?? (path.startsWith('/learn/') ? 'src/pages/learn/LearnTopic.tsx' : undefined)
     ?? (path.startsWith('/models/') ? 'src/pages/models/ModelDetail.tsx' : undefined)
+    ?? (path.startsWith('/providers/') ? 'src/pages/providers/ProviderDetail.tsx' : undefined)
   if (!entryKey) return ''
 
   const modules = new Set()

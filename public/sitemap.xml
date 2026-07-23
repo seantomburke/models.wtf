@@ -310,4 +310,54 @@
     <lastmod>2026-07-23</lastmod>
     <changefreq>monthly</changefreq>
   </url>
+  <url>
+    <loc>https://seantomburke.github.io/models.fyi/providers/anthropic/</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://seantomburke.github.io/models.fyi/providers/openai/</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://seantomburke.github.io/models.fyi/providers/google/</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://seantomburke.github.io/models.fyi/providers/xai/</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://seantomburke.github.io/models.fyi/providers/meta/</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://seantomburke.github.io/models.fyi/providers/moonshot/</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://seantomburke.github.io/models.fyi/providers/thinking-machines/</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://seantomburke.github.io/models.fyi/providers/deepseek/</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://seantomburke.github.io/models.fyi/providers/alibaba/</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://seantomburke.github.io/models.fyi/providers/zhipu/</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
 </urlset>

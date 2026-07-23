@@ -60,14 +60,21 @@ export function ModelsIndex() {
         <section key={provider.id} aria-labelledby={`provider-${provider.id}`}>
           <h2
             id={`provider-${provider.id}`}
-            className="mb-3 flex items-center gap-2 text-lg font-semibold tracking-tight text-fg"
+            className="mb-3 text-lg font-semibold tracking-tight text-fg"
           >
-            <span
-              aria-hidden="true"
-              className="inline-block h-2.5 w-2.5 shrink-0 rounded-full"
-              style={{ backgroundColor: provider.color }}
-            />
-            {provider.name}
+            {/* The heading links to the provider's own page — lineup table,
+                release history, and a preselected compare link live there. */}
+            <Link
+              to={`/providers/${provider.id}`}
+              className="inline-flex items-center gap-2 hover:text-accent-deep hover:underline"
+            >
+              <span
+                aria-hidden="true"
+                className="inline-block h-2.5 w-2.5 shrink-0 rounded-full"
+                style={{ backgroundColor: provider.color }}
+              />
+              {provider.name}
+            </Link>
           </h2>
           <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {items.map((model) => (

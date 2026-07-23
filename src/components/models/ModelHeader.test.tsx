@@ -1,6 +1,11 @@
-import { render, screen } from '@testing-library/react'
+import { render as renderBare, screen } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
+import type { ReactElement } from 'react'
 import { ModelHeader } from './ModelHeader'
 import { models, providers } from '../../data'
+
+// The header's provider name is a router <Link>, so every render needs a router.
+const render = (ui: ReactElement) => renderBare(<MemoryRouter>{ui}</MemoryRouter>)
 
 describe('ModelHeader component', () => {
   test('renders model name', () => {

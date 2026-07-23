@@ -18,8 +18,13 @@ import { gzipSync } from 'node:zlib'
 const BUDGET_KB = {
   /** Total JS the homepage preloads before it can render. */
   entry: 140,
-  /** The shared chunk holding route metadata, imported by every page. */
-  meta: 60,
+  /**
+   * The shared chunk holding route metadata, imported by every page.
+   * Raised 60 → 64 on 2026-07-23 for the 10 /providers/:id routes (their
+   * titles, blurbs, and schema builders live in routeMeta like the model
+   * pages' do) — measured 60.5 kB after the change.
+   */
+  meta: 64,
 }
 
 const html = 'dist/index.html'

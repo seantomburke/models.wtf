@@ -1,8 +1,13 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render as renderBare, screen } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import userEvent from '@testing-library/user-event'
+import type { ReactElement } from 'react'
 import { ModelCard } from './ModelCard'
 import type { Model } from '../data/types.ts'
+
+// The card's provider name is a router <Link>, so every render needs a router.
+const render = (ui: ReactElement) => renderBare(<MemoryRouter>{ui}</MemoryRouter>)
 
 const mockModel: Model = {
   id: 'test-model',

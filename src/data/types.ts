@@ -23,6 +23,8 @@ export interface Provider {
   /** Brand-ish color used for chart points and badges. */
   color: string
   openSource: boolean
+  /** One-sentence plain-language intro, shown on /providers/:id and in meta descriptions. */
+  blurb: string
 }
 
 export type BenchmarkId =

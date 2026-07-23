@@ -121,6 +121,35 @@ test('every model route carries valid SoftwareApplication JSON-LD', () => {
   }
 })
 
+test('every provider route carries Organization JSON-LD listing its models', () => {
+  for (const p of providers) {
+    const org = nodeOfType(`/providers/${p.id}`, 'Organization')
+    expect(org.name).toBe(p.name)
+    expect(org.url).toBe(canonicalUrl(`/providers/${p.id}`))
+    expect(org.description).toBe(p.blurb)
+    const providerModels = models.filter((m) => m.providerId === p.id)
+    if (providerModels.length > 0) {
+      const owns = org.owns as Array<{ name: string; url: string }>
+      expect(owns.map((o) => o.name)).toEqual(providerModels.map((m) => m.name))
+      expect(owns.map((o) => o.url)).toEqual(
+        providerModels.map((m) => canonicalUrl(`/models/${m.id}`)),
+      )
+    } else {
+      expect(org.owns).toBeUndefined()
+    }
+  }
+})
+
+test('provider pages breadcrumb up through the /models index', () => {
+  for (const p of providers) {
+    const crumbs = nodeOfType(`/providers/${p.id}`, 'BreadcrumbList')
+    const items = crumbs.itemListElement as Array<{ name: string; item: string }>
+    expect(items.map((i) => i.name)).toEqual(['Home', 'Models', p.name])
+    expect(items[1].item).toBe(canonicalUrl('/models'))
+    expect(items[2].item).toBe(canonicalUrl(`/providers/${p.id}`))
+  }
+})
+
 test('model pages breadcrumb up through the /models index', () => {
   for (const m of models) {
     const crumbs = nodeOfType(`/models/${m.id}`, 'BreadcrumbList')

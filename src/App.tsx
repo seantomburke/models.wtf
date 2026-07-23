@@ -23,6 +23,7 @@ const Glossary = createPreloadedRoute(routeLoaders.glossary)
 const WhatsNew = createPreloadedRoute(routeLoaders.whatsNew)
 const ModelsIndex = createPreloadedRoute(routeLoaders.models)
 const ModelDetail = createPreloadedRoute(routeLoaders.modelDetail)
+const ProviderDetail = createPreloadedRoute(routeLoaders.providerDetail)
 const NotFound = createPreloadedRoute(routeLoaders.notFound)
 
 function App() {
@@ -65,6 +66,7 @@ function App() {
         <Route path="whats-new" element={<WhatsNew />} />
         <Route path="models" element={<ModelsIndex />} />
         <Route path="models/:id" element={<ModelDetail />} />
+        <Route path="providers/:id" element={<ProviderDetail />} />
         <Route path="*" element={<NotFound />} />
       </Route>
       </Routes>

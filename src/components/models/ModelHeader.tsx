@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import type { Model, Provider } from '../../data/types'
 import { ProviderLogo } from '../ProviderLogo'
 
@@ -20,7 +21,11 @@ export function ModelHeader({ model, provider }: Props) {
             {model.name}
           </h1>
           {provider && (
-            <p className="text-lg text-fg-muted">{provider.name}</p>
+            <p className="text-lg text-fg-muted">
+              <Link to={`/providers/${provider.id}`} className="hover:text-accent-deep hover:underline">
+                {provider.name}
+              </Link>
+            </p>
           )}
         </div>
         <div className="flex flex-wrap gap-2">

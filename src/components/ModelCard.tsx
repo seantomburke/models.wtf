@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import type { Model } from '../data/types.ts'
 import { formatPrice, formatTokens } from '../lib/format.ts'
 import { benchmarks, providerById } from '../data/index.ts'
@@ -52,7 +53,12 @@ export function ModelCard({
         {provider && (
           <>
             <ProviderLogo providerId={model.providerId} size={12} />
-            <span>{provider.name}</span>
+            <Link
+              to={`/providers/${provider.id}`}
+              className="hover:text-accent-deep hover:underline"
+            >
+              {provider.name}
+            </Link>
           </>
         )}
         <span className="capitalize rounded bg-fg-muted/10 px-2 py-0.5">{model.tier}</span>

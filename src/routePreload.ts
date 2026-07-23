@@ -56,6 +56,9 @@ export const routeLoaders = {
   modelDetail: createRetryableRouteLoader(() =>
     import('./pages/models/ModelDetail.tsx').then((m) => ({ default: m.ModelDetail })),
   ),
+  providerDetail: createRetryableRouteLoader(() =>
+    import('./pages/providers/ProviderDetail.tsx').then((m) => ({ default: m.ProviderDetail })),
+  ),
   notFound: createRetryableRouteLoader(() =>
     import('./pages/NotFound.tsx').then((m) => ({ default: m.NotFound })),
   ),
@@ -83,6 +86,7 @@ export function routeLoaderFor(pathname: string, baseUrl = '/'): RouteLoader | u
   if (path === '/whats-new') return routeLoaders.whatsNew
   if (path === '/models') return routeLoaders.models
   if (path.startsWith('/models/')) return routeLoaders.modelDetail
+  if (path.startsWith('/providers/')) return routeLoaders.providerDetail
   return routeLoaders.notFound
 }
 
