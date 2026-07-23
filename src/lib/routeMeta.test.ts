@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs'
-import { routeMeta, metaFor, canonicalUrl, SITE_URL, provideCorpus } from './routeMeta'
+import { routeMeta, metaFor, canonicalUrl, SITE_URL, provideCorpus, ogImageFor } from './routeMeta'
+import { ogImageKey } from './ogImage'
 import { topics, levels } from '../pages/learn/topics'
 import { models } from '../data/models'
 import { providers } from '../data/providers'
@@ -57,14 +58,28 @@ test('learn topics are all present', () => {
   }
 })
 
-test('every route has an og type and an absolute og:image URL', () => {
+test('every route has an og type and a unique absolute og:image URL', () => {
   // Social crawlers reject relative og:image paths, so these must be absolute.
   expect(SITE_URL).toMatch(/^https:\/\/[^/]/)
   expect(SITE_URL.endsWith('/')).toBe(false)
+  const images = new Set<string>()
   for (const r of routeMeta) {
     expect(r.type).toBeDefined()
-    expect(r.image).toBe(`${SITE_URL}/og-image.png`)
+    // Each route gets its own PNG under /og/, rendered at build time by
+    // scripts/generate-og-images.mjs from the same ogImageKey.
+    expect(r.image).toBe(`${SITE_URL}/og/${ogImageKey(r.path)}.png`)
+    expect(images.has(r.image!)).toBe(false)
+    images.add(r.image!)
   }
+})
+
+test('ogImageKey maps home to "home" and folds slashes to dashes', () => {
+  expect(ogImageKey('/')).toBe('home')
+  expect(ogImageKey('/compare')).toBe('compare')
+  expect(ogImageKey('/models/claude-fable-5')).toBe('models-claude-fable-5')
+  expect(ogImageKey('/learn/what-is-a-token')).toBe('learn-what-is-a-token')
+  expect(ogImageFor('/')).toBe(`${SITE_URL}/og/home.png`)
+  expect(ogImageFor('/models/kimi-k3')).toBe(`${SITE_URL}/og/models-kimi-k3.png`)
 })
 
 test('metaFor throws on unknown paths', () => {

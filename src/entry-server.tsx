@@ -9,6 +9,13 @@ import { releases } from './data/releases.ts'
 
 // Re-exported for scripts/prerender.mjs (which can only import compiled JS).
 export { routeMeta, notFoundMeta, SITE_URL, canonicalUrl } from './lib/routeMeta.ts'
+// scripts/generate-og-images.mjs renders one dist/og/<key>.png per route,
+// keyed by the same function routeMeta uses to build og:image URLs.
+export { ogImageKey } from './lib/ogImage.ts'
+export { models } from './data/models.ts'
+export { providers } from './data/providers.ts'
+export { topics } from './pages/learn/topics.ts'
+export { formatTokens, formatPrice } from './lib/format.ts'
 // The prerender guard asserts every FAQ answer reaches /faq's <main>.
 export { faqs } from './data/faqs.ts'
 // scripts/generate-feed.mjs builds the Atom feed from the release log.

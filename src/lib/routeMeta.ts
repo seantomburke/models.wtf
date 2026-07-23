@@ -3,6 +3,7 @@ import type { Topic } from '../pages/learn/topics.ts'
 import { models } from '../data/models.ts'
 import { providers } from '../data/providers.ts'
 import type { Model } from '../data/types.ts'
+import { ogImageKey } from './ogImage.ts'
 
 /**
  * Canonical SEO metadata for every prerenderable route.
@@ -38,7 +39,14 @@ export function canonicalUrl(path: string): string {
   return path === '/' ? `${SITE_URL}/` : `${SITE_URL}${path}/`
 }
 
-const ogImage = `${SITE_URL}/og-image.png`
+/**
+ * Per-route OpenGraph image URL. scripts/generate-og-images.mjs renders the
+ * matching dist/og/<key>.png at build time and fails the build if any route's
+ * image is missing, so this URL is always backed by a real file.
+ */
+export function ogImageFor(path: string): string {
+  return `${SITE_URL}/og/${ogImageKey(path)}.png`
+}
 
 export const routeMeta: RouteMeta[] = [
   {
@@ -47,7 +55,7 @@ export const routeMeta: RouteMeta[] = [
     description:
       'Compare flagship AI models from OpenAI, Anthropic, Google, and xAI across benchmarks, cost, and capability. Plain language, no PhD required.',
     type: 'website',
-    image: ogImage,
+    image: ogImageFor('/'),
   },
   {
     path: '/compare',
@@ -55,7 +63,7 @@ export const routeMeta: RouteMeta[] = [
     description:
       'Every flagship AI model side by side: benchmark scores, prices, and context windows from OpenAI, Anthropic, Google, and xAI, in plain language.',
     type: 'website',
-    image: ogImage,
+    image: ogImageFor('/compare'),
   },
   {
     path: '/graph',
@@ -63,7 +71,7 @@ export const routeMeta: RouteMeta[] = [
     description:
       'Plot AI model performance against price on axes you choose. Compare GPT, Claude, Gemini, Grok, and open-source models visually.',
     type: 'website',
-    image: ogImage,
+    image: ogImageFor('/graph'),
   },
   {
     path: '/calculator',
@@ -71,7 +79,7 @@ export const routeMeta: RouteMeta[] = [
     description:
       'Compare what AI models charge per million tokens, then paste your own text to price input, output, and thinking tokens across GPT, Claude, and Gemini.',
     type: 'website',
-    image: ogImage,
+    image: ogImageFor('/calculator'),
   },
   {
     path: '/quiz',
@@ -79,7 +87,7 @@ export const routeMeta: RouteMeta[] = [
     description:
       'Answer a few plain-language questions: who you are, what you want to do, and your budget, and get an AI model recommendation with the reasoning spelled out.',
     type: 'website',
-    image: ogImage,
+    image: ogImageFor('/quiz'),
   },
   {
     path: '/search',
@@ -87,7 +95,7 @@ export const routeMeta: RouteMeta[] = [
     description:
       'Search and find AI models by name, provider, or capability. Quickly locate the model you\'re looking for from our comprehensive database.',
     type: 'website',
-    image: ogImage,
+    image: ogImageFor('/search'),
   },
   {
     path: '/learn',
@@ -95,7 +103,7 @@ export const routeMeta: RouteMeta[] = [
     description:
       'A plain-language learning path for AI models: basics, intermediate, and advanced explainers, plus a lab of tiny models you can train in your browser.',
     type: 'website',
-    image: ogImage,
+    image: ogImageFor('/learn'),
   },
   {
     path: '/faq',
@@ -103,7 +111,7 @@ export const routeMeta: RouteMeta[] = [
     description:
       'Frequently asked questions about AI models, benchmarks, pricing, and model selection. Get answers to common questions in plain language.',
     type: 'website',
-    image: ogImage,
+    image: ogImageFor('/faq'),
   },
   {
     path: '/glossary',
@@ -111,7 +119,7 @@ export const routeMeta: RouteMeta[] = [
     description:
       'AI and model terminology explained in plain language. Search for terms like LLM, token, context window, hallucination, and more.',
     type: 'website',
-    image: ogImage,
+    image: ogImageFor('/glossary'),
   },
   {
     path: '/whats-new',
@@ -119,7 +127,7 @@ export const routeMeta: RouteMeta[] = [
     description:
       'The latest AI model releases, updates, and announcements from OpenAI, Anthropic, Google, xAI, and the open-source community, in one chronological feed.',
     type: 'website',
-    image: ogImage,
+    image: ogImageFor('/whats-new'),
   },
   {
     path: '/models',
@@ -127,21 +135,21 @@ export const routeMeta: RouteMeta[] = [
     description:
       'Browse every AI model we track, grouped by provider. One page each with benchmark scores, prices, context window, and who the model actually suits.',
     type: 'website',
-    image: ogImage,
+    image: ogImageFor('/models'),
   },
   ...topics.map((t) => ({
     path: `/learn/${t.slug}`,
     title: t.metaTitle,
     description: t.metaDescription,
     type: 'article' as const,
-    image: ogImage,
+    image: ogImageFor(`/learn/${t.slug}`),
   })),
   ...models.map((m) => ({
     path: `/models/${m.id}`,
     title: `${m.name} — benchmarks, pricing, and specs — Models.fyi`,
     description: m.blurb,
     type: 'article' as const,
-    image: ogImage,
+    image: ogImageFor(`/models/${m.id}`),
     structuredData: modelSchema(m),
   })),
 ]
