@@ -115,6 +115,12 @@ export const glossaryTerms: GlossaryTerm[] = [
     long: 'GPQA Diamond is a set of hard science questions written by PhDs (in chemistry, biology, physics, etc). The key: you can\'t just Google the answer. You have to reason through the science. It tests whether an AI model can think like a scientist. Looking things up is no help here.',
   },
   {
+    id: 'evals',
+    term: 'Evals',
+    short: 'Tests that measure how well an AI model or AI product performs.',
+    long: 'Evals (short for "evaluations") are how you check whether an AI model is actually good. An eval is a test suite: a set of questions or tasks with a way to score the answers. Public benchmarks like SWE-bench and GPQA Diamond are evals anyone can run, and teams also write private evals for their own products, like "does our support bot answer these 200 real customer questions correctly?" Running evals before and after changes is how you know if model quality went up or down.',
+  },
+  {
     id: 'prompt-engineering',
     term: 'Prompt Engineering',
     short: 'Writing questions for AI models in clever ways to get better answers.',
