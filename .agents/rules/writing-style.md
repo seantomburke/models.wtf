@@ -12,7 +12,7 @@ Canonical rules for all user-facing copy on models.fyi. The site explains comple
 
 ## Hard bans
 
-1. **No em dashes or en dashes, anywhere in the repo.** This covers prose, UI strings, page titles, code comments, commit messages, and docs. Split the thought into sentences, or use a comma, colon, or parentheses. Guard: `src/lib/copy-style.test.ts`.
+1. **No em dashes or en dashes, anywhere in the repo.** This covers prose, UI strings, page titles, code comments, commit messages, and docs. Split the thought into sentences, or use a comma, colon, or parentheses. Guard: `src/lib/copy-style.test.ts`. One exemption: a standalone em dash used as an empty-cell placeholder glyph (the dash alone in a string literal or JSX cell) is data display and stays. When sweeping dashes, edit each occurrence with judgment; a blind regex substitution once produced an unbalanced paren mid-comment. Verify with `git grep` plus the guard test, and remember curly quotes around a glyph defeat the exemption regex (use straight quotes).
 2. **No "X, not Y" contrast framing.** Never define something by negating its opposite in the same sentence ("it learns patterns, not examples"). State the intended claim directly ("it learns patterns"). If the contrast carries essential meaning, put the negation in its own sentence. Guard: `src/lib/copy-style.test.ts` (allowlist for the rare necessary case).
 3. No filler intensifiers ("really", "actually", "genuinely", "truly") when they add no meaning.
 4. No rhetorical questions that merely introduce the next sentence.
@@ -28,10 +28,12 @@ Canonical rules for all user-facing copy on models.fyi. The site explains comple
 
 - Render equations with the `MathBlock` component (`src/components/MathBlock.tsx`), which lazy-loads KaTeX. Write the formula in LaTeX.
 - Do not build equations out of unicode subscripts and symbols in prose strings. A plain-text fallback belongs inside MathBlock, where it renders until KaTeX loads and serves prerendered HTML.
+- Register the equation via `src/pages/learn/sectionComponents.ts` (wrap it in a tiny component like `WeightedSumEquation`) so katex hangs off the LearnTopic chunk. `check-bundle-budget.mjs` fails the build if katex reaches the homepage preloads.
+- Testing MathBlock in jsdom: once the KaTeX stylesheet loads, jsdom's `getComputedStyle` chokes on it and every Testing Library role query throws. Assert `[role="math"]` and classes with `container.querySelector`. KaTeX renders bad LaTeX as `.katex-error` (with `throwOnError: false`), so an error-path test must select that class; `.katex` alone never appears and the waitFor times out.
 
 ## Page titles
 
-- Title separator is a pipe: `Compare AI models | Models.fyi`.
+- Title separator is a pipe: `Compare AI models | Models.fyi`. Changing the separator has three sync points beyond routeMeta: the JSON-LD name-strip regexes in `routeMeta.ts`, the OG title-strip regex in `scripts/generate-og-images.mjs`, and the feed titles (`src/lib/feed.ts` plus the autodiscovery title in `scripts/prerender.mjs`).
 - Preserve SEO length constraints when rewriting titles or meta descriptions.
 
 ## Preserve when rewriting

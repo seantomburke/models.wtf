@@ -4,8 +4,9 @@ Extends the root `AGENTS.md` and `src/AGENTS.md`. The Learn section teaches AI c
 
 ## Content rules
 
-- Prefer interactive visuals, diagrams, and animations over paragraph blocks. Three consecutive paragraphs without a visual is a smell; build a component instead.
-- Math renders through `MathBlock` (`src/components/MathBlock.tsx`) with LaTeX. No unicode-art equations in prose strings.
+- Prefer interactive visuals, diagrams, and animations over paragraph blocks. Three consecutive paragraphs without a visual is a smell; build a component instead. The 2026-07-23 visuals audit filed issues #110-#124 (label `learn-visuals`) for the topics that violate this; work them down before adding more prose-only topics.
+- Math renders through `MathBlock` (`src/components/MathBlock.tsx`) with LaTeX. No unicode-art equations in prose strings. Reference implementation: `WeightedSumEquation` registered in `sectionComponents.ts` for the weights topic.
+- Section headings are shared keys: `topicProse.ts` and `sectionComponents.ts` both key on `<slug>::<heading>` from `topics.ts`. Renaming a heading means updating all keyed files in the same change or the prose and demo silently vanish (a Learn.test guard catches missing prose).
 - Long prose lives in `topicProse.ts`, which loads lazily. Never import it top-level into `topics.ts`; that ships it on every route (see `.agents/rules/performance-budget.md`).
 
 ## Lab models

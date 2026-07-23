@@ -16,7 +16,7 @@ The canonical style rules live in `.agents/rules/writing-style.md`. Read that fi
 
 ## Preserve
 
-- Factual accuracy, caveats, meaning, and implications.
+- Factual accuracy, caveats, meaning, and implications. Removing a "X, not Y" frame is the easiest place to accidentally assert a NEW fact: restate the original claim, never substitute a different one. If the original claim looks factually wrong, flag it instead of silently "fixing" it in the rewrite.
 - Dynamic template values such as `${variableName}` and `${percent}%` exactly as written.
 - SEO length constraints. Preserve the original length or ask before changing it materially.
 - Existing structured-data shapes and field names.

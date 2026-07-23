@@ -29,3 +29,4 @@ npm run build          # Prerender guard, bundle budget, OG drift, link check
 
 - Session reports, audits, and plans never land in the repo root. Put them in `docs/archive/` if they must be kept at all.
 - Parallel workers sharing a worktree cross-commit each other's files. Verify `git commit --stat` against what each worker reports done.
+- For repo-wide mechanical sweeps (like the 2026-07-23 dash removal), split workers by disjoint path sets (one owns `src/components`, another owns `src/lib` + `src/pages`), have each run tsc and the full test suite before reporting, and keep committing in one lane. This kept a 90-file sweep conflict-free.
