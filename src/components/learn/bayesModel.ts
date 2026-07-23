@@ -85,7 +85,12 @@ export const DEFAULT_FALSE_POSITIVE_RATE = 0.1
 /**
  * Two tiny corpora, one per hidden topic. Same starter words on purpose:
  * "the rain…" and "the pan…" only separate the topics once the second word
- * lands, which is exactly the update the demo wants to show.
+ * lands, which is exactly the update the demo wants to show. "hot" and
+ * "cold" appear in BOTH topics on purpose too: "a cold…" or "a hot…" is
+ * ambiguous evidence, and only the word after it (wind vs soup) resolves
+ * the topic: a second, softer version of the same Bayesian update.
+ * Both topics open 5 sentences with "the" and 3 with "a", so the first
+ * word alone never moves the posterior.
  */
 export const TOPIC_CORPORA: Record<string, string[]> = {
   weather: [
@@ -94,6 +99,9 @@ export const TOPIC_CORPORA: Record<string, string[]> = {
     'the wind blew over the hills',
     'the storm blew in fast',
     'a cold wind blew in',
+    'a cold wind blew all night',
+    'a hot wind blew all night',
+    'the hot sun baked the hills',
   ],
   cooking: [
     'the pan sat on the stove',
@@ -101,6 +109,9 @@ export const TOPIC_CORPORA: Record<string, string[]> = {
     'the bread baked all night',
     'a hot pan sat waiting',
     'the soup boiled over fast',
+    'a cold soup in the morning',
+    'a hot soup in the morning',
+    'the cold bread sat on the stove',
   ],
 }
 

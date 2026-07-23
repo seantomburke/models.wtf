@@ -69,13 +69,14 @@ test('an impossible positive (evidence 0) reports 0 instead of NaN', () => {
 // ---------------------------------------------------------------------------
 
 test('per-topic bigram probabilities come straight from corpus counts', () => {
-  // Weather sentences starting with "the": 4 of 5, so P(the | start) = 4/5.
-  expect(topicNextProbs('weather', SEQ_START).get('the')).toBeCloseTo(4 / 5, 12)
-  expect(topicNextProbs('weather', SEQ_START).get('a')).toBeCloseTo(1 / 5, 12)
+  // Weather sentences starting with "the": 5 of 8, so P(the | start) = 5/8.
+  expect(topicNextProbs('weather', SEQ_START).get('the')).toBeCloseTo(5 / 8, 12)
+  expect(topicNextProbs('weather', SEQ_START).get('a')).toBeCloseTo(3 / 8, 12)
   // In the weather corpus, "the" is followed by: rain 2, wind 1, storm 1,
-  // hills 2; six continuations in all.
-  expect(topicNextProbs('weather', 'the').get('rain')).toBeCloseTo(2 / 6, 12)
-  expect(topicNextProbs('weather', 'the').get('storm')).toBeCloseTo(1 / 6, 12)
+  // hills 3, hot 1; eight continuations in all.
+  expect(topicNextProbs('weather', 'the').get('rain')).toBeCloseTo(2 / 8, 12)
+  expect(topicNextProbs('weather', 'the').get('storm')).toBeCloseTo(1 / 8, 12)
+  expect(topicNextProbs('weather', 'the').get('hills')).toBeCloseTo(3 / 8, 12)
   // The cooking corpus never mentions rain.
   expect(topicNextProbs('cooking', 'the').get('rain')).toBeUndefined()
 })
@@ -95,9 +96,12 @@ test('each topic\'s next-word distribution sums to 1', () => {
 test('the topic posterior starts uniform and stays uniform on topic-neutral words', () => {
   const start = topicPosteriors([])
   for (const { posterior } of start) expect(posterior).toBeCloseTo(1 / 2, 12)
-  // "the" opens 4 of 5 sentences in both corpora, so it carries no evidence.
+  // "the" opens 5 of 8 sentences in both corpora, so it carries no evidence,
+  // and neither does "a", which opens the other 3 in each.
   const afterThe = topicPosteriors(['the'])
   for (const { posterior } of afterThe) expect(posterior).toBeCloseTo(1 / 2, 12)
+  const afterA = topicPosteriors(['a'])
+  for (const { posterior } of afterA) expect(posterior).toBeCloseTo(1 / 2, 12)
 })
 
 test('a topic-specific word updates the posterior exactly as Bayes\' theorem says', () => {
@@ -109,7 +113,7 @@ test('a topic-specific word updates the posterior exactly as Bayes\' theorem say
 })
 
 test('posteriors are a probability distribution after every prefix', () => {
-  for (const prefix of [[], ['the'], ['a'], ['the', 'soup'], ['the', 'soup', 'boiled']]) {
+  for (const prefix of [[], ['the'], ['a'], ['the', 'soup'], ['the', 'soup', 'boiled'], ['a', 'cold'], ['a', 'hot', 'soup']]) {
     const posts = topicPosteriors(prefix)
     const total = posts.reduce((sum, p) => sum + p.posterior, 0)
     expect(total).toBeCloseTo(1, 12)
@@ -118,17 +122,18 @@ test('posteriors are a probability distribution after every prefix', () => {
 
 test('the mixture prediction is the posterior-weighted sum of per-topic bigrams', () => {
   // At the start both topics are equally likely, so
-  // P(the) = 1/2 · 4/5 + 1/2 · 4/5 = 4/5.
+  // P(the) = 1/2 · 5/8 + 1/2 · 5/8 = 5/8.
   const start = mixtureNextWords([])
-  expect(start.find((p) => p.word === 'the')?.prob).toBeCloseTo(4 / 5, 12)
-  expect(start.find((p) => p.word === 'a')?.prob).toBeCloseTo(1 / 5, 12)
+  expect(start.find((p) => p.word === 'the')?.prob).toBeCloseTo(5 / 8, 12)
+  expect(start.find((p) => p.word === 'a')?.prob).toBeCloseTo(3 / 8, 12)
 
   // After "the" (posterior still uniform):
-  // P(rain | the) = 1/2 · 2/6 + 1/2 · 0 = 1/6.
+  // P(rain | the) = 1/2 · 2/8 + 1/2 · 0 = 1/8.
   const afterThe = mixtureNextWords(['the'])
-  expect(afterThe.find((p) => p.word === 'rain')?.prob).toBeCloseTo(1 / 6, 12)
-  // P(soup | the) = 1/2 · 0 + 1/2 · 2/6 = 1/6.
-  expect(afterThe.find((p) => p.word === 'soup')?.prob).toBeCloseTo(1 / 6, 12)
+  expect(afterThe.find((p) => p.word === 'rain')?.prob).toBeCloseTo(1 / 8, 12)
+  // Cooking's "the" row has 10 continuations (soup appears twice), so
+  // P(soup | the) = 1/2 · 0 + 1/2 · 2/10 = 1/10.
+  expect(afterThe.find((p) => p.word === 'soup')?.prob).toBeCloseTo(1 / 10, 12)
 
   // After "the rain" the weather posterior is 1, so the mixture equals the
   // weather bigram exactly: "rain" is always followed by "fell".
@@ -139,7 +144,7 @@ test('the mixture prediction is the posterior-weighted sum of per-topic bigrams'
 })
 
 test('mixture probabilities sum to 1 after every reachable prefix', () => {
-  for (const prefix of [[], ['the'], ['the', 'rain'], ['the', 'soup'], ['a']]) {
+  for (const prefix of [[], ['the'], ['the', 'rain'], ['the', 'soup'], ['a'], ['a', 'cold'], ['a', 'hot']]) {
     const preds = mixtureNextWords(prefix)
     const total = preds.reduce((sum, p) => sum + p.prob, 0)
     expect(total).toBeCloseTo(1, 12)
@@ -158,9 +163,42 @@ test('sharper posteriors mean sharper predictions: the Bayesian payoff', () => {
 })
 
 test('the two corpora stay in the shape the lesson describes', () => {
-  // The prose sells specific numbers (5 sentences per topic, shared openers);
+  // The prose sells specific numbers (8 sentences per topic, shared openers);
   // guard them so a corpus edit can't silently break the worked examples.
-  expect(TOPIC_CORPORA.weather).toHaveLength(5)
-  expect(TOPIC_CORPORA.cooking).toHaveLength(5)
+  expect(TOPIC_CORPORA.weather).toHaveLength(8)
+  expect(TOPIC_CORPORA.cooking).toHaveLength(8)
   expect(TOPICS).toEqual(['weather', 'cooking'])
+  // Both topics open the same number of sentences with "the" and with "a",
+  // so the first word alone never tips the posterior.
+  for (const opener of ['the', 'a']) {
+    const counts = TOPICS.map(
+      (t) => TOPIC_CORPORA[t].filter((s) => s.startsWith(`${opener} `)).length,
+    )
+    expect(new Set(counts).size).toBe(1)
+  }
+  // "hot" and "cold" appear in BOTH corpora; that ambiguity is the point.
+  for (const word of ['hot', 'cold']) {
+    for (const topic of TOPICS) {
+      expect(TOPIC_CORPORA[topic].some((s) => s.split(' ').includes(word))).toBe(true)
+    }
+  }
+})
+
+test('"hot" and "cold" are ambiguous evidence that the NEXT word resolves', () => {
+  // "a cold" leans weather (weather has 2 of the 3 "a cold…" sentences) and
+  // "a hot" leans cooking, but neither decides anything: both topics keep
+  // nonzero posterior mass.
+  for (const prefix of [['a', 'cold'], ['a', 'hot']]) {
+    const posts = topicPosteriors(prefix)
+    for (const { posterior } of posts) {
+      expect(posterior).toBeGreaterThan(0)
+      expect(posterior).toBeLessThan(1)
+    }
+  }
+  // The word after "cold" is what settles it: "wind" is weather-only,
+  // "soup" is cooking-only.
+  const wind = topicPosteriors(['a', 'cold', 'wind'])
+  expect(wind.find((p) => p.topic === 'weather')?.posterior).toBeCloseTo(1, 12)
+  const soup = topicPosteriors(['a', 'cold', 'soup'])
+  expect(soup.find((p) => p.topic === 'cooking')?.posterior).toBeCloseTo(1, 12)
 })

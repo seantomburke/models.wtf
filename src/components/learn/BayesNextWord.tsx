@@ -26,7 +26,7 @@ export function BayesNextWord() {
       <div className="rounded-lg border border-line bg-bg-secondary p-6">
         <h3 className="text-lg font-semibold">Build a sentence, watch the belief update</h3>
         <p className="mt-2 text-sm text-fg-secondary">
-          This model learned from ten sentences (five about weather, five about cooking) but
+          This model learned from sixteen sentences (eight about weather, eight about cooking) but
           it doesn't know which kind of sentence you're writing. Every word you pick is
           evidence. Bayes' theorem turns that evidence into an updated belief about the topic,
           and the belief sharpens the next-word prediction.
@@ -107,7 +107,9 @@ export function BayesNextWord() {
           Each prediction is the two topics' word probabilities, weighted by the current belief:
           P(word) = P(word | weather) · P(weather | context) + P(word | cooking) · P(cooking | context).
           Pick "rain" and the cooking belief drops to zero (no cooking sentence ever contained it),
-          so the model commits, and its next predictions get sharper.
+          so the model commits, and its next predictions get sharper. Some words are softer
+          evidence: "hot" and "cold" appear in both kinds of sentences, so they only nudge the
+          belief, and the word after them ("wind" vs "soup") settles it.
         </p>
       </div>
     </div>
