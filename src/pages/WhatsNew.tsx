@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { usePageMeta } from '../lib/meta.ts'
 import { metaFor, provideCorpus } from '../lib/routeMeta.ts'
 import { releases, models, providerById, type ReleaseType } from '../data/index.ts'
@@ -63,7 +64,8 @@ export function WhatsNew() {
   })
 
   const sortedReleases = useMemo(() => {
-    return releases.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    // Copy before sorting — sort() in place would mutate the shared module array.
+    return [...releases].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   }, [])
 
   const filtered = useMemo(() => {
@@ -144,10 +146,13 @@ export function WhatsNew() {
                         {releaseTypeLabels[release.type]}
                       </span>
                       {model && provider && (
-                        <div className="flex items-center gap-1.5">
+                        <Link
+                          to={`/models/${model.id}`}
+                          className="flex items-center gap-1.5 text-fg-muted hover:text-accent-deep transition-colors duration-150"
+                        >
                           <ProviderLogo providerId={model.providerId} size={14} />
-                          <span className="text-xs font-medium text-fg-muted">{model.name}</span>
-                        </div>
+                          <span className="text-xs font-medium">{model.name}</span>
+                        </Link>
                       )}
                     </div>
                     <h2 className="mt-2 text-lg font-semibold text-fg">{release.title}</h2>

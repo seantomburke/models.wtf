@@ -57,6 +57,12 @@ describe('WhatsNew', () => {
     expect(screen.getByText('Claude Fable 5')).toBeInTheDocument()
   })
 
+  it('links model chips to their model pages', () => {
+    renderWithRouter(<WhatsNew />)
+    const chip = screen.getByRole('link', { name: /Claude Fable 5/ })
+    expect(chip).toHaveAttribute('href', '/models/claude-fable-5')
+  })
+
   it('displays relative dates', () => {
     renderWithRouter(<WhatsNew />)
     const dateElements = screen.getAllByText(/ago|Today|Yesterday/)

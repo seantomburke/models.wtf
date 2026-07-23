@@ -10,6 +10,7 @@ import { ModelSpecs } from '../../components/models/ModelSpecs'
 import { ModelBenchmarks } from '../../components/models/ModelBenchmarks'
 import { UseCasesSection } from '../../components/models/UseCasesSection'
 import { ProsCons } from '../../components/models/ProsCons'
+import { ModelReleaseHistory } from '../../components/models/ModelReleaseHistory'
 import { RelatedModels } from '../../components/models/RelatedModels'
 import { Breadcrumb } from '../../components/Breadcrumb'
 import { NotFound } from '../NotFound'
@@ -92,6 +93,8 @@ function ModelDetailContent({ model }: { model: Model }) {
         {model.prosVsCompetitors && Object.keys(model.prosVsCompetitors).length > 0 && (
           <ProsCons prosVsCompetitors={model.prosVsCompetitors} />
         )}
+
+        <ModelReleaseHistory modelId={model.id} />
 
         <RelatedModels currentModelId={model.id} />
 
