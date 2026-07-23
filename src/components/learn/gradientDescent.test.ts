@@ -1,10 +1,12 @@
 import { describe, it, expect } from 'vitest'
 import {
   EPOCHS,
+  GRID_SIZE,
   PIXEL_COUNT,
   TRAINING_RUN,
   TRAINING_SAMPLES_PER_CLASS,
   TRAINING_SET,
+  buildTrainingSet,
   makeRandom,
   classifyWithLearnedWeights,
   predictWith,
@@ -43,6 +45,69 @@ describe('training set', () => {
     }
     const threes = TRAINING_SET.filter((ex) => ex.target === 1).length
     expect(threes).toBe(TRAINING_SET.length - threes)
+  })
+
+  it('is deterministic for a seed and different across seeds', () => {
+    expect(buildTrainingSet(123)).toEqual(buildTrainingSet(123))
+    const a = buildTrainingSet(123).map((ex) => ex.pixels)
+    const b = buildTrainingSet(456).map((ex) => ex.pixels)
+    expect(a).not.toEqual(b)
+  })
+
+  it('draws connected strokes with no isolated noise pixels', () => {
+    const neighbours = (pixels: boolean[], index: number) => {
+      const row = Math.floor(index / GRID_SIZE)
+      const col = index % GRID_SIZE
+      let count = 0
+      for (let dr = -1; dr <= 1; dr++) {
+        for (let dc = -1; dc <= 1; dc++) {
+          if (dr === 0 && dc === 0) continue
+          const r = row + dr
+          const c = col + dc
+          if (r >= 0 && r < GRID_SIZE && c >= 0 && c < GRID_SIZE && pixels[r * GRID_SIZE + c]) count++
+        }
+      }
+      return count
+    }
+    for (const ex of TRAINING_SET) {
+      for (let i = 0; i < PIXEL_COUNT; i++) {
+        if (ex.pixels[i]) expect(neighbours(ex.pixels, i)).toBeGreaterThan(0)
+      }
+    }
+  })
+
+  it('gives every glyph the telltale spine of its own letter', () => {
+    // An E's leftmost inked column is a solid vertical stroke; a 3's is not —
+    // its left side is just the bar tips. That structural difference is what
+    // makes the drawings read as letters rather than noise.
+    const columnRuns = (pixels: boolean[], col: number) => {
+      const rows: number[] = []
+      for (let row = 0; row < GRID_SIZE; row++) {
+        if (pixels[row * GRID_SIZE + col]) rows.push(row)
+      }
+      return rows
+    }
+    for (const ex of TRAINING_SET) {
+      let leftCol = 0
+      while (leftCol < GRID_SIZE && columnRuns(ex.pixels, leftCol).length === 0) leftCol++
+      const rows = columnRuns(ex.pixels, leftCol)
+      const solid = rows.length === rows[rows.length - 1] - rows[0] + 1 && rows.length >= 6
+      if (ex.target === 0) {
+        expect(solid).toBe(true)
+      } else {
+        expect(rows.length).toBeLessThanOrEqual(4)
+      }
+    }
+  })
+
+  it('varies enough that the model has something to learn', () => {
+    const unique = new Set(TRAINING_SET.map((ex) => ex.pixels.map((p) => (p ? 1 : 0)).join('')))
+    expect(unique.size).toBeGreaterThan(TRAINING_SET.length * 0.8)
+    // Drawings move around the grid: not every sample lights the same columns.
+    const firstInk = (ex: { pixels: boolean[] }) =>
+      Math.min(...ex.pixels.map((p, i) => (p ? i % GRID_SIZE : GRID_SIZE)))
+    const leftEdges = new Set(TRAINING_SET.map(firstInk))
+    expect(leftEdges.size).toBeGreaterThan(1)
   })
 })
 

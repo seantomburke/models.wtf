@@ -55,31 +55,113 @@ export interface TrainingExample {
   target: number
 }
 
-function withNoise(base: boolean[], rand: () => number, flips: number): boolean[] {
-  const pixels = base.slice()
-  for (let n = 0; n < flips; n++) {
-    const i = Math.floor(rand() * PIXEL_COUNT)
-    pixels[i] = !pixels[i]
+/** Pick a whole number from lo to hi inclusive. */
+function randInt(rand: () => number, lo: number, hi: number): number {
+  return lo + Math.floor(rand() * (hi - lo + 1))
+}
+
+/**
+ * The per-drawing "handwriting" choices. Every sample rolls its own copy, so
+ * variation comes from how the strokes are drawn — where the glyph sits, how
+ * wide it is, how thick the pen was — never from sprinkling random pixels.
+ */
+interface GlyphStyle {
+  /** Rows for the top, middle, and bottom bars. */
+  topRow: number
+  midRow: number
+  bottomRow: number
+  /** Leftmost and rightmost columns the glyph spans. */
+  left: number
+  right: number
+  /** True for a chunkier two-pixel pen on the vertical stroke. */
+  thick: boolean
+  /** For the 3: pull the connector in a column on some rows, like a curve. */
+  curved: boolean
+}
+
+function rollStyle(rand: () => number): GlyphStyle {
+  // Scale first: how wide is the glyph? Then slide it left or right.
+  const width = randInt(rand, 4, 6)
+  const left = randInt(rand, 0, GRID_SIZE - 1 - width)
+  // Vertical placement: the three bars can squeeze up or stretch down.
+  const topRow = randInt(rand, 0, 1)
+  const bottomRow = randInt(rand, 6, 7)
+  const midRow = randInt(rand, topRow + 2, bottomRow - 2)
+  return {
+    topRow,
+    midRow,
+    bottomRow,
+    left,
+    right: left + width,
+    thick: rand() < 0.4,
+    curved: rand() < 0.5,
   }
+}
+
+function drawBar(pixels: boolean[], row: number, from: number, to: number): void {
+  for (let col = from; col <= to; col++) pixels[row * GRID_SIZE + col] = true
+}
+
+function drawColumn(pixels: boolean[], col: number, from: number, to: number): void {
+  for (let row = from; row <= to; row++) pixels[row * GRID_SIZE + col] = true
+}
+
+/**
+ * A hand-drawn 3: three horizontal bars joined down the right-hand side.
+ * A curved style pulls the connector one column in between the bars, the way
+ * a rounded 3 bows outward; a straight style keeps a flat right edge.
+ */
+function drawThree(style: GlyphStyle): boolean[] {
+  const pixels = Array<boolean>(PIXEL_COUNT).fill(false)
+  const { topRow, midRow, bottomRow, left, right, thick, curved } = style
+  // The bars stop one short of the spine column so the curve reads as a curve.
+  const barLeft = left + (curved ? 1 : 0)
+  drawBar(pixels, topRow, left, right - 1)
+  drawBar(pixels, midRow, barLeft, right - 1)
+  drawBar(pixels, bottomRow, left, right - 1)
+  // Right-side connectors between the bars.
+  drawColumn(pixels, right, topRow, midRow)
+  drawColumn(pixels, right, midRow, bottomRow)
+  if (curved) {
+    // Round the corners: the bar tips meet the spine a row early.
+    pixels[(topRow + 1) * GRID_SIZE + right - 1] = true
+    pixels[(bottomRow - 1) * GRID_SIZE + right - 1] = true
+  }
+  if (thick) drawColumn(pixels, right - 1, midRow, bottomRow)
   return pixels
 }
 
 /**
- * The training set: the two clean reference shapes plus smudged variants, so
- * the model has to learn a general rule instead of memorizing two images.
+ * A hand-drawn E: a left spine with three bars reaching right. Thick pens
+ * double the spine; curved styles shorten the middle bar the way a quick
+ * scribble does.
+ */
+function drawE(style: GlyphStyle): boolean[] {
+  const pixels = Array<boolean>(PIXEL_COUNT).fill(false)
+  const { topRow, midRow, bottomRow, left, right, thick, curved } = style
+  drawColumn(pixels, left, topRow, bottomRow)
+  if (thick) drawColumn(pixels, left + 1, topRow, bottomRow)
+  drawBar(pixels, topRow, left, right)
+  drawBar(pixels, midRow, left, curved ? right - 1 : right)
+  drawBar(pixels, bottomRow, left, right)
+  return pixels
+}
+
+/**
+ * The training set: the two clean reference shapes plus procedurally drawn
+ * variants. Every variant is a real connected-stroke 3 or E — the variation
+ * comes from translation, scale, curvature, and pen thickness, so the model
+ * has to learn a general rule instead of memorizing two images.
  */
 export function buildTrainingSet(seed = SEED): TrainingExample[] {
   const rand = makeRandom(seed ^ 0x9e3779b9)
-  const three = patternThree()
-  const e = patternE()
   const examples: TrainingExample[] = [
-    { label: 'Clean 3', pixels: three, target: 1 },
-    { label: 'Clean E', pixels: e, target: 0 },
+    { label: 'Clean 3', pixels: patternThree(), target: 1 },
+    { label: 'Clean E', pixels: patternE(), target: 0 },
   ]
   for (let v = 1; v < TRAINING_SAMPLES_PER_CLASS; v++) {
-    const flips = 2 + Math.floor(rand() * 4)
-    examples.push({ label: `Training 3 #${v + 1}`, pixels: withNoise(three, rand, flips), target: 1 })
-    examples.push({ label: `Training E #${v + 1}`, pixels: withNoise(e, rand, flips), target: 0 })
+    examples.push({ label: `Training 3 #${v + 1}`, pixels: drawThree(rollStyle(rand)), target: 1 })
+    examples.push({ label: `Training E #${v + 1}`, pixels: drawE(rollStyle(rand)), target: 0 })
   }
   return examples
 }
