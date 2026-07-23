@@ -36,11 +36,13 @@ export function Glossary() {
 
   const grouped = useMemo(() => {
     const groups: Record<string, GlossaryTerm[]> = {}
-    filtered.forEach((term) => {
-      const letter = term.term[0].toUpperCase()
-      if (!groups[letter]) groups[letter] = []
-      groups[letter].push(term)
-    })
+    filtered
+      .filter((term) => term.category !== 'search-ranking')
+      .forEach((term) => {
+        const letter = term.term[0].toUpperCase()
+        if (!groups[letter]) groups[letter] = []
+        groups[letter].push(term)
+      })
     return Object.keys(groups)
       .sort()
       .reduce(
@@ -51,6 +53,14 @@ export function Glossary() {
         {} as Record<string, GlossaryTerm[]>,
       )
   }, [filtered])
+
+  const searchRankingTerms = useMemo(
+    () =>
+      filtered
+        .filter((term) => term.category === 'search-ranking')
+        .sort((a, b) => a.term.localeCompare(b.term)),
+    [filtered],
+  )
 
   const toggleExpanded = (id: string) => {
     const newSet = new Set(expandedIds)
@@ -100,7 +110,7 @@ export function Glossary() {
         )}
       </div>
 
-      {Object.keys(grouped).length === 0 ? (
+      {Object.keys(grouped).length === 0 && searchRankingTerms.length === 0 ? (
         <div className="py-8 text-center text-fg-muted">
           <p>No terms found matching "{search}"</p>
         </div>
@@ -110,48 +120,36 @@ export function Glossary() {
             <section key={letter}>
               <h2 className="mb-3 text-lg font-semibold text-fg-secondary">{letter}</h2>
               <div className="space-y-2">
-                {terms.map((term) => {
-                  const isExpanded = expandedIds.has(term.id)
-                  return (
-                    <details
-                      key={term.id}
-                      open={isExpanded}
-                      className="group rounded-lg border border-line bg-surface-raised transition-colors hover:border-line-strong"
-                    >
-                      <summary
-                        onClick={() => toggleExpanded(term.id)}
-                        className="cursor-pointer select-none px-4 py-3 text-sm font-semibold text-fg transition-colors hover:text-accent-deep"
-                      >
-                        <span className="inline-flex items-center gap-2">
-                          {term.term}
-                          <span
-                            aria-hidden
-                            className="text-fg-muted transition-transform group-open:rotate-180"
-                          >
-                            ▼
-                          </span>
-                        </span>
-                      </summary>
-                      <div className="border-t border-line px-4 py-3">
-                        <p className="text-sm text-fg-secondary">{term.short}</p>
-                        <p className="mt-2 text-sm leading-relaxed text-fg-secondary">{term.long}</p>
-                        {term.relatedLearnTopic && (
-                          <div className="mt-3 text-xs">
-                            <a
-                              href={`/models.fyi/learn/${term.relatedLearnTopic}`}
-                              className="inline-flex items-center gap-1 rounded bg-accent-soft px-2 py-1 font-medium text-accent-deep transition-colors hover:bg-accent-soft/80"
-                            >
-                              Learn more →
-                            </a>
-                          </div>
-                        )}
-                      </div>
-                    </details>
-                  )
-                })}
+                {terms.map((term) => (
+                  <TermCard
+                    key={term.id}
+                    term={term}
+                    isExpanded={expandedIds.has(term.id)}
+                    onToggle={toggleExpanded}
+                  />
+                ))}
               </div>
             </section>
           ))}
+
+          {searchRankingTerms.length > 0 && (
+            <section className="border-t border-line pt-6">
+              <h2 className="text-lg font-semibold text-fg">Search &amp; Ranking</h2>
+              <p className="mb-3 mt-1 text-sm text-fg-secondary">
+                How search engines and AI systems find and order the most relevant results.
+              </p>
+              <div className="space-y-2">
+                {searchRankingTerms.map((term) => (
+                  <TermCard
+                    key={term.id}
+                    term={term}
+                    isExpanded={expandedIds.has(term.id)}
+                    onToggle={toggleExpanded}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       )}
 
@@ -161,5 +159,63 @@ export function Glossary() {
         </p>
       </div>
     </div>
+  )
+}
+
+function TermCard({
+  term,
+  isExpanded,
+  onToggle,
+}: {
+  term: GlossaryTerm
+  isExpanded: boolean
+  onToggle: (id: string) => void
+}) {
+  return (
+    <details
+      open={isExpanded}
+      className="group rounded-lg border border-line bg-surface-raised transition-colors hover:border-line-strong"
+    >
+      <summary
+        onClick={() => onToggle(term.id)}
+        className="cursor-pointer select-none px-4 py-3 text-sm font-semibold text-fg transition-colors hover:text-accent-deep"
+      >
+        <span className="inline-flex items-center gap-2">
+          {term.term}
+          <span
+            aria-hidden
+            className="text-fg-muted transition-transform group-open:rotate-180"
+          >
+            ▼
+          </span>
+        </span>
+      </summary>
+      <div className="border-t border-line px-4 py-3">
+        <p className="text-sm text-fg-secondary">{term.short}</p>
+        <p className="mt-2 text-sm leading-relaxed text-fg-secondary">{term.long}</p>
+        {(term.relatedLearnTopic || term.sourceUrl) && (
+          <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
+            {term.relatedLearnTopic && (
+              <a
+                href={`/models.fyi/learn/${term.relatedLearnTopic}`}
+                className="inline-flex items-center gap-1 rounded bg-accent-soft px-2 py-1 font-medium text-accent-deep transition-colors hover:bg-accent-soft/80"
+              >
+                Learn more →
+              </a>
+            )}
+            {term.sourceUrl && (
+              <a
+                href={term.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 rounded border border-line px-2 py-1 font-medium text-fg-secondary transition-colors hover:border-line-strong hover:text-fg"
+              >
+                {term.sourceLabel ?? 'Official site'} ↗
+              </a>
+            )}
+          </div>
+        )}
+      </div>
+    </details>
   )
 }

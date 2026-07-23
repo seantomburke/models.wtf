@@ -69,3 +69,56 @@ test('includes common LLM jargon terms with plain-language explanations', () => 
   expect(glossaryTerms.find((entry) => entry.id === 'few-shot-prompting')?.long).toContain('Zero-shot')
   expect(glossaryTerms.find((entry) => entry.id === 'mixture-of-experts')?.long).toContain('MoE')
 })
+
+test('includes the agent-era terms with plain-language explanations', () => {
+  const agentTerms = [
+    'seed',
+    'skill',
+    'function-calling',
+    'code-mode',
+    'vibe-coding',
+    'neural-network',
+    'prompt-injection',
+    'prompt-poisoning',
+    'reasoning-effort',
+    'thinking',
+    'plan-mode',
+    'agent-orchestration',
+  ]
+
+  for (const id of agentTerms) {
+    const term = glossaryTerms.find((entry) => entry.id === id)
+    expect(term).toBeDefined()
+    expect(term?.short).not.toBe('')
+    expect(term?.long).not.toBe('')
+  }
+
+  // Official references requested in issue #105.
+  expect(glossaryTerms.find((entry) => entry.id === 'mcp')?.sourceUrl).toBe(
+    'https://modelcontextprotocol.io',
+  )
+  expect(glossaryTerms.find((entry) => entry.id === 'skill')?.sourceUrl).toBe(
+    'https://agentskills.io',
+  )
+  expect(glossaryTerms.find((entry) => entry.id === 'vibe-coding')?.long).toContain('Karpathy')
+})
+
+test('search & ranking section holds exactly the retrieval concepts', () => {
+  const searchRanking = glossaryTerms
+    .filter((term) => term.category === 'search-ranking')
+    .map((term) => term.id)
+    .sort()
+
+  expect(searchRanking).toEqual([
+    'bm25',
+    'cosine-similarity',
+    'semantic-search',
+    'tf-idf',
+    'vector-search',
+  ])
+
+  // Every other term stays in the default (general) section.
+  for (const term of glossaryTerms) {
+    expect([undefined, 'general', 'search-ranking']).toContain(term.category)
+  }
+})
