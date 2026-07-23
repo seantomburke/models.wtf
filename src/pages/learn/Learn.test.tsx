@@ -67,6 +67,51 @@ test('index groups topics under the four learning-path levels', () => {
   }
 })
 
+test('keeps model-versus-model topics together after the intro and outside the learning path', () => {
+  renderAt('/learn')
+
+  const comparisons = screen.getByRole('region', { name: /model vs\. model/i })
+  const comparisonSlugs = ['claude-vs-gpt', 'claude-vs-gemini', 'grok-vs-gpt']
+
+  for (const slug of comparisonSlugs) {
+    const topic = topics.find((candidate) => candidate.slug === slug)!
+    const link = within(comparisons).getByRole('link', { name: new RegExp(topic.question, 'i') })
+    expect(comparisons).toContainElement(link)
+    expect(link).toHaveTextContent('Head-to-head comparison')
+  }
+
+  expect(comparisons).toHaveTextContent('Anthropic')
+  expect(comparisons).toHaveTextContent('OpenAI')
+  expect(comparisons).toHaveTextContent('Google')
+  expect(comparisons).toHaveTextContent('xAI')
+
+  for (const level of levels) {
+    const pathSection = screen.getByRole('region', { name: level.title })
+    for (const slug of comparisonSlugs) {
+      const topic = topics.find((candidate) => candidate.slug === slug)!
+      expect(pathSection).not.toHaveTextContent(topic.question)
+    }
+  }
+
+  expect(
+    comparisons.compareDocumentPosition(screen.getByRole('region', { name: levels[0].title })),
+  ).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
+})
+
+test('keeps animated previews for learning-path topics but not model comparisons', () => {
+  renderAt('/learn')
+
+  const comparisons = screen.getByRole('region', { name: /model vs\. model/i })
+  const comparison = within(comparisons).getByRole('link', { name: /claude vs gpt/i })
+  expect(comparison.querySelector('[data-motif]')).toBeNull()
+
+  const standardTopic = screen
+    .getAllByRole('link', { name: /what is an ai model/i })
+    .find((link) => link.querySelector('[data-motif]') !== null)
+  expect(standardTopic).toBeDefined()
+  expect(standardTopic!.querySelector('[data-motif]')).not.toBeNull()
+})
+
 test('lab topics with a named model render its model card', () => {
   renderAt('/learn/understand-image-classification')
   expect(screen.getByText('Doodle-64')).toBeInTheDocument()
