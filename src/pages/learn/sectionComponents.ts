@@ -14,9 +14,23 @@ import type { ComponentType } from 'react'
 import { BayesTreeExplorer } from '../../components/learn/BayesTreeExplorer'
 import { BayesNextWord } from '../../components/learn/BayesNextWord'
 import { WeightedSumEquation } from '../../components/learn/WeightedSumEquation'
+import { HallucinationDemo } from '../../components/learn/HallucinationDemo'
+import { ContextWindowVisualizer } from '../../components/learn/ContextWindowVisualizer'
+import { TokenCostVisualizer } from '../../components/learn/TokenCostVisualizer'
+import {
+  ClaudeVsGptFaceOff,
+  ClaudeVsGeminiFaceOff,
+  GrokVsGptFaceOff,
+} from '../../components/learn/ModelFaceOff'
 
 export const sectionComponents: Record<string, ComponentType> = {
   'bayesian-statistics::Walk the tree': BayesTreeExplorer,
   'bayesian-statistics::The same math predicts the next word': BayesNextWord,
   'how-do-neural-network-weights-work::How they work: the multiplication': WeightedSumEquation,
+  'hallucinations::The fundamental problem': HallucinationDemo,
+  'context-window-strategies::Smart strategies': ContextWindowVisualizer,
+  'model-pricing-tokens::Input vs output: the split': TokenCostVisualizer,
+  "claude-vs-gpt::What they're good at": ClaudeVsGptFaceOff,
+  'claude-vs-gemini::Capabilities': ClaudeVsGeminiFaceOff,
+  'grok-vs-gpt::What Grok does well': GrokVsGptFaceOff,
 }
