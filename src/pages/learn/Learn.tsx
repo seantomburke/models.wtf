@@ -43,13 +43,15 @@ function ComparisonCompanies({ topicSlug }: { topicSlug: string }) {
 /**
  * Sidebar table of contents: every lesson under its level header, as plain
  * links. Desktop only — on small screens the card grid IS the overview, and
- * a second copy of thirty links would just push it below the fold.
+ * a second copy of thirty links would just push it below the fold. The nav
+ * grows to its full content height (no inner scroll), so the page scrolls
+ * past it naturally.
  */
 function LessonIndex() {
   return (
     <nav
       aria-label="All lessons"
-      className="hidden lg:block lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto rounded-xl border border-line bg-surface-raised p-4"
+      className="hidden self-start lg:block rounded-xl border border-line bg-surface-raised p-4"
     >
       {levels.map((level) => (
         <div key={level.id} className="mb-4 last:mb-0">
