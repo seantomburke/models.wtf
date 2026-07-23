@@ -15,7 +15,7 @@ export const providers: Provider[] = [
     color: '#10A37F',
     openSource: false,
     blurb:
-      'The maker of ChatGPT and the GPT family — the models most people meet first, tuned to be fast, friendly, and good at almost everything.',
+      'The maker of ChatGPT and the GPT family, the models most people meet first, tuned to be fast, friendly, and good at almost everything.',
   },
   {
     id: 'google',
@@ -31,7 +31,7 @@ export const providers: Provider[] = [
     color: '#1D1D1F',
     openSource: false,
     blurb:
-      "Elon Musk's AI lab, maker of the Grok models — fast, plugged into real-time information from X, and priced to undercut the big labs.",
+      "Elon Musk's AI lab, maker of the Grok models: fast, plugged into real-time information from X, and priced to undercut the big labs.",
   },
   // Meta pivoted closed with Muse Spark (2026); its Llama 4 models stay open at the model level.
   {
@@ -49,7 +49,7 @@ export const providers: Provider[] = [
     color: '#7C3AED',
     openSource: false,
     blurb:
-      'The Beijing lab behind the Kimi models — agentic heavy-lifters that punch above their price, with open weights promised for its latest.',
+      'The Beijing lab behind the Kimi models: agentic heavy-lifters that punch above their price, with open weights promised for its latest.',
   },
   {
     id: 'thinking-machines',
@@ -73,7 +73,7 @@ export const providers: Provider[] = [
     color: '#FF6A00',
     openSource: true,
     blurb:
-      "Alibaba's Qwen team ships one of the deepest open-weight lineups anywhere — from tiny on-device models to frontier-class flagships.",
+      "Alibaba's Qwen team ships one of the deepest open-weight lineups anywhere, from tiny on-device models to frontier-class flagships.",
   },
   {
     id: 'zhipu',
@@ -81,6 +81,6 @@ export const providers: Provider[] = [
     color: '#3B82F6',
     openSource: true,
     blurb:
-      'The lab behind the GLM series — open-weight models with a coding and agent focus that keep closing the gap with the closed frontier.',
+      'The lab behind the GLM series: open-weight models with a coding and agent focus that keep closing the gap with the closed frontier.',
   },
 ]

@@ -180,7 +180,7 @@ describe('BenchmarkCell pinned details card (issue #78)', () => {
     await user.click(scoreButton)
     expect(scoreButton).toHaveAttribute('aria-expanded', 'true')
 
-    // Pointer leaves the score on its way into the card — it must stay open.
+    // Pointer leaves the score on its way into the card; it must stay open.
     await user.unhover(scoreButton)
     const link = screen.getByRole('link', { name: /view source/i })
     expect(link).toBeInTheDocument()

@@ -1,6 +1,6 @@
 # Frontend Guidance (src/)
 
-Extends the root `AGENTS.md` with rules for code under `src/`.
+Extends the root `AGENTS.md` with rules for code under `src/`. Any user-facing copy follows `.agents/rules/writing-style.md` (guarded by `src/lib/copy-style.test.ts`).
 
 ## React Patterns
 
@@ -15,9 +15,9 @@ When building data-heavy or dashboard-style UI, follow `.agents/skills/design/SK
 
 ### SEO and Accessibility
 
-SEO is a product requirement, not an afterthought.
+SEO is a product requirement on every page.
 
-- Use semantic HTML (`<main>`, `<section>`, `<h1>`–`<h6>` in order, `<nav>`)
+- Use semantic HTML (`<main>`, `<section>`, `<h1>` through `<h6>` in order, `<nav>`)
 - Set page `<title>` and meta description per route
 - Give every image meaningful `alt` text; label interactive elements
 

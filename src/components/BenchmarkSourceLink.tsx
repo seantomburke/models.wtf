@@ -6,8 +6,8 @@ interface BenchmarkSourceLinkProps {
   className?: string
   children?: React.ReactNode
   /**
-   * `badge` — "source ↗" text. `wrapper` — wraps children in the link.
-   * `icon` — arrow only, for tight spots like table headers.
+   * `badge`: "source ↗" text. `wrapper`: wraps children in the link.
+   * `icon`: arrow only, for tight spots like table headers.
    */
   variant?: 'badge' | 'wrapper' | 'icon'
 }

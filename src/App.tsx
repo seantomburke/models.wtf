@@ -9,7 +9,7 @@ import { createPreloadedRoute, routeLoaders } from './routePreload.ts'
 
 // Every route but Home is lazy. Home stays static because it is the most
 // common landing route, and splitting it would only buy a round-trip.
-// Everything else was riding along in the entry bundle — a visitor landing on
+// Everything else was riding along in the entry bundle: a visitor landing on
 // Home was downloading the Learn labs' neural nets before the page could paint.
 const Graph = createPreloadedRoute(routeLoaders.graph)
 const Calculator = createPreloadedRoute(routeLoaders.calculator)
@@ -35,7 +35,7 @@ function App() {
       {/* Layout wraps <Outlet /> in a Suspense boundary, so the lazy routes
           below need no per-route one. Graph and Calculator keep theirs because
           their skeletons mirror the real layout, which the generic fallback
-          cannot — but only in the browser: a boundary during prerender makes
+          cannot, but only in the browser: a boundary during prerender makes
           React flush a shell instead of the finished page (see ClientSuspense
           in Layout.tsx). */}
       <Route element={<Layout />}>

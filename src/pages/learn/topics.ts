@@ -655,7 +655,7 @@ const authored: Topic[] = [
       parameters: '525: 448 pixel-to-stroke weights + 7 stroke biases + 70 stroke-to-digit weights',
       layers: '2 (64 pixels → 7 stroke detectors → 10 digits)',
       inputs: '64 numbers: the 8×8 grid, 1 where you drew ink and 0 where you didn\'t',
-      outputs: '10 probabilities, one per digit 0–9, summing to 100%',
+      outputs: '10 probabilities, one per digit 0-9, summing to 100%',
       scale: 'Same inputs as Doodle-64, eight times the parameters, and one hidden layer, the single upgrade that "deep" learning repeats hundreds of times in a billion-parameter LLM.',
     },
     sections: [
@@ -778,7 +778,7 @@ const authored: Topic[] = [
       parameters: '918: 640 pixel-to-primitive weights + 10 primitive biases + 80 primitive-to-shape weights + 8 shape biases + 80 shape-to-digit weights + 100 skip weights',
       layers: '3 (64 pixels → 10 stroke primitives → 8 shape detectors → 10 digits)',
       inputs: '64 numbers: the 8×8 grid, 1 where you drew ink and 0 where you didn\'t',
-      outputs: '10 probabilities, one per digit 0–9, summing to 100%',
+      outputs: '10 probabilities, one per digit 0-9, summing to 100%',
       scale: 'Doodle-525\'s job with one more layer in the middle. It reads every canonical digit at over 99% confidence where the two-layer model manages 94%, and it stays right when a stroke is smudged. That is the payoff for features that compose.',
     },
     sections: [

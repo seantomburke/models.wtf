@@ -3,7 +3,7 @@ import { HoverableNode } from './NodePatternTooltip'
 
 /**
  * Animated forward pass through a small deep network.
- * Real math (random weights, sigmoid activations) — the animation
+ * Real math (random weights, sigmoid activations); the animation
  * steps layer by layer so you can watch values flow left to right.
  */
 
@@ -157,7 +157,7 @@ export function MultiLayerNetwork() {
             )
 
             // Only the hidden layers get a hover card. These weights are random,
-            // so a hidden node here has no name and no picture — what it does have
+            // so a hidden node here has no name and no picture; what it does have
             // is the weight vector it applies, which is the honest answer to
             // "what pattern is this node looking for?" for an untrained network.
             const isHidden = l > 0 && l < LAYER_SIZES.length - 1
@@ -233,7 +233,7 @@ export function MultiLayerNetwork() {
 
       <p className="mt-4 text-xs text-fg-muted">
         Blue lines are positive weights (excite the next neuron), orange lines are negative (dampen it).
-        Thicker = stronger. Each neuron squashes its weighted sum into 0–1, and brighter circles mean values
+        Thicker = stronger. Each neuron squashes its weighted sum into 0-1, and brighter circles mean values
         closer to 1. Hit "Random weights" and the same inputs give a completely different answer.
         The knowledge is in the weights.
       </p>

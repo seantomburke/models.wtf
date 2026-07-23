@@ -30,7 +30,7 @@ for (const m of models) {
     if (prov.source === 'independent') {
       if (!prov.runner) fail(`${m.id}: independent ${bench} score missing runner`)
       if (prov.independentScore !== undefined) {
-        fail(`${m.id}: ${bench} is already independent — independentScore is for provider-reported scores`)
+        fail(`${m.id}: ${bench} is already independent; independentScore is for provider-reported scores`)
       }
     }
     if (prov.independentScore !== undefined) {
@@ -97,7 +97,7 @@ for (const m of models) {
 }
 
 // ─── Coverage ──────────────────────────────────────────────────
-if (models.length < 10) fail(`only ${models.length} models — expected the full lineup`)
+if (models.length < 10) fail(`only ${models.length} models; expected the full lineup`)
 if (!models.some((m) => m.openSource)) fail('no open-source models in dataset')
 for (const b of benchmarks) {
   if (!models.some((m) => b.id in m.scores)) {

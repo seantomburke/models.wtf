@@ -60,7 +60,7 @@ export interface TotalCostRow extends Record<string, unknown> {
   model: string
   provider: string
   cost: number
-  /** Preformatted for the tooltip — d3 number formats mangle sub-cent values. */
+  /** Preformatted for the tooltip; d3 number formats mangle sub-cent values. */
   costLabel: string
 }
 

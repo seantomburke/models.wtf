@@ -208,7 +208,7 @@ test('benchmark headers use short labels, are sortable, and keep their source li
   const gpqa = benchmarks.find((b) => b.id === 'gpqa-diamond')!
   const header = screen.getByRole('columnheader', { name: new RegExp(gpqa.shortName!) })
 
-  // Short label instead of the full name — that is what stopped the wrapping.
+  // Short label instead of the full name; that is what stopped the wrapping.
   expect(header).toHaveClass('whitespace-nowrap')
   const sortButton = within(header).getByRole('button')
   expect(sortButton.textContent).toContain(gpqa.shortName)

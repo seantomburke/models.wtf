@@ -70,7 +70,7 @@ export interface GraphRow extends Record<string, unknown> {
  * Family key for a model: the shared generation prefix its variants hang off.
  *
  * Derived from the name rather than stored on the model because the dataset
- * has no effort-level field — variants are only ever distinguished by a
+ * has no effort-level field; variants are only ever distinguished by a
  * trailing tier word ('GPT-5.6 Sol', 'Llama 4 Maverick'). Stripping that word
  * groups the variants; a name with no trailing variant is its own family.
  * `graph.test.ts` pins the groupings this produces so a rename can't silently
@@ -89,7 +89,7 @@ export function familyOf(m: Model): string {
 /**
  * Short label for a point on the graph: the model name minus a leading
  * provider brand word, because the point's color already says who made it.
- * 'Claude Opus 4.8' → 'Opus 4.8', but 'GPT-5.6 Sol' keeps its GPT — the
+ * 'Claude Opus 4.8' → 'Opus 4.8', but 'GPT-5.6 Sol' keeps its GPT: the
  * brand word only comes off when it stands alone at the front of the name
  * and something distinctive remains after it. Word-by-word prefix matching
  * (not substring) so 'Geminix Prime' never loses letters to 'Gemini'.
@@ -143,7 +143,7 @@ export function paletteFor(rows: Array<{ provider: string }>): string[] {
  *
  * In provider mode a series IS a company, so it takes that company's brand
  * color. In family mode every model in a family shares one provider, so the
- * family inherits that provider's color too — which keeps a line the same
+ * family inherits that provider's color too, which keeps a line the same
  * hue as the points it joins in both modes.
  */
 export function paletteForSeries(
@@ -201,7 +201,7 @@ export const LOG_SCALE_RATIO = 20
 /** Fraction of the data span added as breathing room on each end. */
 const PADDING_FRACTION = 0.08
 
-/** 1, 2, 2.5 and 5 x 10^n — the step sizes people read fluently. */
+/** 1, 2, 2.5 and 5 x 10^n: the step sizes people read fluently. */
 function niceStep(rough: number): number {
   const magnitude = 10 ** Math.floor(Math.log10(rough))
   const normalized = rough / magnitude
@@ -245,7 +245,7 @@ export function axisScale(values: number[], cap?: number): AxisScale {
 
   if (min > 0 && max / min >= LOG_SCALE_RATIO) {
     // Pad in log space so the proportional margin is even at both ends, then
-    // snap each bound out to the nearest 1/2/5 x 10^n stop — the same stops
+    // snap each bound out to the nearest 1/2/5 x 10^n stop, the same stops
     // scaleTicks labels, so the axis begins and ends on a printed tick.
     const span = Math.log10(max) - Math.log10(min)
     const low = logStop(10 ** (Math.log10(min) - span * PADDING_FRACTION), 'down')
@@ -264,7 +264,7 @@ export function axisScale(values: number[], cap?: number): AxisScale {
   const snap = (n: number) => Number(n.toPrecision(12))
   let low = snap(Math.floor((min - span * PADDING_FRACTION) / step) * step)
   let high = snap(Math.ceil((max + span * PADDING_FRACTION) / step) * step)
-  // Never invent room below zero for data that has none — a negative price
+  // Never invent room below zero for data that has none: a negative price
   // axis is a lie, and the extra space is exactly what issue #81 is about.
   if (min >= 0 && low < 0) low = 0
   if (cap !== undefined && high > cap) high = cap
@@ -349,7 +349,7 @@ function scaleSpec(scale: AxisScale): { domain: [number, number]; type?: AxisSca
 /**
  * Scatter spec, layered with connecting lines when `connections` is on.
  *
- * The lines go in the FIRST layer so they paint under the points — drawn on
+ * The lines go in the FIRST layer so they paint under the points; drawn on
  * top, a dotted line reads as part of the marker and makes individual models
  * harder to pick out, which is the noise issue #75 warns about. They stay
  * thin and semi-transparent for the same reason: the points are the data,
@@ -365,7 +365,7 @@ export function buildGraphSpec(
   if (connections === 'off') return points
 
   const segments = connectionSegments(rows)
-  // Nothing to join (every series is a lone model) — a bare scatter beats an
+  // Nothing to join (every series is a lone model); a bare scatter beats an
   // empty layer, which would still reserve its own legend entry.
   if (segments.length === 0) return points
 
@@ -427,7 +427,7 @@ function buildScatterSpec(xAxis: AxisOption, yAxis: AxisOption, rows: GraphRow[]
     legend: { position: 'top', maxRows: 2 },
     encoding: {
       // The engine skips its nice/zero adjustments whenever an explicit
-      // domain is set, so axisScale is the whole story for both scales — and
+      // domain is set, so axisScale is the whole story for both scales, and
       // the title carries the scale type so a log axis can't be misread.
       x: {
         field: 'x',
@@ -503,7 +503,7 @@ export const CONNECTION_DASH = '3 4'
 
 /**
  * Connecting lines sit well under full strength so the points stay the
- * focus — the readability requirement in issue #75. Like the dash, this is
+ * focus, the readability requirement in issue #75. Like the dash, this is
  * read from a data field via the opacity encoding.
  */
 export const CONNECTION_OPACITY = 0.45

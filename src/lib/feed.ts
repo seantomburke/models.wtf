@@ -6,7 +6,7 @@ const esc = (s: string) =>
 
 /**
  * Release dates are date-only ISO strings. Atom requires full RFC 3339
- * timestamps, so pin them to midnight UTC — stable across rebuilds, unlike
+ * timestamps, so pin them to midnight UTC: stable across rebuilds, unlike
  * a per-build timestamp.
  */
 function atomDate(isoDate: string): string {
@@ -32,7 +32,7 @@ function entryLink(release: Release): string {
  */
 export function buildAtomFeed(releaseLog: readonly Release[]): string {
   if (releaseLog.length === 0) {
-    throw new Error('release log is empty — refusing to publish an empty feed')
+    throw new Error('release log is empty; refusing to publish an empty feed')
   }
 
   const sorted = [...releaseLog].sort((a, b) => b.date.localeCompare(a.date))

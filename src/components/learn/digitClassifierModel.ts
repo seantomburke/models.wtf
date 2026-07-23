@@ -1,9 +1,9 @@
 /**
- * A real (tiny) two-layer network that reads the digits 0–9 on an 8x8 grid.
+ * A real (tiny) two-layer network that reads the digits 0-9 on an 8x8 grid.
  *
  * Layer 1 (64 pixels → 7 hidden neurons): each hidden neuron is a "stroke
- * detector". Its weights are 1/size on the pixels of one stroke — a bar or a
- * vertical line, laid out like a seven-segment display — and 0 everywhere
+ * detector". Its weights are 1/size on the pixels of one stroke (a bar or a
+ * vertical line, laid out like a seven-segment display) and 0 everywhere
  * else, with a -0.5 bias. Squashed through a steep sigmoid, the neuron fires
  * (≈1) when most of its stroke is drawn and stays quiet (≈0) when it isn't.
  *
@@ -109,11 +109,11 @@ export interface DigitClassification {
   prediction: number
   /** Probability of the winning digit. */
   confidence: number
-  /** Softmax probability per digit, indexed 0–9. */
+  /** Softmax probability per digit, indexed 0-9. */
   probs: number[]
-  /** Hidden-layer activations per stroke detector, 0–1. */
+  /** Hidden-layer activations per stroke detector, 0-1. */
   hidden: number[]
-  /** Fraction of each stroke's pixels that are drawn, 0–1. */
+  /** Fraction of each stroke's pixels that are drawn, 0-1. */
   coverage: number[]
   /** Raw output scores before softmax. */
   scores: number[]

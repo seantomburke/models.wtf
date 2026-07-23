@@ -67,7 +67,7 @@ const PRIMITIVE_PATTERNS = PRIMITIVES.map((prim, j) => ({
 }))
 
 /**
- * A shape has no pixels of its own — it watches primitives. Its pattern is
+ * A shape has no pixels of its own; it watches primitives. Its pattern is
  * the union of the pixels of every primitive it requires, which is exactly
  * the drawing that makes the shape appear.
  */

@@ -14,7 +14,7 @@ const esc = (s) =>
 
 // Vite KEEPS the template's <meta name="description">, it just reformats the
 // attributes onto separate lines. The 02ceb10 substitution regex missed it for
-// that reason alone — not because the tag was gone — so switching to injection
+// that reason alone (not because the tag was gone), so switching to injection
 // left the generic homepage boilerplate in place and every page shipped TWO
 // description tags. Crawlers that read the first one (the usual behaviour) saw
 // the same site-wide blurb on all 59 pages and the per-route snippet was dead.
@@ -23,7 +23,7 @@ const rawTemplate = readFileSync('dist/index.html', 'utf8')
 const template = rawTemplate.replace(/\s*<meta\s+name="description"[\s\S]*?\/>/, '')
 if (template.includes('name="description"')) {
   throw new Error(
-    'failed to strip the template <meta name="description"> — prerendered pages would ship a duplicate, and crawlers reading the first tag get the generic site blurb instead of the per-route snippet.',
+    'failed to strip the template <meta name="description">; prerendered pages would ship a duplicate, and crawlers reading the first tag get the generic site blurb instead of the per-route snippet.',
   )
 }
 const manifest = JSON.parse(readFileSync('dist/.vite/manifest.json', 'utf8'))
@@ -83,7 +83,7 @@ const socialHead = ({ path, title, description, type, image }, { canonical = tru
     `<meta name="description" content="${esc(description)}" />`,
     // Feed autodiscovery: readers and browser extensions find the Atom feed
     // (scripts/generate-feed.mjs) from any page, not just /whats-new.
-    `<link rel="alternate" type="application/atom+xml" title="Models.fyi — What&#x27;s new" href="${SITE_URL}/feed.xml" />`,
+    `<link rel="alternate" type="application/atom+xml" title="Models.fyi | What&#x27;s new" href="${SITE_URL}/feed.xml" />`,
     ...(url ? [`<link rel="canonical" href="${url}" />`] : []),
     `<meta property="og:title" content="${esc(title)}" />`,
     `<meta property="og:description" content="${esc(description)}" />`,
@@ -102,7 +102,7 @@ const socialHead = ({ path, title, description, type, image }, { canonical = tru
   ].join('\n    ')
 }
 
-// JSON-LD goes in the static head too — Google renders JS but most other
+// JSON-LD goes in the static head too: Google renders JS but most other
 // crawlers (and LLM scrapers) read structured data only from raw HTML.
 // Escape "<" so model text can never form a premature </script>.
 const jsonLd = (data) =>
@@ -112,7 +112,7 @@ const assertResolvedBody = (body, path) => {
   const main = body.match(/<main[^>]*>([\s\S]*?)<\/main>/)?.[1] ?? ''
   if (body.includes('<!--$?-->') || body.includes('<template id="B:')) {
     throw new Error(
-      `prerender left an unresolved Suspense boundary in ${path} — the page ships its fallback, not its content. See ClientSuspense in src/components/Layout.tsx.`,
+      `prerender left an unresolved Suspense boundary in ${path}: the page ships its fallback instead of its content. See ClientSuspense in src/components/Layout.tsx.`,
     )
   }
   if (main.includes('Loading…')) {
@@ -147,7 +147,7 @@ for (const meta of routeMeta) {
   // the shell with a `<!--$?-->` marker and the fallback, then streams the
   // actual content as trailing <template> blobs that only a browser splices in.
   // This shipped on 32 of 57 pages without anyone noticing, because the file
-  // still *contained* the content — just after </main>, where no crawler looks.
+  // still *contained* the content, just after </main>, where no crawler looks.
   // Fail the build instead.
   // A collapsed accordion must still SHIP its answers. /faq rendered each answer
   // as `{isExpanded && ...}`, so the prerendered page carried all 23 questions
@@ -167,7 +167,7 @@ for (const meta of routeMeta) {
     const missing = faqs.filter((faq) => !decoded.includes(faq.answer))
     if (missing.length > 0) {
       throw new Error(
-        `prerender left ${missing.length} of ${faqs.length} FAQ answers out of <main> — collapsed accordion content must stay mounted and be hidden with CSS. First missing: ${missing[0].question}`,
+        `prerender left ${missing.length} of ${faqs.length} FAQ answers out of <main>; collapsed accordion content must stay mounted and be hidden with CSS. First missing: ${missing[0].question}`,
       )
     }
   }

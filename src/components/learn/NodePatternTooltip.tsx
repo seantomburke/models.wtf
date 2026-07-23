@@ -7,8 +7,8 @@ import { useId, useState } from 'react'
  * named set of pixels (a stroke) or a named set of strokes (a shape). The
  * diagrams show that as a colored circle and a percentage, which tells you a
  * node fired but not what it was looking for. This component renders the
- * answer — the node's name, its detected pattern drawn on a mini 8x8 grid,
- * and its current activation — as a tooltip on hover and on keyboard focus.
+ * answer (the node's name, its detected pattern drawn on a mini 8x8 grid,
+ * and its current activation) as a tooltip on hover and on keyboard focus.
  *
  * Rendered inside an <svg> via <foreignObject> so it can be plain HTML and
  * flow its own text, and so it escapes the SVG's own painting order by being
@@ -68,7 +68,7 @@ function MiniPattern({ pixels, color, gridSize }: { pixels: boolean[]; color: st
 
 /**
  * The tooltip body. Kept separate from the SVG plumbing so it can be
- * rendered on its own — in tests, or by any non-SVG caller.
+ * rendered on its own: in tests, or by any non-SVG caller.
  */
 export function NodePatternCard({
   pattern,
@@ -136,7 +136,7 @@ const CARD_H = 132
 /**
  * Wraps a hidden node's own SVG marks in a hover/focus target and renders the
  * pattern card next to it. The card is positioned to the right of the node,
- * flipping left when the node sits close to the SVG's right edge — these
+ * flipping left when the node sits close to the SVG's right edge, since these
  * diagrams put their hidden layers at all sorts of x positions.
  */
 export function HoverableNode({

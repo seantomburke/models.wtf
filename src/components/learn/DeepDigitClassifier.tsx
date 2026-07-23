@@ -33,7 +33,7 @@ export function DeepDigitClassifier() {
     <div className="space-y-8">
       {/* Drawing Grid */}
       <div className="rounded-lg border border-line bg-bg-secondary p-6">
-        <h3 className="text-lg font-semibold">Draw a digit: 0–9</h3>
+        <h3 className="text-lg font-semibold">Draw a digit: 0-9</h3>
         <p className="mt-2 text-sm text-fg-secondary">
           Click a pixel, or drag across the grid to draw a stroke at once. On a phone, draw with
           your finger. A three-layer network, 64 inputs, {PRIMITIVE_COUNT} stroke primitives,{' '}
@@ -328,7 +328,7 @@ export function DeepDigitClassifier() {
             <li>
               <strong className="text-fg-primary">Layer 1 finds parts.</strong> Ten primitives,
               each a bar half or a short line. Smaller parts than the two-layer model uses, and
-              deliberately so — you can't compose a loop out of pieces that are already loop-sized.
+              deliberately so: you can't compose a loop out of pieces that are already loop-sized.
             </li>
             <li>
               <strong className="text-fg-primary">Layer 2 finds shapes.</strong> Eight detectors
@@ -345,7 +345,7 @@ export function DeepDigitClassifier() {
           </ul>
 
           <p className="text-fg-secondary">
-            Load an 8, then erase its lower-left line and watch the bottom loop switch off — the
+            Load an 8, then erase its lower-left line and watch the bottom loop switch off. The
             model reads a 9, because that is exactly what a 9 is: an 8 with the bottom loop opened
             up. Erase the middle bar instead and the waist goes quiet, so it reads a 0. The
             two-layer model reaches the same answers, but it gets there by tallying strokes. This
@@ -356,7 +356,7 @@ export function DeepDigitClassifier() {
           <p className="text-fg-secondary">
             That is the whole argument for depth, and it is the same argument at every scale. A
             real vision model's early layers find edges, its middle layers find textures and parts,
-            and its late layers find objects. Nobody hand-writes those middle features — training
+            and its late layers find objects. Nobody hand-writes those middle features; training
             discovers them. Here they were chosen by hand so you can read them, all{' '}
             {PARAMETER_COUNT} parameters of them.
           </p>

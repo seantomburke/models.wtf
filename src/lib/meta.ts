@@ -13,7 +13,7 @@ export interface PageMetaOptions {
 
 /**
  * Sets the document title and meta description for a page.
- * Every route must call this — SEO is a product requirement.
+ * Every route must call this; SEO is a product requirement.
  */
 export function usePageMeta(title: string, description: string): void
 export function usePageMeta(options: PageMetaOptions): void

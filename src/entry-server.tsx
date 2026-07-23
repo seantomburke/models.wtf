@@ -24,13 +24,13 @@ export { buildAtomFeed } from './lib/feed.ts'
 
 // The client leaves these corpora to the pages that own them, so no single
 // client bundle carries all three. Prerendering emits JSON-LD for every route
-// from one process, so register them all here — up front, rather than relying
+// from one process, so register them all here, up front, rather than relying
 // on a page module having been rendered first.
 provideCorpus({ faqs, glossaryTerms, releases })
 
 /**
  * Render the app for one route. `path` excludes the base (e.g. "/compare").
- * Uses react-dom/static's prerender — the React 19 SSG API.
+ * Uses react-dom/static's prerender, the React 19 SSG API.
  *
  * It resolves lazy route chunks inline only while no Suspense boundary is
  * mounted; with one, it may flush a shell and stream the rest as trailing

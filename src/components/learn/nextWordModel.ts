@@ -7,7 +7,7 @@
  * Sentence starts are one more "word" (START) and sentence ends another (END),
  * so the model also knows how sentences tend to begin and stop.
  *
- * Every number the demo shows is derived from CORPUS below — there is no
+ * Every number the demo shows is derived from CORPUS below; there is no
  * other knowledge anywhere. That is the point.
  */
 
@@ -93,7 +93,7 @@ export function candidatesAt(words: string[], index: number): NextWord[] {
 
 /**
  * Re-choose the word at `index`: keep everything before it, apply the new
- * choice, and drop everything after — later words were predicted from a
+ * choice, and drop everything after, since later words were predicted from a
  * word that no longer exists. Choosing END ends the sentence at `index`.
  */
 export function rechooseWordAt(words: string[], index: number, word: string): string[] {

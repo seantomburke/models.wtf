@@ -1,5 +1,5 @@
 /**
- * A real (tiny) three-layer network that reads the digits 0–9 on an 8x8 grid.
+ * A real (tiny) three-layer network that reads the digits 0-9 on an 8x8 grid.
  *
  * Doodle-525 went pixels → strokes → digits. This one puts another layer in
  * the middle, because that is what "deep" actually buys you. The strokes get
@@ -22,13 +22,13 @@
  *
  * Layer 3 (8 shapes → 10 digit outputs): the shape vocabulary gives every
  * digit its own signature, so the output weights are *derived*, not typed
- * in — we run layers 1 and 2 over the canonical drawing of each digit and
+ * in: we run layers 1 and 2 over the canonical drawing of each digit and
  * read off which shapes it lights up. +1 for a shape the digit shows, -1 for
  * one it doesn't, exactly Doodle-525's stroke vote one level of abstraction
  * higher. Softmax turns the ten scores into probabilities.
  *
- * Some pairs sit one shape apart — a 0 is an 8 without the waist, a 2 is a 3
- * that leans the other way — so layer 3 also keeps a quiet direct connection
+ * Some pairs sit one shape apart (a 0 is an 8 without the waist, a 2 is a 3
+ * that leans the other way), so layer 3 also keeps a quiet direct connection
  * back to layer 1. Real vision models do the same thing with skip
  * connections: late layers get to look at early features when the
  * abstraction throws away something they still need.
@@ -120,7 +120,7 @@ export interface ShapeDetector {
 
 /**
  * The 8 shape detectors of layer 2. Each is a pattern over stroke
- * primitives, and each is reused by several digits — that reuse is the whole
+ * primitives, and each is reused by several digits; that reuse is the whole
  * point of a middle layer.
  */
 export const SHAPES: ShapeDetector[] = [
@@ -239,7 +239,7 @@ const OUTPUT_STEEPNESS = 2
 /**
  * How loudly layer 3 is allowed to consult layer 1 directly. Shapes carry
  * the argument; the skip path only settles what shapes cannot see, so it is
- * deliberately quiet — under half a shape's vote per primitive.
+ * deliberately quiet: under half a shape's vote per primitive.
  */
 const SKIP_SCALE = 0.45
 
@@ -289,13 +289,13 @@ export interface DeepDigitClassification {
   prediction: number
   /** Probability of the winning digit. */
   confidence: number
-  /** Softmax probability per digit, indexed 0–9. */
+  /** Softmax probability per digit, indexed 0-9. */
   probs: number[]
-  /** Layer-1 activations per stroke primitive, 0–1. */
+  /** Layer-1 activations per stroke primitive, 0-1. */
   primitives: number[]
-  /** Layer-2 activations per shape detector, 0–1. */
+  /** Layer-2 activations per shape detector, 0-1. */
   shapes: number[]
-  /** Fraction of each primitive's pixels that are drawn, 0–1. */
+  /** Fraction of each primitive's pixels that are drawn, 0-1. */
   coverage: number[]
   /** Raw output scores before softmax. */
   scores: number[]

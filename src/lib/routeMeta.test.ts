@@ -23,7 +23,7 @@ function nodesFor(path: string): Node[] {
   expect(data!['@context']).toBe('https://schema.org')
   const nested = data!['@graph'] as Node[] | undefined
   if (!nested) return [data as Node]
-  // Nodes inside a @graph must not repeat @context — the graph carries it.
+  // Nodes inside a @graph must not repeat @context; the graph carries it.
   for (const n of nested) expect(n['@context']).toBeUndefined()
   return nested
 }
@@ -109,7 +109,7 @@ test('every model route carries valid SoftwareApplication JSON-LD', () => {
     const provider = providers.find((p) => p.id === m.providerId)!
     expect((schema!.creator as { name: string }).name).toBe(provider.name)
     if (m.inputPricePerMTok !== null) {
-      // schema.org price must be a bare number — unit text invalidates it.
+      // schema.org price must be a bare number; unit text invalidates it.
       const offers = schema!.offers as { price: unknown; priceCurrency: string }
       expect(offers.price).toBe(m.inputPricePerMTok)
       expect(offers.priceCurrency).toBe('USD')

@@ -42,8 +42,8 @@ export interface PlacedLabel {
 
 export interface PlaceLabelsOptions {
   /**
-   * Plot width divided by height. Percent units are not square — 1% of a
-   * 900px-wide plot is ~2x the distance of 1% of its 450px height — so
+   * Plot width divided by height. Percent units are not square (1% of a
+   * 900px-wide plot is ~2x the distance of 1% of its 450px height), so
    * collision math must weigh x and y differently. Defaults to the graph
    * page's roughly 2:1 plot.
    */
@@ -57,7 +57,7 @@ export interface PlaceLabelsOptions {
 /**
  * Tuned for text-[10px] labels in a ~900x450 plot: a 10px-font character
  * averages ~6px wide → 6/900 ≈ 0.67% of width; a 14px line → 14/450 ≈ 3.1%
- * of height. Estimates only — the renderer keeps labels non-interactive, so
+ * of height. Estimates only: the renderer keeps labels non-interactive, so
  * a slightly generous box costs nothing but spacing.
  */
 const DEFAULT_CHAR_WIDTH = 0.7
@@ -164,7 +164,7 @@ function leaderAttachment(box: Box, point: LabelInput): { x: number; y: number }
  *
  * Deterministic: inputs are processed in the caller's order (stable for a
  * given dataset), each label takes the first non-colliding slot, and a label
- * that collides in every slot is dropped rather than drawn over a neighbor —
+ * that collides in every slot is dropped rather than drawn over a neighbor;
  * the model stays reachable through the point's own hover card and the
  * fallback selector, so a hidden label loses less than an unreadable pile.
  */

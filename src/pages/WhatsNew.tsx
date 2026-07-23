@@ -38,7 +38,7 @@ function getRelativeDate(dateStr: string): string {
 }
 
 // Release dates are date-only strings ("2026-07-15"), which parse as midnight
-// UTC — format in UTC so viewers west of Greenwich don't see the prior day.
+// UTC, so format in UTC and viewers west of Greenwich won't see the prior day.
 function formatReleaseDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString('en-US', {
     year: 'numeric',
@@ -49,7 +49,7 @@ function formatReleaseDate(dateStr: string): string {
 }
 
 // This page already loads the release feed to render it, so it supplies the
-// entries the /whats-new JSON-LD needs — keeping them out of other bundles.
+// entries the /whats-new JSON-LD needs, keeping them out of other bundles.
 provideCorpus({ releases })
 
 export function WhatsNew() {
@@ -64,7 +64,7 @@ export function WhatsNew() {
   })
 
   const sortedReleases = useMemo(() => {
-    // Copy before sorting — sort() in place would mutate the shared module array.
+    // Copy before sorting; sort() in place would mutate the shared module array.
     return [...releases].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   }, [])
 

@@ -30,7 +30,7 @@ test('axis options cover every benchmark plus price and context', () => {
 })
 
 test('shortModelLabel strips a distinct brand prefix and keeps everything else', () => {
-  // Anthropic models drop the Claude brand word — the color already says who.
+  // Anthropic models drop the Claude brand word; the color already says who.
   expect(shortModelLabel('Claude Opus 4.8', 'Anthropic')).toBe('Opus 4.8')
   expect(shortModelLabel('Claude Fable 5', 'Anthropic')).toBe('Fable 5')
   expect(shortModelLabel('Claude Sonnet 5', 'Anthropic')).toBe('Sonnet 5')
@@ -53,7 +53,7 @@ test('shortModelLabel never returns an empty string for any real model', () => {
   for (const m of models) {
     const label = shortModelLabel(m.name, providerName.get(m.providerId) ?? m.providerId)
     expect(label.length).toBeGreaterThan(0)
-    // The short label is always a suffix of the full name — it only ever
+    // The short label is always a suffix of the full name: it only ever
     // strips a leading brand, never rewrites.
     expect(m.name.endsWith(label)).toBe(true)
   }
@@ -105,7 +105,7 @@ test('every non-empty axis combination produces a spec the chart engine accepts'
     for (const y of axisOptions) {
       const { rows } = buildGraphRows(x, y)
       // The page renders an empty-state message instead of a chart when no
-      // model has data on both axes — only non-empty specs reach the engine.
+      // model has data on both axes; only non-empty specs reach the engine.
       if (rows.length === 0) continue
       const result = validateSpec(buildGraphSpec(x, y, rows))
       expect(result.valid, `spec invalid for ${x.id} × ${y.id}: ${JSON.stringify(result.errors)}`).toBe(true)
@@ -157,7 +157,7 @@ test('axisScale switches to log exactly at the documented ratio threshold', () =
   expect(axisScale([0.5, 50]).type).toBe('log') // price-output, 100x spread
   expect(axisScale([73.3, 96.2], 100).type).toBe('linear') // benchmarks, 1.3x
   // Log needs a strictly positive domain, so a zero forces linear even at a
-  // huge spread — Math.log10(0) would otherwise poison every projection.
+  // huge spread; Math.log10(0) would otherwise poison every projection.
   expect(axisScale([0, 1000]).type).toBe('linear')
   expect(axisScale([-5, 1000]).type).toBe('linear')
 })
@@ -272,7 +272,7 @@ test('spec crops both domains to the data, pins the legend on top, and draws no 
   const yMin = Math.min(...rows.map((r) => r.y))
   expect(yDomain[1]).toBeGreaterThanOrEqual(Math.max(...rows.map((r) => r.y)))
   expect(yDomain[1]).toBeLessThanOrEqual(100) // percentage axis never reads past 100
-  // Cropped, not zero-anchored — the readability fix in issue #81.
+  // Cropped rather than zero-anchored: the readability fix in issue #81.
   expect(yDomain[0]).toBeGreaterThan(0)
   expect(yDomain[0]).toBeLessThanOrEqual(yMin)
 })
@@ -404,7 +404,7 @@ test('connections on layer dotted lines UNDER the points', () => {
   // Lines first so the points paint on top and stay readable (issue #75).
   expect((layers[0].mark as Record<string, unknown>).type).toBe('rule')
   expect((layers[1].mark as Record<string, unknown>).type).toBe('point')
-  // Dash and opacity ride on data fields, not the mark def — the engine's
+  // Dash and opacity ride on data fields, not the mark def; the engine's
   // rule renderer only honors them through encodings. The rendered SVG is
   // asserted in graph.render.test.tsx.
   const encoding = layers[0].encoding!

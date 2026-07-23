@@ -56,7 +56,7 @@ export function PixelClassifier() {
       <div className="rounded-lg border border-line bg-bg-secondary p-6">
         <h3 className="text-lg font-semibold">The classifier's 64 weights</h3>
         <p className="mt-2 text-sm text-fg-secondary">
-          This is the network's entire "knowledge": one weight per pixel, squashed to 0–1 with the
+          This is the network's entire "knowledge": one weight per pixel, squashed to 0-1 with the
           sigmoid function and drawn in the same 8x8 layout as the drawing grid. Green cells (weight
           near 1) are where a 3 puts ink but an E doesn't. Red cells (weight near 0) are where an E
           puts ink but a 3 doesn't. Transparent cells (weight 0.5) don't help tell them apart, so

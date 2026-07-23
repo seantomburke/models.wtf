@@ -16,7 +16,7 @@ export interface GraphPreset {
 
 /**
  * The preset tabs, in tab order. Every x/y id here must exist in
- * `axisOptions` — `graphUrlState.test.ts` asserts that, so a benchmark
+ * `axisOptions`; `graphUrlState.test.ts` asserts that, so a benchmark
  * rename can't silently leave a tab pointing at a missing axis.
  */
 export const graphPresets: GraphPreset[] = [
@@ -132,7 +132,7 @@ export function parseGraphParams(params: URLSearchParams): GraphUrlState {
 
 /**
  * Serialize Graph page state into query params. Defaults are omitted so the
- * canonical /graph URL stays clean. A preset serializes as just its id —
+ * canonical /graph URL stays clean. A preset serializes as just its id;
  * the axes are recoverable from it, so writing them too would let a
  * hand-edited link drift out of sync with the tab.
  */

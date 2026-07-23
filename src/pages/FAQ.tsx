@@ -6,7 +6,7 @@ import { faqs, faqsByCategory, faqCategories } from '../data/faqs.ts'
 import { Breadcrumb } from '../components/Breadcrumb.tsx'
 
 // This page already loads the FAQ corpus to render it, so it supplies the copy
-// the /faq JSON-LD needs — keeping it out of every other route's bundle.
+// the /faq JSON-LD needs, keeping it out of every other route's bundle.
 provideCorpus({ faqs })
 
 /** Item ids whose question matches the ?q= deep-link query, in page order. */
@@ -128,12 +128,12 @@ export function FAQ() {
                         clip, never unmounted and never `display: none`. Unmounting
                         it kept all 23 answers out of the prerendered HTML, so
                         crawlers, LLM scrapers, and readers without JS saw a list of
-                        questions with no answers — and `hidden`/`display: none`
+                        questions with no answers, and `hidden`/`display: none`
                         would have the same effect on Ctrl-F. A clip keeps the text
                         in the layout, so in-page find still reaches it.
                         `hidden="until-found"` would be the tidier fix, but React 19
                         coerces `hidden` to a boolean and emits `hidden=""`, which is
-                        plain `display: none` — hence the clip.
+                        plain `display: none`, hence the clip.
                         `inert` keeps collapsed answers out of keyboard/AT reach. */}
                     <div
                       id={`${itemId}-content`}

@@ -125,7 +125,7 @@ describe('capabilityFilters', () => {
   })
 
   // Regression guard. Every filter chip on /compare must be satisfiable by the
-  // real dataset — a chip no model matches silently empties the table. This is
+  // real dataset; a chip no model matches silently empties the table. This is
   // the check that would have caught `vision`/`imageGeneration` going unset on
   // all 19 models. Deliberately imports the real data, not mocks.
   describe('capability options against the real dataset', () => {

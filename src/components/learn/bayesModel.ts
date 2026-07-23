@@ -1,11 +1,11 @@
 /**
- * Pure math for the Bayesian statistics lesson. No UI, no window access —
+ * Pure math for the Bayesian statistics lesson. No UI, no window access;
  * every number the two demos show is computed here from Bayes' theorem:
  *
  *   P(A | B) = P(B | A) · P(A) / P(B)
  *
  * Part 1 (the tree): the classic medical-test example. A two-stage
- * probability tree — sick or healthy, then test positive or negative —
+ * probability tree (sick or healthy, then test positive or negative)
  * whose four leaves are joint probabilities. The posterior
  * P(sick | positive) is the sick-and-positive leaf divided by the sum of
  * both positive leaves. The default numbers (1% prevalence, 90% sensitivity,
@@ -109,7 +109,7 @@ export const TOPICS = Object.keys(TOPIC_CORPORA)
 /** Sentence-start sentinel, so the model also has P(first word | topic). */
 export const SEQ_START = '<start>'
 
-/** counts[topic].get(prev).get(next) — pure counting, exactly like Parrot-43. */
+/** counts[topic].get(prev).get(next): pure counting, exactly like Parrot-43. */
 function topicBigramCounts(): Record<string, Map<string, Map<string, number>>> {
   const all: Record<string, Map<string, Map<string, number>>> = {}
   for (const [topic, corpus] of Object.entries(TOPIC_CORPORA)) {
@@ -152,7 +152,7 @@ export interface TopicPosterior {
  *
  *   P(topic | w₁…wₙ) ∝ P(topic) · Π P(wᵢ | wᵢ₋₁, topic)
  *
- * Implemented as the sequential form of Bayes' theorem — each word
+ * Implemented as the sequential form of Bayes' theorem: each word
  * multiplies the running posterior by its likelihood under each topic,
  * then renormalizes. Starts from a uniform prior over topics.
  * A word a topic has never seen in that position sends that topic's

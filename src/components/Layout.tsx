@@ -24,8 +24,8 @@ const navItems = [
  * lazy child inline when nothing can show a fallback, but as soon as a boundary
  * exists it may flush the shell the moment its buffer fills (~12kB) and stream
  * the remainder as trailing <template> blobs plus a $RC() script. Those only
- * splice in under a real browser, so crawlers — the whole reason this site
- * prerenders — saw a <main> holding nothing but the fallback on every page big
+ * splice in under a real browser, so crawlers (the whole reason this site
+ * prerenders) saw a <main> holding nothing but the fallback on every page big
  * enough to cross that threshold. Smaller pages fit in the shell and looked
  * fine, which is why this shipped unnoticed.
  *

@@ -2,12 +2,12 @@
  * Site-wide content search: provider pages, glossary terms, Learn topics, and FAQs.
  *
  * Lives apart from search.ts on purpose. Compare imports searchModels, and
- * Rollup chunks at module granularity — importing the glossary and FAQ corpora
+ * Rollup chunks at module granularity: importing the glossary and FAQ corpora
  * from search.ts pulled both datasets into /compare's preload graph. Only the
  * Search page imports this module, so the corpora stay in their own chunks.
  * topics.ts already ships in the shared meta chunk (routeMeta.ts imports it),
  * so reading it here adds no bundle weight. providers.ts is tiny and the
- * Search page already loads the data index, so it costs nothing here either —
+ * Search page already loads the data index, so it costs nothing here either,
  * but keep it out of search.ts for the same chunking reason.
  */
 import { glossaryTerms } from '../data/glossary.ts'
@@ -35,8 +35,8 @@ function clip(text: string): string {
 }
 
 /**
- * Search the site's educational content. Relevance tiers mirror searchModels —
- * a hit on the title/term/question outranks a hit buried in body copy — so
+ * Search the site's educational content. Relevance tiers mirror searchModels
+ * (a hit on the title/term/question outranks a hit buried in body copy) so
  * results interleave sensibly.
  */
 export function searchContent(query: string): ContentResult[] {

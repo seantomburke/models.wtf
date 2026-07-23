@@ -15,7 +15,7 @@ import type { PostHog } from 'posthog-js'
  *    order once the real client is live.
  * 2. `usePostHog()` reads a client out of React context during the first
  *    render, so the provider needs *something* immediately. `stub` is that
- *    stand-in — it captures into the queue and no-ops everything else.
+ *    stand-in: it captures into the queue and no-ops everything else.
  *
  * We import the `slim` build deliberately: it drops surveys, product tours, and
  * the other extensions this site never calls, roughly halving the download.
@@ -67,7 +67,7 @@ const flush = (loaded: PostHog) => {
 }
 
 /**
- * Load and initialise PostHog. Safe to call more than once — the in-flight
+ * Load and initialise PostHog. Safe to call more than once; the in-flight
  * promise is reused, so concurrent callers share one network request.
  *
  * Resolves to `null` when analytics can't or shouldn't run (no token
@@ -86,7 +86,7 @@ export const loadAnalytics = async (): Promise<PostHog | null> => {
       // The slim and full builds ship separate but structurally identical
       // declarations, so TypeScript treats their `PostHog` types as unrelated.
       // `@posthog/react` is typed against the full build, so we settle on that
-      // type here — the runtime object is the same shape either way.
+      // type here; the runtime object is the same shape either way.
       const posthog = mod.posthog as unknown as PostHog
 
       posthog.init(token, {

@@ -7,7 +7,7 @@ import type { GlossaryTerm } from '../data/index.ts'
 import { Breadcrumb } from '../components/Breadcrumb.tsx'
 
 // This page already loads the glossary to render it, so it supplies the terms
-// the /glossary JSON-LD needs — keeping them out of every other route's bundle.
+// the /glossary JSON-LD needs, keeping them out of every other route's bundle.
 provideCorpus({ glossaryTerms })
 
 export function Glossary() {
@@ -22,7 +22,7 @@ export function Glossary() {
   })
 
   // Seed the search box from ?q= so site-wide search can deep-link to a term,
-  // but keep typing local — every keystroke shouldn't rewrite the URL.
+  // but keep typing local; every keystroke shouldn't rewrite the URL.
   const [searchParams] = useSearchParams()
   const [search, setSearch] = useState(() => searchParams.get('q') ?? '')
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set())

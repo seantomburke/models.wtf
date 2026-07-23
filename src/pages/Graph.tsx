@@ -57,7 +57,7 @@ interface PresetTabsProps {
  * The preset views, as a real ARIA tablist.
  *
  * Roving tabindex: exactly one tab is in the tab order at a time and the
- * arrow keys move between them, which is what the tablist pattern requires —
+ * arrow keys move between them, which is what the tablist pattern requires;
  * leaving every tab tabbable would make a keyboard user press Tab four times
  * to get past the strip.
  */

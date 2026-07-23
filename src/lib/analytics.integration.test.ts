@@ -28,7 +28,7 @@ const recordEvents = (body: unknown) => {
     try {
       raw = gunzipSync(bytes).toString('utf8')
     } catch {
-      // Not gzipped after all — fall back to reading it as plain text.
+      // Not gzipped after all; fall back to reading it as plain text.
       raw = Buffer.from(bytes).toString('utf8')
     }
   } else {
@@ -73,7 +73,7 @@ describe('analytics integration (real slim SDK)', () => {
   it('delivers an event captured before load to the ingest endpoint', async () => {
     const { capture, loadAnalytics } = await import('./analytics.ts')
 
-    // Fired while the SDK is still in flight — the case that used to be a
+    // Fired while the SDK is still in flight: the case that used to be a
     // guaranteed static import and is now genuinely deferred.
     capture('early_test_event', { early: true })
     expect(sentEvents).toHaveLength(0)
@@ -82,7 +82,7 @@ describe('analytics integration (real slim SDK)', () => {
     expect(client).not.toBeNull()
 
     // Assert on the specific queued event, not merely that *some* request went
-    // out — the SDK fires its own requests on init, which would make a looser
+    // out; the SDK fires its own requests on init, which would make a looser
     // check pass even if the flush were broken.
     await vi.waitFor(
       () => {

@@ -3,8 +3,8 @@ import type { Motif } from './TopicCardAnimation'
 /**
  * Which animated motif each /learn topic shows on its index card.
  *
- * The lab topics reuse the visual idea from their own learning pane — the
- * pixel grid, the digit outputs, the layer sweep, the ball on the loss curve —
+ * The lab topics reuse the visual idea from their own learning pane (the
+ * pixel grid, the digit outputs, the layer sweep, the ball on the loss curve)
  * so the card previews what you get when you click it. The rest get the
  * closest honest picture of their subject.
  *

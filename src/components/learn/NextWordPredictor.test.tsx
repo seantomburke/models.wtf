@@ -81,7 +81,7 @@ test('choosing "end here" from a dropdown ends the sentence at that point', asyn
   await user.click(screen.getByRole('button', { name: /^cat:/i }))
   await user.click(screen.getByRole('button', { name: /^sat:/i }))
 
-  // Word 3's candidates are everything that follows "cat" — including END,
+  // Word 3's candidates are everything that follows "cat", including END,
   // because "the dog chased the cat" stops there. Choose it.
   const third = screen.getAllByRole('combobox')[2]
   const endOption = within(third)

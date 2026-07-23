@@ -2,7 +2,7 @@
  * Single re-export of the PostHog React bindings.
  *
  * Import `usePostHog` / `PostHogProvider` from here, never from
- * `@posthog/react` directly — that package's main entry does a top-level
+ * `@posthog/react` directly: that package's main entry does a top-level
  * `import posthogJs from 'posthog-js'`, which pulls the entire analytics SDK
  * into the entry chunk and undoes the deferred loading in lib/analytics.ts.
  * The `slim` build has the same hooks with no such import.

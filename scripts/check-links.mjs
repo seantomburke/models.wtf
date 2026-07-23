@@ -4,7 +4,7 @@
  * Verify every internal link in the built site resolves to a real page or asset.
  * Runs after prerender.mjs, over dist/ rather than over source data.
  *
- * A unit test can only guard the link lists it knows about — glossary.test.ts
+ * A unit test can only guard the link lists it knows about: glossary.test.ts
  * covers relatedLearnTopic, and nothing covers hrefs written inline in JSX or
  * prose. Those are where the dead glossary links in 776d619 came from, so the
  * check that catches the next rename has to read the rendered HTML.
@@ -33,7 +33,7 @@ function walk(dir, onFile) {
 
 function main() {
   if (!fs.existsSync(distDir)) {
-    console.error('✗ dist/ not found — run `npm run build` first')
+    console.error('✗ dist/ not found; run `npm run build` first')
     process.exit(1)
   }
 

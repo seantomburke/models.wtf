@@ -80,7 +80,7 @@ Sources checked 2026-07-23: [Claude Sonnet 5](https://artificialanalysis.ai/mode
   source checks still rule out the available near-matches: unsupported
   benchmark versions, different model variants, tool-assisted-only results,
   and figures with no reproducible harness. This is deliberate: the site
-  shows “—” instead of turning an incomparable score into a false comparison.
+  shows "—" instead of turning an incomparable score into a false comparison.
 
 Sources: [Grok 4.5 benchmark results](https://benchmarklist.com/models/xai-grok-4-5/)
 and [Muse Spark 1.1 benchmark results](https://benchmarklist.com/models/meta-muse-spark-1-1/),
@@ -173,7 +173,7 @@ github.com/meta-llama/llama-models MODEL_CARD.md, vals.ai, and tbench.ai.
   provider-published it takes no `scoreProvenance` entry.
 - **Llama 4 Maverick and Scout (8 cells) are unfillable at the source.**
   Meta's own `llama-models` MODEL_CARD.md publishes neither SWE-bench
-  Verified, SWE-bench Pro, Terminal-Bench, nor HLE for either model — its
+  Verified, SWE-bench Pro, Terminal-Bench, nor HLE for either model; its
   instruction-tuned table tops out at LiveCodeBench. A search digest claiming
   "Maverick 74.2 on SWE-bench Verified" is fabricated; a sibling result in
   the same search reported Maverick at 8.0 on SWE-bench *Lite*, and Verified
@@ -184,8 +184,8 @@ github.com/meta-llama/llama-models MODEL_CARD.md, vals.ai, and tbench.ai.
   and we track 2.1 exclusively, so it stays excluded rather than converted.
   Circulating third-party GPQA values (74.1 / 73.0 / 67.2 / 67) still
   conflict and still have no verifiable leaderboard entry.
-- **Grok 4.5 HLE stays omitted — near-miss worth recording.** Searches for it
-  return *Grok 4* numbers (25.4–26.9 closed-book, 41.0 with tools, 50.7
+- **Grok 4.5 HLE stays omitted; near-miss worth recording.** Searches for it
+  return *Grok 4* numbers (25.4-26.9 closed-book, 41.0 with tools, 50.7
   Heavy). Different model; using them would have been a silent substitution.
   Artificial Analysis's HLE leaderboard has no Grok 4.5 row.
 - **Terra/Luna HLE and Terra SWE-bench Verified stay omitted.** openai.com
@@ -226,7 +226,7 @@ roster), plus web searches for Muse Spark 1.1 and Kimi K3 eval tables.
   Llama 4 Maverick and Scout.
 - **Vision = false for two**, on the strength of their own model cards:
   GLM-5.2 and DeepSeek V4 Pro are both plain text-generation models. Note
-  these are recorded as explicit `false`, not omissions — the provider card
+  these are recorded as explicit `false`, not omissions; the provider card
   positively establishes the absence, which is different from "unknown".
 - **imageGeneration is false for all 18 models we could source.** Every
   provider that documents an output modality lists text only, and each one
@@ -271,7 +271,7 @@ roster), plus web searches for Muse Spark 1.1 and Kimi K3 eval tables.
   like Opus 4.8 (45.7). Both closed-book figures were used instead.
 - **Gemini 3.5 Flash GPQA re-attributed.** The 92.2 carried a
   "Google-published" comment, but the official model card publishes no GPQA
-  at all — the number is an Artificial Analysis run, now marked independent.
+  at all; the number is an Artificial Analysis run, now marked independent.
   The same card confirms its Terminal-Bench 76.2 *is* a 2.1 result
   (Terminus-2 harness), contradicting secondary coverage that called it 2.0,
   so the score stands and the convention is not violated.
@@ -280,11 +280,11 @@ roster), plus web searches for Muse Spark 1.1 and Kimi K3 eval tables.
   and Inkling (47.57). Provider numbers stay per the convention.
 - **Rejected leads:** Gemini 3.1 Pro's HLE is quoted as both 44.4 and 51.4 by
   different sources with no provider figure to settle it, so it stays
-  omitted. Grok 4.5 has no isolated HLE score — only its position in
-  Artificial Analysis's composite index — so it stays omitted too. Kimi K3's
+  omitted. Grok 4.5 has no isolated HLE score (only its position in
+  Artificial Analysis's composite index), so it stays omitted too. Kimi K3's
   "95.10 SWE-bench Verified" is the Vals *Index subset*, a different harness
   from the 93.4 mini-swe-agent run already recorded, not an update to it.
-- Checked and unchanged: no new frontier releases July 17–20 (llm-stats
+- Checked and unchanged: no new frontier releases July 17-20 (llm-stats
   release feed); Gemini 3.5 Pro still not GA (still no model card or pricing;
   now rumoured to August); Kimi K3 open weights still promised for 07-27.
 
@@ -317,10 +317,10 @@ anthropic.com/news/claude-haiku-4-5.
 - **Kimi K3 added as Moonshot AI's flagship** (released 2026-07-16: 2.8T-param
   sparse MoE, 1M context, native vision, always-on reasoning, $3/$15).
   GPQA Diamond 93.5, Terminal-Bench 2.1 88.3, and HLE 56.0 (with tools) are
-  all Moonshot-published — no independent runs yet (K3 is absent from
+  all Moonshot-published; no independent runs yet (K3 is absent from
   tbench.ai's 17-row leaderboard). Moonshot publishes no SWE-bench
   Verified/Pro (its launch table uses DeepSWE/ProgramBench/FrontierSWE
-  instead). Open weights are promised by 2026-07-27 — flip `openSource`
+  instead). Open weights are promised by 2026-07-27; flip `openSource`
   and null the prices if that lands.
 - **Inkling added as Thinking Machines' first model** (released 2026-07-15:
   975B MoE / 41B active, Apache 2.0 open weights on Hugging Face, up to 1M
@@ -330,7 +330,7 @@ anthropic.com/news/claude-haiku-4-5.
   Prices are null per the open-weights convention (hosted APIs exist on
   Together/Fireworks/Modal/Databricks/Baseten at varying rates).
 - **Gemini 3.5 Pro did NOT ship on July 17.** Bloomberg and 9to5Google
-  (July 16) report the launch slipped again — the third missed deadline —
+  (July 16) report the launch slipped again (the third missed deadline)
   over coding-benchmark shortfalls and hallucination issues; Google may ship
   a stopgap "Gemini 3.6 Flash" instead. Several aggregator articles claiming
   a July 17 GA are churn: deepmind.google still lists 3.5 Pro as "coming
@@ -351,7 +351,7 @@ benchlm.ai + morphllm.com (Kimi K3 pricing/specs/Moonshot-published scores),
 tbench.ai (Terminal-Bench 2.1 leaderboard recheck), bloomberg.com +
 9to5google.com + techtimes.com (Gemini 3.5 Pro delay), ai.google.dev +
 deepmind.google (Gemini API/model-card recheck), anthropic.com/news
-(Haiku 4.5 GPQA recheck), llm-stats.com (July 14–19 release news).
+(Haiku 4.5 GPQA recheck), llm-stats.com (July 14-19 release news).
 
 2026-07-14 second-pass refresh notes:
 
@@ -360,15 +360,15 @@ deepmind.google (Gemini API/model-card recheck), anthropic.com/news
   independent Claude Code run at 78.9; Sonnet 5's published 80.4 has a
   Claude Code run at 74.6. Scores unchanged per the provider-wins
   convention; inline comments added. (We also verified the published
-  numbers against launch coverage — the 80.4/74.6 pair looked like a
+  numbers against launch coverage; the 80.4/74.6 pair looked like a
   possible row-misalignment from the leaderboard, but both are genuinely
   Anthropic-published: Sonnet 5 announcement and Opus 4.8 system card
   §8.3.)
 - **Rejected leads:** an llm-stats.com search snippet claimed "Gemini 3.2
-  Pro", "DeepSeek V4.5", and "Llama 5" joined the July leaderboards — all
+  Pro", "DeepSeek V4.5", and "Llama 5" joined the July leaderboards; all
   three are phantom names (no such releases exist; Llama 5 was already
   debunked 7/13 as a misnaming of Muse Spark 1.1). A Lushbinary post cites
-  "GPT-5.6 Sol Ultra 91.9" on Terminal-Bench 2.1 — that is a max-effort
+  "GPT-5.6 Sol Ultra 91.9" on Terminal-Bench 2.1; that is a max-effort
   config from a secondary source; Sol's 88.8 OpenAI-published number stays.
 - **Sonnet 5 intro pricing ignored:** $2/$10 promotional pricing runs until
   2026-08-31, but per convention we list the $3/$15 list price.
@@ -383,7 +383,7 @@ deepmind.google (Gemini API/model-card recheck), anthropic.com/news
 2026-07-14 morning refresh notes:
 
 - **tbench.ai now has official Terminal-Bench 2.1 runs for the models we
-  were watching.** Muse Spark 1.1 gained a score (76.2, mini-SWE-agent) —
+  were watching.** Muse Spark 1.1 gained a score (76.2, mini-SWE-agent),
   previously omitted because Meta had published only a 2.0 run. Grok 4.5
   (79.3, Cursor CLI), GPT-5.6 Terra (78.4, Codex), and Luna (75.7, Codex)
   got independent runs that land well below the providers' self-reported
@@ -396,8 +396,8 @@ deepmind.google (Gemini API/model-card recheck), anthropic.com/news
 - Checked and unchanged: OpenAI still publishes no GPQA/SWE-bench Verified
   for the GPT-5.6 family; Haiku 4.5 GPQA still has no verifiable source
   (benchlm.ai shows none); Gemini 3.5 Pro still not GA (no model card,
-  docs, or pricing — reporting now points at July 17); no new flagship
-  releases July 13–14; no 2.1 runs yet for DeepSeek V4 Pro / Qwen 3.6 /
+  docs, or pricing; reporting now points at July 17); no new flagship
+  releases July 13-14; no 2.1 runs yet for DeepSeek V4 Pro / Qwen 3.6 /
   GLM-5.2 / Grok 4.1 Fast.
 
 2026-07-13 second-pass refresh notes:
@@ -405,13 +405,13 @@ deepmind.google (Gemini API/model-card recheck), anthropic.com/news
 - **Muse Spark 1.1 added as Meta's flagship** (released 2026-07-09 by Meta
   Superintelligence Labs, `muse-spark-1.1`, $1.25/$4.25, 1M context, 256K max
   output, reasoning with adjustable effort). It is closed-weights on the new
-  Meta Model API — Meta's pivot away from open-weights Llama — so the `meta`
+  Meta Model API (Meta's pivot away from open-weights Llama), so the `meta`
   provider is now `openSource: false` while the Llama 4 models keep their
   model-level open flags (they remain Meta's newest open weights). SWE-bench
   Pro 61.5 is Meta-published; GPQA Diamond 88.4 is an Artificial Analysis
   independent run; Terminal-Bench is omitted because Meta published only a
   2.0 run (80.0) and we track 2.1 only. Meta published no SWE-bench Verified.
-  Note: several outlets covered this release as "Llama 5" — that name is
+  Note: several outlets covered this release as "Llama 5"; that name is
   wrong; Wikipedia and deeplearning.ai confirm the Llama line ended at 4.
 - Meta was also added to the quiz's company-preference options now that it
   sells API access like the other closed providers.
@@ -420,12 +420,12 @@ deepmind.google (Gemini API/model-card recheck), anthropic.com/news
   absent from the official leaderboard); GPT-5.6 Terra/Luna GPQA still
   unpublished (Artificial Analysis shows only composite index scores);
   Gemini 3.5 Pro is still unreleased (third-party reports point at July 17
-  with no official Google model card, docs, or pricing — excluded until GA).
+  with no official Google model card, docs, or pricing; excluded until GA).
 
 2026-07-13 morning refresh notes:
 
 - **Grok 4.5 replaced Grok 4.3** as xAI's flagship (launched 2026-07-08,
-  `grok-4.5`, $2/$6, 500K context — long-context requests above 200K bill
+  `grok-4.5`, $2/$6, 500K context; long-context requests above 200K bill
   higher). Its SWE-bench Pro (64.7) and Terminal-Bench 2.1 (83.3) numbers are
   xAI self-reported with no independent verification yet; GPQA (93.1) is an
   Artificial Analysis run. xAI published no SWE-bench Verified.
@@ -461,8 +461,8 @@ status), web search for July 14 release news.
 
 Sources used (2026-07-14 morning): tbench.ai (Terminal-Bench 2.1 leaderboard,
 fetched twice for consistency), benchlm.ai (Haiku 4.5 model page),
-o-mega.ai (GPT-5.6 benchmark article — CAISI attribution check),
-web search for July 13–14 release news and Gemini 3.5 Pro GA status.
+o-mega.ai (GPT-5.6 benchmark article; CAISI attribution check),
+web search for July 13-14 release news and Gemini 3.5 Pro GA status.
 
 Sources used (2026-07-13 second pass): marktechpost.com and
 digitalapplied.com (Muse Spark 1.1 launch coverage: pricing, context, model
@@ -470,7 +470,7 @@ id, Meta's published eval table), vals.ai and benchlm.ai (Muse Spark 1.1
 model pages: max output, GPQA Diamond via Artificial Analysis, Terminal-Bench
 2.0-only status), deeplearning.ai + Wikipedia Llama article (Muse Spark
 replaced Llama; closed-weights pivot), tbench.ai (2.1 leaderboard recheck),
-llm-stats.com (news recheck for July 8–13 releases).
+llm-stats.com (news recheck for July 8-13 releases).
 
 Sources used (2026-07-13 morning refresh): artificialanalysis.ai (GPQA Diamond and
 Terminal-Bench v2.1 leaderboards, Grok 4.5 model page), benchlm.ai (Grok 4.5

@@ -26,7 +26,7 @@ export function DigitClassifier() {
     <div className="space-y-8">
       {/* Drawing Grid */}
       <div className="rounded-lg border border-line bg-bg-secondary p-6">
-        <h3 className="text-lg font-semibold">Draw a digit: 0–9</h3>
+        <h3 className="text-lg font-semibold">Draw a digit: 0-9</h3>
         <p className="mt-2 text-sm text-fg-secondary">
           Click a pixel, or drag across the grid to draw a stroke at once. On a phone, draw with
           your finger. A two-layer network, 64 inputs, {SEGMENT_COUNT} stroke detectors, 10
@@ -79,7 +79,7 @@ export function DigitClassifier() {
         <p className="mt-2 text-sm text-fg-secondary">
           The output layer's 70 weights, one row per digit. Green means "this digit expects that
           stroke", red means "that stroke is evidence against it". An 8 wants every stroke; a 1
-          only wants the two right-hand lines — every other stroke argues against it.
+          only wants the two right-hand lines, and every other stroke argues against it.
         </p>
         <div className="mt-6">
           <DigitOutputWeights />
@@ -168,7 +168,7 @@ export function DigitClassifier() {
             <li>
               <strong className="text-fg-primary">Layer 2 combines strokes.</strong> Each digit
               output adds +1 for every firing detector the digit uses and −1 for every firing
-              detector it doesn't. A quiet detector votes in reverse — no bottom bar is real
+              detector it doesn't. A quiet detector votes in reverse: no bottom bar is real
               evidence <em>for</em> a 4 and against an 8.
             </li>
             <li>

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
-// The slim SDK is the module under deferral — stub it so no network or real
+// The slim SDK is the module under deferral. Stub it so no network or real
 // PostHog init happens, and so we can assert what got captured and when.
 const init = vi.fn()
 const capture = vi.fn()
@@ -119,7 +119,7 @@ describe('analytics', () => {
     const { getAnalyticsClient } = await freshModule()
 
     // PostHogProvider reads this during the very first render, so it can never
-    // be null — components call usePostHog().capture() immediately.
+    // be null; components call usePostHog().capture() immediately.
     expect(() => getAnalyticsClient().capture('from_stub')).not.toThrow()
   })
 })

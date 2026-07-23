@@ -68,7 +68,7 @@ export function Search() {
       <section>
         <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Search</h1>
         <p className="mt-2 text-fg-secondary">
-          Find models by name, provider, or capability — or jump to a provider's page, the glossary, Learn topics, and FAQ.
+          Find models by name, provider, or capability. You can also jump to a provider's page, the glossary, Learn topics, and FAQ.
         </p>
       </section>
 

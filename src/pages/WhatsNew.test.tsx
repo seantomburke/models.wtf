@@ -71,7 +71,7 @@ describe('WhatsNew', () => {
 
   it('pluralizes relative dates correctly at a count of one', () => {
     // Pin "now" to 8 days after the 2026-07-21 release so it lands in the
-    // one-week bucket — the case that used to render "1 weeks ago".
+    // one-week bucket, the case that used to render "1 weeks ago".
     vi.useFakeTimers({ now: new Date('2026-07-29T12:00:00Z'), toFake: ['Date'] })
     try {
       renderWithRouter(<WhatsNew />)

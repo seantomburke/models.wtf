@@ -62,7 +62,7 @@ export function ModelsIndex() {
             id={`provider-${provider.id}`}
             className="mb-3 text-lg font-semibold tracking-tight text-fg"
           >
-            {/* The heading links to the provider's own page — lineup table,
+            {/* The heading links to the provider's own page: lineup table,
                 release history, and a preselected compare link live there. */}
             <Link
               to={`/providers/${provider.id}`}

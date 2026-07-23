@@ -7,7 +7,7 @@ import { prefersReducedMotion } from './useCardAnimation'
  * input matrix as 64 nodes on the left, the two output neurons ("3" and "E")
  * on the right, every edge colored by the learned weight's sign. Same visual
  * language as PixelNetworkDiagram, but wired to whatever the lab's gradient
- * descent run produced — invert the labels and the edge colors flip with them.
+ * descent run produced: invert the labels and the edge colors flip with them.
  */
 
 const SVG_W = 560
@@ -203,7 +203,7 @@ export function LearnedNetworkDiagram({ pixels, weights, bias }: LearnedNetworkD
       <p className="mt-4 text-xs text-fg-muted">
         These are the exact weights your training run just learned. Green edges carry evidence
         toward an output, red edges against it. Press predict and watch your lit pixels send their
-        signal down the weighted connections — the output with the bigger weighted sum wins.
+        signal down the weighted connections. The output with the bigger weighted sum wins.
       </p>
     </div>
   )

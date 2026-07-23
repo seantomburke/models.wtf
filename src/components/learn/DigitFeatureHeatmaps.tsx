@@ -1,7 +1,7 @@
 import { GRID_SIZE, PIXEL_COUNT, SEGMENTS, classifyDigit } from './digitClassifierModel'
 
 /**
- * The hidden layer's weights drawn as seven mini 8x8 heatmaps — one per
+ * The hidden layer's weights drawn as seven mini 8x8 heatmaps, one per
  * stroke detector. Colored cells are the pixels that neuron watches (its
  * positive weights); everything else is weight 0. When a drawing is passed
  * in, each card also reports how strongly its detector is firing.

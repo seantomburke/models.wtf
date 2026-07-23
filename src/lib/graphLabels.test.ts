@@ -3,7 +3,7 @@ import type { LabelInput, PlacedLabel } from './graphLabels'
 
 const ASPECT = 2
 
-/** Overlap test mirroring the module's padded box collision, minus the pad —
+/** Overlap test mirroring the module's padded box collision, minus the pad;
  * shown labels must be clear of each other even without breathing room. */
 function boxesOverlap(a: PlacedLabel, b: PlacedLabel): boolean {
   return (
@@ -86,7 +86,7 @@ test('labels never cross the plot boundary', () => {
 
 test('hiding is a last resort: an impossible pile drops labels instead of stacking them', () => {
   // Twelve identical points: no arrangement can show twelve labels around
-  // one spot without overlap, so some must be hidden — but at least one
+  // one spot without overlap, so some must be hidden, but at least one
   // shows, and the shown ones stay clear of each other.
   const inputs: LabelInput[] = Array.from({ length: 12 }, (_, i) => ({
     id: `m${i}`,

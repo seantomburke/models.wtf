@@ -3,7 +3,7 @@ import { faqs } from './faqs'
 
 /**
  * The glossary and FAQ teach model selection by example. When the lineup moves
- * on, those examples quietly become wrong — and they contradict the model table
+ * on, those examples quietly become wrong, and they contradict the model table
  * on the same site. This guards the prose against naming a retired generation.
  *
  * Entries in ALLOWED_HISTORICAL are deliberate references to the past (company
@@ -13,7 +13,7 @@ const RETIRED_GENERATIONS =
   /\b(?:GPT-[1-4][\w.-]*|Claude [123](?:\.\d)?\b|Gemini [12](?:\.\d)?\b|Llama [123]\b|Grok [123]\b)/g
 
 const ALLOWED_HISTORICAL = new Set([
-  // "The company that created ChatGPT and GPT-4" — founding history.
+  // "The company that created ChatGPT and GPT-4" is founding history.
   'openai',
 ])
 

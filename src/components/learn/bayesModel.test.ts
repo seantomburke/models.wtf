@@ -73,7 +73,7 @@ test('per-topic bigram probabilities come straight from corpus counts', () => {
   expect(topicNextProbs('weather', SEQ_START).get('the')).toBeCloseTo(4 / 5, 12)
   expect(topicNextProbs('weather', SEQ_START).get('a')).toBeCloseTo(1 / 5, 12)
   // In the weather corpus, "the" is followed by: rain 2, wind 1, storm 1,
-  // hills 2 — six continuations in all.
+  // hills 2; six continuations in all.
   expect(topicNextProbs('weather', 'the').get('rain')).toBeCloseTo(2 / 6, 12)
   expect(topicNextProbs('weather', 'the').get('storm')).toBeCloseTo(1 / 6, 12)
   // The cooking corpus never mentions rain.
@@ -146,10 +146,10 @@ test('mixture probabilities sum to 1 after every reachable prefix', () => {
   }
 })
 
-test('sharper posteriors mean sharper predictions — the Bayesian payoff', () => {
+test('sharper posteriors mean sharper predictions: the Bayesian payoff', () => {
   // P(fell | prev = "rain") under a stuck-at-uniform posterior would be
   // 1/2 · 1 + 1/2 · 0 = 1/2. With the observed prefix "the rain" the
-  // posterior on weather is 1, so the model predicts "fell" at 100% —
+  // posterior on weather is 1, so the model predicts "fell" at 100%;
   // the evidence sharpened the prediction.
   const stuckAtUniform = 0.5
   const observed = mixtureNextWords(['the', 'rain']).find((p) => p.word === 'fell')?.prob

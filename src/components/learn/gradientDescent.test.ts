@@ -77,8 +77,8 @@ describe('training set', () => {
   })
 
   it('gives every glyph the telltale spine of its own letter', () => {
-    // An E's leftmost inked column is a solid vertical stroke; a 3's is not —
-    // its left side is just the bar tips. That structural difference is what
+    // An E's leftmost inked column is a solid vertical stroke; a 3's is not,
+    // since its left side is just the bar tips. That structural difference is what
     // makes the drawings read as letters rather than noise.
     const columnRuns = (pixels: boolean[], col: number) => {
       const rows: number[] = []

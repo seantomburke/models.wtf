@@ -48,7 +48,7 @@ export function NextWordPredictor() {
 
   /**
    * Re-choose the word at `index` from its dropdown. Everything after it is
-   * dropped — those words were predicted from a word that no longer exists —
+   * dropped (those words were predicted from a word that no longer exists)
    * and prediction picks up from the new choice.
    */
   const rechoose = (index: number, word: string) => {

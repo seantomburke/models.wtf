@@ -42,7 +42,7 @@ function ComparisonCompanies({ topicSlug }: { topicSlug: string }) {
 
 /**
  * Sidebar table of contents: every lesson under its level header, as plain
- * links. Desktop only — on small screens the card grid IS the overview, and
+ * links. Desktop only: on small screens the card grid IS the overview, and
  * a second copy of thirty links would just push it below the fold. The nav
  * grows to its full content height (no inner scroll), so the page scrolls
  * past it naturally.

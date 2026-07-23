@@ -32,8 +32,8 @@ interface SwipeLabelDeckProps {
 /**
  * The queue made visible: the next few unlabelled drawings ride in from the
  * right and step left toward the deck as each card is judged. The step is one
- * translate transition on the whole strip — set to a slot width without
- * transition, then released to zero — so it stays cheap, and it is skipped
+ * translate transition on the whole strip (set to a slot width without
+ * transition, then released to zero) so it stays cheap, and it is skipped
  * entirely under prefers-reduced-motion.
  */
 function ConveyorStrip({ upcoming }: { upcoming: SwipeCard[] }) {
@@ -132,7 +132,7 @@ export function SwipeLabelDeck({ card, upcoming, remaining, onLabel, onDelete, o
     if (event.button !== 0 || exit) return
     originRef.current = { x: event.clientX, y: event.clientY, pointerId: event.pointerId }
     // Capture keeps the drag alive when the pointer leaves the card, and jsdom
-    // does not implement it — hence the guard.
+    // does not implement it, hence the guard.
     cardRef.current?.setPointerCapture?.(event.pointerId)
     setDrag({ dx: 0, dy: 0 })
   }

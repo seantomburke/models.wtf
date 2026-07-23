@@ -11,7 +11,7 @@ const PAD_Y = 10
  * viewer literally watches the weights converge: a tangle of near-zero noise
  * on the left that fans out and settles into steady bands on the right. The
  * epoch scrubber's position is marked with a sweep line, and the history to
- * the right of it is ghosted — the same past/future treatment as the loss
+ * the right of it is ghosted: the same past/future treatment as the loss
  * chart on the gradient descent page.
  */
 export function WeightTrajectoryChart({ run, epoch }: { run: TrainingRun; epoch: number }) {
@@ -73,7 +73,7 @@ export function WeightTrajectoryChart({ run, epoch }: { run: TrainingRun; epoch:
         <line x1={geometry.x(epoch)} y1={0} x2={geometry.x(epoch)} y2={CHART_H} stroke="var(--color-accent)" strokeWidth="2" />
       </svg>
       <p className="mt-2 text-xs text-fg-muted">
-        Each line is one of the 64 weights. They start as random noise near zero, then gradient descent pulls the ones that matter apart — green lines end up voting for 3, red lines for E.
+        Each line is one of the 64 weights. They start as random noise near zero, then gradient descent pulls the ones that matter apart: green lines end up voting for 3, red lines for E.
       </p>
     </div>
   )

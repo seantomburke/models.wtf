@@ -42,7 +42,7 @@ export function initWebVitals(posthog: ReturnType<typeof usePostHog> | null): vo
   /**
    * Interaction to Next Paint (INP): measures interactivity.
    * It quantifies the experience users feel when trying to interact with
-   * an unresponsive page — a low INP helps ensure the page is usable.
+   * an unresponsive page; a low INP helps ensure the page is usable.
    * Note: INP replaces First Input Delay (FID) in the Core Web Vitals.
    */
   onINP((metric: Metric) => {
@@ -52,7 +52,7 @@ export function initWebVitals(posthog: ReturnType<typeof usePostHog> | null): vo
   /**
    * Cumulative Layout Shift (CLS): measures visual stability.
    * It quantifies how much visible elements shift around on the page during
-   * the page's lifetime — low CLS helps ensure visual stability.
+   * the page's lifetime; low CLS helps ensure visual stability.
    */
   onCLS((metric: Metric) => {
     captureWebVital(posthog, EVENTS.WEB_VITAL_CLS, metric.value, metric.rating || 'unknown', metric.delta)

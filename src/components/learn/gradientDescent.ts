@@ -33,7 +33,7 @@ export const SEED = 20260719
 
 /**
  * Deterministic 32-bit PRNG (mulberry32). Seeded so the "random" starting
- * weights are the same every single run — which is what makes the animation
+ * weights are the same every single run, which is what makes the animation
  * reproducible and the tests meaningful.
  */
 export function makeRandom(seed: number): () => number {
@@ -62,8 +62,8 @@ function randInt(rand: () => number, lo: number, hi: number): number {
 
 /**
  * The per-drawing "handwriting" choices. Every sample rolls its own copy, so
- * variation comes from how the strokes are drawn — where the glyph sits, how
- * wide it is, how thick the pen was — never from sprinkling random pixels.
+ * variation comes from how the strokes are drawn (where the glyph sits, how
+ * wide it is, how thick the pen was), never from sprinkling random pixels.
  */
 interface GlyphStyle {
   /** Rows for the top, middle, and bottom bars. */
@@ -149,7 +149,7 @@ function drawE(style: GlyphStyle): boolean[] {
 
 /**
  * The training set: the two clean reference shapes plus procedurally drawn
- * variants. Every variant is a real connected-stroke 3 or E — the variation
+ * variants. Every variant is a real connected-stroke 3 or E; the variation
  * comes from translation, scale, curvature, and pen thickness, so the model
  * has to learn a general rule instead of memorizing two images.
  */
@@ -175,7 +175,7 @@ export interface EpochSnapshot {
   weights: number[]
   /** Mean cross-entropy loss over the training set at the start of this epoch. */
   loss: number
-  /** How many training images the model gets right, 0–1. */
+  /** How many training images the model gets right, 0-1. */
   accuracy: number
   /** The intercept learned alongside the 64 pixel weights. */
   bias: number
@@ -265,7 +265,7 @@ export function trainGradientDescent(options: {
   const data = options.data ?? TRAINING_SET
   validateTrainingOptions(seed, epochs, learningRate, data)
 
-  // Step 1: guess. Small random numbers around zero — the model knows nothing.
+  // Step 1: guess. Small random numbers around zero; the model knows nothing.
   const rand = makeRandom(seed)
   const weights = Array.from({ length: PIXEL_COUNT }, () => (rand() - 0.5) * 0.6)
   const initialWeights = weights.slice()

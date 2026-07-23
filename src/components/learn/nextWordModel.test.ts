@@ -34,7 +34,7 @@ test('predictions are probabilities that sum to 1, most likely first', () => {
   }
 })
 
-test('unseen words predict nothing — the model can only parrot its training data', () => {
+test('unseen words predict nothing: the model can only parrot its training data', () => {
   expect(nextWords('helicopter')).toEqual([])
 })
 
@@ -62,7 +62,7 @@ test('rechooseWordAt keeps the prefix, applies the new word, and drops the rest'
   expect(rechooseWordAt(['the', 'cat', 'sat'], 2, 'ate')).toEqual(['the', 'cat', 'ate'])
 })
 
-test('rechooseWordAt with END truncates without appending — the sentence stops there', () => {
+test('rechooseWordAt with END truncates without appending: the sentence stops there', () => {
   expect(rechooseWordAt(['the', 'cat', 'sat'], 2, END)).toEqual(['the', 'cat'])
 })
 

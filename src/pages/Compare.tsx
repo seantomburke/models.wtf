@@ -42,7 +42,7 @@ import {
 type Filter = CompareFilter
 
 /**
- * Copies the current URL — which carries the active filters, search, and sort —
+ * Copies the current URL (which carries the active filters, search, and sort)
  * so a comparison can be shared as-is. Reads location at click time because the
  * page is prerendered without a window.
  */
@@ -237,7 +237,7 @@ export function Compare() {
         <h1 className="text-3xl font-semibold tracking-tight">Compare models</h1>
         <p className="mt-3 leading-relaxed text-fg-secondary">
           Higher is better on every test, and the <span className="font-medium text-accent-deep">best published score</span>{' '}
-          in each column is highlighted. A "—" means no score has been published yet, not that the model scored zero.
+          in each column is highlighted. A "—" means no score has been published yet. It never means the model scored zero.
         </p>
       </div>
 
@@ -425,7 +425,7 @@ export function Compare() {
               {benchmarks.map((b) => (
                 /* Short label keeps the header on one line; the full name and the
                    plain-language explanation move into the tooltip. The source link
-                   sits beside the sort button, not inside it — nesting a link in a
+                   sits beside the sort button, not inside it, because nesting a link in a
                    button hides it from keyboard users. */
                 <SortableHeader
                   key={b.id}

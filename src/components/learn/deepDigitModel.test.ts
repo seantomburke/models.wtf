@@ -213,7 +213,7 @@ describe('classifyDigitDeep', () => {
   it('hesitates on a genuinely ambiguous drawing', () => {
     // Rub out two of the three pixels in the 8's upper-left line. The line is
     // now too faint to close the top loop but too present to be gone, which
-    // is the one situation where a hand-built model should be unsure — and it
+    // is the one situation where a hand-built model should be unsure, and it
     // is, splitting its vote instead of committing.
     const damaged = [...digitPattern(8)]
     damaged[PRIMITIVES[2].pixels[0]] = false

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { releases, type ReleaseType } from '../../data/index.ts'
 
-// Duplicated from WhatsNew rather than shared — the mapping is tiny and each
+// Duplicated from WhatsNew rather than shared: the mapping is tiny and each
 // surface can evolve its own labels independently.
 const releaseTypeLabels: Record<ReleaseType, string> = {
   new: '🆕 New',
@@ -18,7 +18,7 @@ const releaseTypeColors: Record<ReleaseType, string> = {
 }
 
 // Release dates are date-only strings ("2026-07-15"), which parse as midnight
-// UTC — format in UTC so viewers west of Greenwich don't see the prior day.
+// UTC, so format in UTC and viewers west of Greenwich won't see the prior day.
 function formatReleaseDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString('en-US', {
     year: 'numeric',

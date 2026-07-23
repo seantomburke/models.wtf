@@ -125,7 +125,7 @@ function drawnX(container: HTMLElement): Map<number, number> {
 }
 
 /**
- * A `scale.type` on a spec is only a request — the engine could ignore it the
+ * A `scale.type` on a spec is only a request; the engine could ignore it the
  * way it ignores strokeDash on a mark def. These assert the geometry it
  * actually drew, which is the only proof the axis is really logarithmic.
  */

@@ -49,7 +49,7 @@ export interface Benchmark {
   id: BenchmarkId
   name: string
   /**
-   * Compact label for narrow table headers. Keep it to one line — the full
+   * Compact label for narrow table headers. Keep it to one line; the full
    * `name` still shows in the header tooltip and everywhere else.
    */
   shortName?: string

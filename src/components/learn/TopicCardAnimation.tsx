@@ -12,7 +12,7 @@ import { useCardAnimation } from './useCardAnimation'
  *   <circle>s whose attributes are a pure function of the animation phase.
  * - Only visible cards animate, on one shared frame loop. See useCardAnimation.
  * - prefers-reduced-motion pins the phase, so every motif still paints a
- *   representative frame — it just never moves.
+ *   representative frame; it just never moves.
  * - Colors come from theme custom properties, so light and dark both work
  *   without a second code path.
  */

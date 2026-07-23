@@ -30,7 +30,7 @@ export const capabilityOptions: CapabilityFilterOption[] = [
   },
   // No 'image-generation' option: every model we track outputs text only, so
   // the chip could only ever empty the table. `hasCapability` still handles
-  // the id, so re-add the option here the day an image model joins the set —
+  // the id, so re-add the option here the day an image model joins the set;
   // capabilityFilters.test.ts fails on any option no model satisfies.
 ]
 

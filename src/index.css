@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* Warm, friendly light foundation — stone neutrals, one teal accent. */
+  /* Warm, friendly light foundation: stone neutrals, one teal accent. */
   --color-surface: #fdfcfa;
   --color-surface-raised: #ffffff;
   --color-fg: #1c1917;
@@ -27,7 +27,7 @@
   --shadow-subtle: 0 1px 3px rgb(0 0 0 / 0.08);
 }
 
-/* Dark mode — slate/zinc neutrals with teal accent */
+/* Dark mode: slate/zinc neutrals with teal accent */
 .dark {
   --color-surface: #0f172a;
   --color-surface-raised: #1e293b;

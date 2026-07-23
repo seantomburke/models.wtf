@@ -4,7 +4,7 @@ import { vi } from 'vitest'
 import App from './App'
 import { preloadInitialRoute } from './routePreload.ts'
 
-// openchart renders to canvas/SVG with real layout measurement — not jsdom-compatible.
+// openchart renders to canvas/SVG with real layout measurement; not jsdom-compatible.
 // The chart data logic is covered separately in lib/graph.test.ts.
 vi.mock('@opendata-ai/openchart-react', () => ({
   Chart: () => <div data-testid="chart" />,

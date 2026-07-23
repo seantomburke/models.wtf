@@ -104,7 +104,7 @@ test('a model without a release date omits the Released row gracefully', async (
 
 test('the card stays open while the pointer moves from the point into it', async () => {
   // user-event models this pointer trip as leaving to the window, which no
-  // real browser does for a move within one wrapper — so drive the exact
+  // real browser does for a move within one wrapper, so drive the exact
   // boundary event: a mouseleave whose destination is the card's link.
   const user = userEvent.setup()
   renderScatter({ connections: 'off' })
@@ -210,7 +210,7 @@ test('a wide-ratio axis projects points and ticks logarithmically', () => {
   ]
   renderScatter({ rows: wide, connections: 'off' })
   const left = (name: RegExp) => pct(wrapperOf(name).style.left)
-  // Equal 10x ratios, so equal spacing — the property a linear axis lacks.
+  // Equal 10x ratios, so equal spacing: the property a linear axis lacks.
   expect(left(/mid,/i) - left(/cheap/i)).toBeCloseTo(left(/dear/i) - left(/mid,/i), 4)
 
   // The axis title has to say it's a log scale or the reader is misled. It

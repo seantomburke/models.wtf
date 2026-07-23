@@ -82,7 +82,7 @@ interface PointCardProps {
 }
 
 /**
- * The detail card that opens beside a point — on hover as a preview, on
+ * The detail card that opens beside a point: on hover as a preview, on
  * click/tap pinned until dismissed. It flips to whichever side of the point
  * has room: right half of the plot opens leftward, bottom half opens upward,
  * so the card never runs off the plot area.
@@ -159,7 +159,7 @@ export function GraphScatter({
   onDismiss,
 }: GraphScatterProps) {
   // Hover preview state lives on the wrapper div, not CSS: the card holds a
-  // link, so it must stay open while the pointer crosses the gap into it —
+  // link, so it must stay open while the pointer crosses the gap into it;
   // mouseenter/leave on a shared wrapper covers point and card together.
   const [hovered, setHovered] = useState<string | null>(null)
 
@@ -312,7 +312,7 @@ export function GraphScatter({
           const xPct = xPercent(row.x)
           const yPct = yPercent(row.y)
           return (
-            // The card holds a link, so it cannot live inside the button —
+            // The card holds a link, so it cannot live inside the button:
             // interactive content inside a button is invalid HTML. Point and
             // card are siblings in a wrapper that owns the hover state.
             <div
@@ -323,14 +323,14 @@ export function GraphScatter({
               onMouseLeave={(e) => {
                 // A leave whose destination is still inside the wrapper is
                 // the pointer crossing from the point into the card (or the
-                // reverse) — the card must survive that trip or its link
+                // reverse); the card must survive that trip or its link
                 // could never be clicked. currentTarget can be gone when the
                 // event lands on a wrapper React has already torn down.
                 const next = e.relatedTarget instanceof Node ? e.relatedTarget : null
                 if (!e.currentTarget?.contains(next)) setHovered(null)
               }}
               // Focus-driven preview mirrors hover, but only closes when
-              // focus leaves the wrapper entirely — tabbing from the point
+              // focus leaves the wrapper entirely: tabbing from the point
               // into the card's link must not tear the card down mid-move.
               onFocus={() => setHovered(row.model)}
               onBlur={(e) => {

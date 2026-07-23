@@ -55,7 +55,7 @@ export function headlineBenchmark(providerModels: Model[]): Benchmark | undefine
   return best
 }
 
-// Duplicated from ModelReleaseHistory rather than shared — the mapping is tiny
+// Duplicated from ModelReleaseHistory rather than shared; the mapping is tiny
 // and each surface can evolve its own labels independently.
 const releaseTypeLabels: Record<ReleaseType, string> = {
   new: '🆕 New',
@@ -65,7 +65,7 @@ const releaseTypeLabels: Record<ReleaseType, string> = {
 }
 
 // Release dates are date-only strings ("2026-07-15"), which parse as midnight
-// UTC — format in UTC so viewers west of Greenwich don't see the prior day.
+// UTC, so format in UTC and viewers west of Greenwich won't see the prior day.
 function formatReleaseDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString('en-US', {
     year: 'numeric',
@@ -123,7 +123,7 @@ function ProviderDetailContent({ provider }: { provider: Provider }) {
         </h2>
         {providerModels.length === 0 ? (
           <p className="text-fg-secondary">
-            We don't track any {provider.name} models yet — check back soon.
+            We don't track any {provider.name} models yet. Check back soon.
           </p>
         ) : (
           <div className="overflow-x-auto rounded-lg border border-line">

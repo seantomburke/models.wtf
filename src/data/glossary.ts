@@ -514,7 +514,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     id: 'tf-idf',
     term: 'TF-IDF',
     short: 'A classic scoring method that ranks words by how frequent and how distinctive they are.',
-    long: 'TF-IDF stands for "Term Frequency–Inverse Document Frequency." A word scores high in a document if it appears often there (term frequency) but rarely everywhere else (inverse document frequency). "The" appears everywhere, so it scores near zero; "photosynthesis" in a biology paper scores high. It\'s a decades-old idea that still underpins a lot of search ranking.',
+    long: 'TF-IDF stands for "Term Frequency-Inverse Document Frequency." A word scores high in a document if it appears often there (term frequency) but rarely everywhere else (inverse document frequency). "The" appears everywhere, so it scores near zero; "photosynthesis" in a biology paper scores high. It\'s a decades-old idea that still underpins a lot of search ranking.',
     category: 'search-ranking',
   },
   {

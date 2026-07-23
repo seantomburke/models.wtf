@@ -102,7 +102,7 @@ export function BenchmarkCell({ benchmark, score, isBest, provenance }: Benchmar
     >
       {interactive ? (
         // The wrapper owns hover so moving the pointer from the number into the
-        // card never crosses an unhovered gap — the card would otherwise close
+        // card never crosses an unhovered gap; the card would otherwise close
         // mid-travel and the source link would be unclickable.
         <span
           className="relative inline-block"

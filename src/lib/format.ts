@@ -21,7 +21,7 @@ export function formatDateForDisplay(date: string | null | undefined): string {
   })
 }
 
-/** "1M", "200K", "10M" — context windows in friendly units. */
+/** "1M", "200K", "10M": context windows in friendly units. */
 export function formatTokens(tokens: number | null): string {
   if (tokens === null) return '—'
   if (tokens >= 1_000_000) {
@@ -31,14 +31,14 @@ export function formatTokens(tokens: number | null): string {
   return `${Math.round(tokens / 1_000)}K`
 }
 
-/** "$5", "$2.50" — price per 1M tokens. */
+/** "$5", "$2.50": price per 1M tokens. */
 export function formatPrice(price: number | null): string {
   if (price === null) return 'Free*'
   return `$${Number.isInteger(price) ? price : price.toFixed(2)}`
 }
 
 /**
- * "$1.24", "$0.50", "$0.0425", "< $0.0001" — computed conversation costs,
+ * "$1.24", "$0.50", "$0.0425", "< $0.0001": computed conversation costs,
  * which are often fractions of a cent. Sub-dollar values keep up to four
  * decimals (trailing zeros trimmed, never fewer than two).
  */

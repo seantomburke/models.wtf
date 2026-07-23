@@ -81,7 +81,7 @@ test('the responsive graph preserves its server markup during hydration', async 
     { model: 'Alpha', modelId: 'alpha', provider: 'OpenAI', family: 'Alpha', series: 'OpenAI', x: 2, y: 80 },
     { model: 'Beta', modelId: 'beta', provider: 'OpenAI', family: 'Beta', series: 'OpenAI', x: 4, y: 90 },
   ]
-  // The card's model-page link needs a router, during prerender too — the
+  // The card's model-page link needs a router, during prerender too; the
   // real page always renders inside one.
   const graph = (
     <MemoryRouter initialEntries={['/graph']}>

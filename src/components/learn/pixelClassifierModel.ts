@@ -4,7 +4,7 @@
  * The 64 weights come straight from the two reference patterns: a pixel only a
  * 3 uses gets a positive weight, a pixel only an E uses gets a negative weight,
  * and pixels the two shapes share (or neither uses) stay neutral. Squashing a
- * weight through sigmoid maps it to 0–1, which is what the weight heatmap shows:
+ * weight through sigmoid maps it to 0-1, which is what the weight heatmap shows:
  * 1 = green (evidence for 3), 0 = red (evidence for E), 0.5 = transparent.
  */
 
@@ -56,12 +56,12 @@ const e = patternE()
 /** +1 where only a 3 has ink, -1 where only an E has ink, 0 where they agree. */
 export const RAW_WEIGHTS: number[] = three.map((on, i) => (on ? 1 : 0) - (e[i] ? 1 : 0))
 
-/** The same weights squashed through sigmoid into 0–1 for display. */
+/** The same weights squashed through sigmoid into 0-1 for display. */
 export const WEIGHTS: number[] = RAW_WEIGHTS.map((w) => sigmoid(w * 2))
 
 export interface Classification {
   prediction: '3' | 'E'
-  /** Probability of the winning class, 0.5–1. */
+  /** Probability of the winning class, 0.5-1. */
   confidence: number
   probThree: number
   probE: number

@@ -3,7 +3,7 @@
  *
  * Runs after prerender.mjs in the build. routeMeta builds each page's og:image
  * URL from the same ogImageKey() imported here (via the compiled dist-server
- * bundle), so the URL in the HTML and the file on disk cannot drift — and the
+ * bundle), so the URL in the HTML and the file on disk cannot drift, and the
  * guard at the bottom fails the build if any route's image is missing anyway.
  *
  * Fonts are committed under scripts/assets/fonts/ (Inter, SIL OFL 1.1) so the
@@ -71,7 +71,7 @@ function wrapText(text, fontSize, maxWidth) {
 /**
  * Wrap a title into at most maxLines, shrinking the font until it fits.
  * Returns { fontSize, lines }. If even the smallest size cannot hold it,
- * the last line is ellipsised — nothing ever draws outside the canvas.
+ * the last line is ellipsised; nothing ever draws outside the canvas.
  */
 function fitTitle(text, { startSize = 68, minSize = 40, maxLines = 3 } = {}) {
   for (let fontSize = startSize; fontSize >= minSize; fontSize -= 4) {
@@ -160,7 +160,7 @@ const genericSvg = (meta) => {
   const title = meta.title.replace(/\s*\|\s*Models\.fyi$/, '')
   const allLines = wrapText(meta.description, 30, MAX_TEXT_WIDTH)
   const descLines = allLines.slice(0, 2)
-  // Descriptions longer than two lines are cut — make the cut visible rather
+  // Descriptions longer than two lines are cut; make the cut visible rather
   // than ending mid-sentence.
   if (allLines.length > 2) {
     descLines[1] = `${descLines[1].replace(/[,.;:]?$/, '')}…`
@@ -205,7 +205,7 @@ for (const meta of routeMeta) {
   const expectedUrl = `${SITE_URL}/og/${ogImageKey(meta.path)}.png`
   if (meta.image !== expectedUrl) {
     throw new Error(
-      `route ${meta.path} has og:image "${meta.image}" but the generator would write "${expectedUrl}" — ogImageKey drifted between routeMeta and this script`,
+      `route ${meta.path} has og:image "${meta.image}" but the generator would write "${expectedUrl}": ogImageKey drifted between routeMeta and this script`,
     )
   }
   const file = `dist/og/${ogImageKey(meta.path)}.png`

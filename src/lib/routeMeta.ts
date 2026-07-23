@@ -26,7 +26,7 @@ export const notFoundMeta = {
   description: 'The page you\'re looking for doesn\'t exist.',
 } as const
 
-/** Absolute base URL of the deployed site — og:image and canonical URLs must be absolute. */
+/** Absolute base URL of the deployed site; og:image and canonical URLs must be absolute. */
 export const SITE_URL = 'https://seantomburke.github.io/models.fyi'
 
 /**
@@ -214,7 +214,7 @@ export function modelSchema(model: Model): Record<string, unknown> {
 /**
  * Generate Organization schema for a provider detail page: the lab itself,
  * with its tracked models attached as an ItemList via subjectOf on the page.
- * Only facts from the data layer are claimed — no founding dates or locations
+ * Only facts from the data layer are claimed: no founding dates or locations
  * we don't record.
  */
 export function providerSchema(provider: Provider): Record<string, unknown> {
@@ -290,7 +290,7 @@ export function breadcrumbSchema(items: Array<{ name: string; path: string }>) {
  * A page usually has both a page-level type and the BreadcrumbList that
  * matches the trail rendered in the UI; @graph is how schema.org expresses
  * "these describe the same page" without emitting two script tags.
- * The inner @context keys are dropped — the graph carries one for all of them.
+ * The inner @context keys are dropped; the graph carries one for all of them.
  */
 function graph(...nodes: Array<Record<string, unknown>>): Record<string, unknown> {
   return {
@@ -387,7 +387,7 @@ export function glossarySchema(
 
 /**
  * Generate ItemList schema for the What's New feed, newest first.
- * Dates are the release records' own ISO dates — nothing is inferred.
+ * Dates are the release records' own ISO dates; nothing is inferred.
  */
 export function releasesSchema(
   releases: ReadonlyArray<{
@@ -511,7 +511,7 @@ interface SchemaCorpus {
  *
  * Every route imports this module for `metaFor`/`canonicalUrl`, so importing
  * these datasets here would pull all of them into the chunk each page preloads.
- * Instead the owning page (or the prerenderer) hands its corpus in — it already
+ * Instead the owning page (or the prerenderer) hands its corpus in; it already
  * imports the data to render the page, so this adds no payload where it's used
  * and removes it everywhere else.
  *
@@ -573,7 +573,7 @@ const pageSchemas: Record<string, () => Record<string, unknown>> = {
       trail({ name: 'Learn', path: '/learn' }),
     ),
   // The FAQ, glossary, and release corpora are large and are needed *only* to
-  // build these three schemas, so this module does not import them — see
+  // build these three schemas, so this module does not import them; see
   // `provideCorpus` above. Each page supplies its own corpus (which it already
   // imports to render), keeping ~77kB gzip out of every other route's payload.
   '/faq': () =>
@@ -624,12 +624,12 @@ const pageSchemas: Record<string, () => Record<string, unknown>> = {
  * Every page imports this module (for `metaFor`/`canonicalUrl`), so anything
  * reachable at module scope lands in the chunk each route preloads. Building
  * all schemas eagerly pulled the FAQ, glossary, and release corpora in with
- * them — ~77kB gzip on every page, for JSON-LD that `scripts/prerender.mjs`
+ * them: ~77kB gzip on every page, for JSON-LD that `scripts/prerender.mjs`
  * has already baked into the static HTML.
  *
  * The getter keeps the property read-identical for prerender (still synchronous,
  * still enumerable on the RouteMeta objects) while deferring the work until a
- * caller actually reads `structuredData` — by which point the owning page has
+ * caller actually reads `structuredData`, by which point the owning page has
  * registered its corpus. Results are memoised so repeated reads stay cheap and
  * referentially stable, which matters because `usePageMeta` lists this in a
  * `useEffect` dependency array; the memo is keyed on `corpusVersion` so a schema
