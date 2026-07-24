@@ -4,7 +4,7 @@ import { PostHogProvider } from './lib/posthog-react.ts'
 import './index.css'
 import App from './App.tsx'
 import { getAnalyticsClient, loadAnalytics } from './lib/analytics.ts'
-import { startWebVitals } from './lib/web-vitals.ts'
+import { startWebVitals } from './lib/startWebVitals.ts'
 import { preloadInitialRoute } from './routePreload.ts'
 import { renderRoot } from './rootRender.tsx'
 

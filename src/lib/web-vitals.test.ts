@@ -126,10 +126,10 @@ describe('startWebVitals', () => {
   // at all. These assert the wiring, not just the helper.
   it('subscribes to the real web-vitals reporters', async () => {
     vi.resetModules()
-    const { startWebVitals: start } = await import('./web-vitals.ts')
+    const { startWebVitals: start } = await import('./startWebVitals.ts')
 
     start()
-    // Let the dynamic import settle.
+    // Let the dynamic imports settle.
     await vi.waitFor(async () => {
       const { onLCP } = await import('web-vitals')
       expect(onLCP).toHaveBeenCalled()
@@ -139,7 +139,7 @@ describe('startWebVitals', () => {
   it('only subscribes once even if called repeatedly', async () => {
     vi.resetModules()
     vi.clearAllMocks()
-    const { startWebVitals: start } = await import('./web-vitals.ts')
+    const { startWebVitals: start } = await import('./startWebVitals.ts')
 
     start()
     start()

@@ -1,7 +1,6 @@
 import type { Metric } from 'web-vitals'
 import { usePostHog } from './posthog-react.ts'
 import { EVENTS, captureWebVital } from './posthog-events.ts'
-import { getAnalyticsClient } from './analytics.ts'
 
 /**
  * Performance budget targets for Core Web Vitals.
@@ -91,37 +90,6 @@ export function initWebVitals(
   onFCP((metric: Metric) => {
     captureWebVital(posthog, EVENTS.WEB_VITAL_FCP, metric.value, metric.rating || 'unknown', metric.delta)
   })
-}
-
-let started = false
-
-/**
- * Load `web-vitals` and begin reporting. Call once, after first paint.
- *
- * Two things this deliberately does not do:
- *
- * 1. It does not import `web-vitals` at module scope. Measuring the site must
- *    not slow it down, so the library is fetched in its own chunk off the
- *    critical path (see .agents/rules/performance-budget.md).
- * 2. It does not wait for the PostHog SDK. `getAnalyticsClient()` returns the
- *    queueing stub until the real client lands, and LCP/FCP settle early, so
- *    waiting would drop exactly the metrics we most want. Queued metrics are
- *    replayed on load (see lib/analytics.ts).
- *
- * Failure is silent by design: performance telemetry is never load-bearing, so
- * a blocked or failed chunk must not surface to the visitor.
- */
-export function startWebVitals(): void {
-  if (started || typeof window === 'undefined') return
-  started = true
-
-  void import('web-vitals')
-    .then(({ onLCP, onINP, onCLS, onTTFB, onFCP }) => {
-      initWebVitals(getAnalyticsClient(), { onLCP, onINP, onCLS, onTTFB, onFCP })
-    })
-    .catch(() => {
-      // An ad blocker or flaky network shouldn't break the page.
-    })
 }
 
 /**

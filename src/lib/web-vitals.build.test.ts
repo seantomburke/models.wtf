@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { readFileSync, existsSync, readdirSync } from 'node:fs'
 
 /**
@@ -10,7 +10,14 @@ import { readFileSync, existsSync, readdirSync } from 'node:fs'
  */
 const dist = 'dist/assets'
 const built = existsSync(dist) ? readdirSync(dist) : []
-const chunk = built.find((f) => /^web-vitals-.*\.js$/.test(f))
+// Two chunks match `web-vitals-*`: the library itself and our own module that
+// wraps it. Pick the library, the one that *exports* the reporters (our wrapper
+// merely mentions them in its code).
+const chunk = built.find(
+  (f) =>
+    /^web-vitals-.*\.js$/.test(f) &&
+    /export\{[^}]*\bas onLCP\b/.test(readFileSync(`${dist}/${f}`, 'utf8')),
+)
 const entry = built.find((f) => /^index-.*\.js$/.test(f))
 
 describe.runIf(chunk && entry)('built web-vitals chunk', () => {
@@ -25,37 +32,35 @@ describe.runIf(chunk && entry)('built web-vitals chunk', () => {
     }
   })
 
-  it('references the lazy chunk from the entry', () => {
+  it('loads the chunk via a dynamic import from the entry', () => {
     const entrySrc = readFileSync(`${dist}/${entry}`, 'utf8')
-    expect(entrySrc).toContain('web-vitals-')
+    expect(entrySrc).toMatch(/import\([`'"][^`'"]*web-vitals-[^`'"]*[`'"]\)/)
   })
 
-  it('exports all five reporters and subscribes to the right entry types', async () => {
-    const observed: string[] = []
-    class FakePO {
-      static supportedEntryTypes = ['largest-contentful-paint', 'layout-shift', 'first-input', 'paint', 'navigation', 'event']
-      constructor(_cb: unknown) {}
-      observe(opts: { type?: string }) { if (opts.type) observed.push(opts.type) }
-      disconnect() {}
-      takeRecords() { return [] }
+  it('does not modulepreload web-vitals onto the critical path', () => {
+    expect(readFileSync('dist/index.html', 'utf8')).not.toContain('web-vitals')
+  })
+
+  it('does not drag analytics onto the critical path', () => {
+    // Importing analytics.ts dynamically from startWebVitals.ts made the
+    // bundler split it into a shared chunk that got modulepreloaded, defeating
+    // the deferred-loading design in analytics.ts. Keep that import static.
+    expect(readFileSync('dist/index.html', 'utf8')).not.toMatch(/modulepreload[^>]*analytics-/)
+  })
+
+  it('ships all five reporters and observes the expected entry types', () => {
+    const chunkSrc = readFileSync(`${dist}/${chunk}`, 'utf8')
+
+    // The bundler mangles local names but keeps the export bindings, so assert
+    // against the export statement rather than importing the file: loading it
+    // here goes through Vite, which re-resolves it to the entry chunk.
+    const exported = chunkSrc.match(/export\{([^}]*\bas onLCP\b[^}]*)\}/)?.[1] ?? ''
+    for (const reporter of ['onCLS', 'onFCP', 'onINP', 'onLCP', 'onTTFB']) {
+      expect(exported, `${reporter} missing from the built chunk`).toContain(reporter)
     }
-    vi.stubGlobal('PerformanceObserver', FakePO)
-    class FakeEventTiming {}
-    Object.defineProperty(FakeEventTiming.prototype, 'interactionId', { value: 0 })
-    vi.stubGlobal('PerformanceEventTiming', FakeEventTiming)
-    performance.getEntriesByType = ((type: string) =>
-      type === 'navigation' ? [{ responseStart: 42, activationStart: 0, type: 'navigate' }] : []) as never
 
-    const mod = await import(/* @vite-ignore */ `${process.cwd()}/${dist}/${chunk}`)
-    expect(Object.keys(mod).filter((k) => /^on[A-Z]/.test(k)).sort())
-      .toEqual(['onCLS', 'onFCP', 'onINP', 'onLCP', 'onTTFB'])
-
-    for (const name of ['onLCP', 'onCLS', 'onFCP'] as const) mod[name](() => {})
-    // CLS registers its layout-shift observer only after FCP resolves, so it is
-    // not expected synchronously here.
-    expect(observed).toContain('largest-contentful-paint')
-    expect(observed).toContain('paint')
-
-    vi.unstubAllGlobals()
+    for (const entryType of ['largest-contentful-paint', 'layout-shift', 'paint', 'event']) {
+      expect(chunkSrc, `${entryType} observer missing`).toContain(entryType)
+    }
   })
 })
