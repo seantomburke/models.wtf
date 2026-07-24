@@ -42,7 +42,10 @@ export function PriceBars({ rows }: { rows: PriceRow[] }) {
       </div>
 
       {/* The chart scrolls sideways on narrow screens instead of crushing
-          fifteen slots into a phone width. */}
+          fifteen slots into a phone width. On wide screens it must not scroll:
+          the rotated x-axis labels below lean up-left (not right) so they stay
+          within the chart box and never trip a spurious scrollbar (see the
+          label row, issues #127, #132). */}
       <div className="overflow-x-auto">
         <div className="min-w-[52rem]" data-testid="price-bar-chart">
           <div className="mt-3 flex" aria-hidden="true">
@@ -97,14 +100,19 @@ export function PriceBars({ rows }: { rows: PriceRow[] }) {
             </div>
           </div>
 
-          {/* X axis: model names under their slots, angled to fit. */}
+          {/* X axis: model names under their slots, angled to fit. Labels lean
+              up and to the LEFT (rotate -45° anchored top-right) so their text
+              projects back over the chart rather than off its right edge. The
+              old left-anchored +45° tilt pushed the last label ~12px past the
+              chart, tripping a spurious horizontal scrollbar on wide screens
+              (issues #127, #132). */}
           <div className="ml-10 flex justify-around gap-1 px-1" aria-hidden="true">
             {rows.map((row) => (
               <span
                 key={`label-${row.modelId}`}
-                className="h-20 w-full max-w-10 overflow-visible text-[10px] leading-tight text-fg-secondary"
+                className="relative h-[5.5rem] w-full max-w-10 text-[10px] leading-tight text-fg-secondary"
               >
-                <span className="block origin-top-left translate-x-1/2 rotate-45 whitespace-nowrap">
+                <span className="absolute right-1/2 top-0 origin-top-right -rotate-45 whitespace-nowrap">
                   {row.model}
                 </span>
               </span>
