@@ -313,7 +313,8 @@ export function SceneNextWord() {
           </p>
           <p>
             People are round dots, and verbs are diamonds. When your sentence stands on a word, that
-            word gets a gold ring and the words the model expects next glow, bigger for more likely.
+            word gets a gold ring, and the words the model expects next glow. The more likely a word
+            is, the bigger it glows.
           </p>
           <div className="flex flex-wrap items-center gap-4 pt-1 text-xs">
             <span className="inline-flex items-center gap-1.5">

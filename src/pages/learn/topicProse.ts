@@ -393,7 +393,7 @@ export const topicProse: Record<string, string[]> = {
       'Parrot-43 also demonstrates the famous LLM failure mode in miniature. Ask it to continue "my" and it says "cat" or "homework". Neither is true. They\'re just the likeliest continuations of its training data. Likely and true are different things. An LLM with billions of parameters blurs that line much more convincingly, but the gap never fully closes. That\'s a hallucination, and now you\'ve watched one get built.',
   ],
   "how-word-embeddings-predict-the-next-word::From a lookup table to a meaning map": [
-      'Parrot-43 is a lookup table. It only remembers which word followed which. Show it a word from outside its training and it has nothing to say. Real language models work differently, and Parrot-2D shows you the first upgrade: every word gets its own small list of numbers, called an embedding, and the model predicts from those numbers.',
+      'Parrot-43 is a lookup table. It only remembers which word followed which. Show it a word from outside its training and it has nothing to say. Real language models work differently, and Parrot-2D shows you the first upgrade. Every word gets its own small list of numbers, called an embedding, and the model predicts from those numbers.',
       'Parrot-2D gives every word just two numbers, and both numbers mean something you can read. The map above the demo places each word by those two numbers. Once a word is a point on a map, "what comes next" becomes a question about meaning, and you can watch the answer light up.',
   ],
   "how-word-embeddings-predict-the-next-word::Two numbers that mean something": [
@@ -401,8 +401,8 @@ export const topicProse: Record<string, string[]> = {
       'A real embedding gives a word thousands of numbers, and nobody labels what each one means. Parrot-2D shrinks that down to two numbers you can name. That is the trade the whole lesson rests on. You give up the scale of a real model and you get a picture you can actually look at.',
   ],
   "how-word-embeddings-predict-the-next-word::Meaning drives the prediction": [
-      'Now build a sentence and watch the map. When you land on Bob, the model rings him with gold and lights up the words it expects next. The bright one is "ignores", the unfriendly verb, because the training sentences taught the model that an unfriendly person is usually followed by an unfriendly verb. The friendly verb "greets" still glows a little, because a couple of training sentences broke the pattern on purpose.',
-      'This is why the model needs meaning and not just memory. The words that light up after Bob are the words that sit near where an unfriendly verb should sit. You can read the prediction straight off the map, which is something a plain lookup table can never let you do.',
+      'Now build a sentence and watch the map. When you land on Bob, the model rings him with gold and lights up the words it expects next. The bright one is "ignores". That is the unfriendly verb, and the training sentences taught the model that an unfriendly person is usually followed by an unfriendly verb. The friendly verb "greets" still glows a little, because a couple of training sentences broke the pattern on purpose.',
+      'This is why the model needs meaning. The words that light up after Bob are the words that sit near where an unfriendly verb should sit. You can read the prediction straight off the map, which is something a plain lookup table can never let you do.',
   ],
   "how-word-embeddings-predict-the-next-word::Filling in the middle of the map": [
       'The four starter words sit in the four corners, which makes friendly and unfriendly look like the only two choices. Press "Add Charlie and sees" and two new words appear in the middle. Charlie is a person who is neither friendly nor unfriendly, so he sits between Alice and Bob. "sees" is a verb that is neither, so it sits between "greets" and "ignores".',
