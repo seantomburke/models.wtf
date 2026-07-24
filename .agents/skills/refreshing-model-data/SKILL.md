@@ -80,17 +80,17 @@ Trust order within a tier is top to bottom. Provider primaries always beat aggre
 | Source | What for | Last verified | Reliability note |
 |---|---|---|---|
 | anthropic.com/news + model docs | Claude releases, eval tables, system cards | 2026-07-23 | System cards carry the authoritative numbers; announcement pages can lag. |
-| openai.com/index + platform docs | GPT releases, eval tables, pricing | 2026-07-23 | openai.com intermittently returns HTTP 403 to automated fetches; retry or use a browser tool. |
-| blog.google + deepmind.google + ai.google.dev | Gemini releases, model cards, API pricing | 2026-07-23 | Model cards distinguish "No tools" HLE from tool-assisted; read the exact column. |
-| docs.x.ai + x.ai news | Grok releases, pricing, model table | 2026-07-23 | Retired models vanish from the docs table entirely; their slugs redirect to newer models. |
-| meta llama-models MODEL_CARD.md + Meta AI blog | Llama and Muse releases | 2026-07-23 | Muse Spark is closed-weights on the Meta Model API; Llama cards top out below the tracked benchmarks. |
+| openai.com/index + platform docs | GPT releases, eval tables, pricing | 2026-07-24 | openai.com intermittently returns HTTP 403 to automated fetches; retry or use a browser tool. |
+| blog.google + deepmind.google + ai.google.dev | Gemini releases, model cards, API pricing | 2026-07-24 | Model cards distinguish "No tools" HLE from tool-assisted; read the exact column. |
+| docs.x.ai + x.ai news | Grok releases, pricing, model table | 2026-07-24 | Retired models vanish from the docs table entirely; their slugs redirect to newer models. |
+| meta llama-models MODEL_CARD.md + Meta AI blog | Llama and Muse releases | 2026-07-24 | Muse Spark is closed-weights on the Meta Model API; Llama cards top out below the tracked benchmarks. |
 | docs.z.ai, api-docs.deepseek.com + tech reports, moonshot.ai, qwen docs, thinkingmachines.ai | Open-model and challenger releases | 2026-07-23 | Tech reports (arXiv) carry the closed-book numbers aggregators misquote. |
 
 ### Tier 2: trusted independent leaderboards (scores, cross-checks)
 
 | Source | What for | Last verified | Reliability note |
 |---|---|---|---|
-| artificialanalysis.ai | Intelligence Index, HLE, GPQA independent runs | 2026-07-23 | Names exact model + effort config; labels estimates as estimates (estimates are not publishable here). |
+| artificialanalysis.ai | Intelligence Index, HLE, GPQA independent runs | 2026-07-24 | Names exact model + effort config; labels estimates as estimates (estimates are not publishable here). |
 | vals.ai | SWE-bench Verified, Terminal-Bench 2.1 uniform runs | 2026-07-23 | Uniform-harness runs (mini-swe-agent, Terminus 2) make cross-model comparison honest. Index subsets are different harnesses. |
 | tbench.ai | Official Terminal-Bench 2.1 leaderboard | 2026-07-23 | Small roster; absence of a model means no run yet, never a zero. |
 | llm-stats.com | Release feed, spec cross-check | 2026-07-23 | Good release radar; its search snippets have surfaced phantom model names, so confirm on provider sites. |
@@ -111,7 +111,7 @@ benchlm.ai, openrouter.ai, vellum.ai, marktechpost.com, and similar outlets quot
 
 | Candidate | Date | Verdict |
 |---|---|---|
-| (seed the first entry on the next run) | | |
+| Hugging Face Open LLM Leaderboard | 2026-07-24 | Rejected for the tracked score grid: it is useful for open-weight discovery, but does not publish exact-variant results for the six benchmark protocols here. |
 
 ## Reporting
 

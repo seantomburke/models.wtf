@@ -1,7 +1,7 @@
 import type { Model } from './types.ts'
 
 /**
- * Model facts researched 2026-07-22. Scores are provider-published evals
+ * Model facts researched 2026-07-24. Scores are provider-published evals
  * where available, otherwise independent leaderboard runs (noted below).
  * A missing score means no reliable published number was found. It never means zero.
  * Sources are listed in src/data/README.md.
@@ -295,7 +295,7 @@ export const models: Model[] = [
       'gpqa-diamond': 92.3, // OpenAI-published
       'terminal-bench': 84.7, // OpenAI-published; tbench.ai independent run (Codex) lands 75.7
       'hle': 37.2, // Artificial Analysis independent run (medium effort, closed-book)
-      'aa-intelligence-index': 46.0, // Artificial Analysis v4.1, high effort
+      'aa-intelligence-index': 51.2, // OpenAI-published v4.1 result, max effort
     },
     scoreProvenance: {
       'swe-bench-verified': { source: 'independent', runner: 'Vals AI (mini-swe-agent)' },
@@ -305,11 +305,6 @@ export const models: Model[] = [
         independentRunner: 'Vals AI (Terminus 2)',
       },
       'hle': { source: 'independent', runner: 'Artificial Analysis' },
-      'aa-intelligence-index': {
-        source: 'independent',
-        runner: 'Artificial Analysis',
-        sourceUrl: 'https://artificialanalysis.ai/models/gpt-5-6-luna-high/',
-      },
     },
     blurb:
       'The fastest, most cost-efficient GPT-5.6 tier. Built for speed and high-volume simple tasks.',
