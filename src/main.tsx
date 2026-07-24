@@ -4,6 +4,7 @@ import { PostHogProvider } from './lib/posthog-react.ts'
 import './index.css'
 import App from './App.tsx'
 import { getAnalyticsClient, loadAnalytics } from './lib/analytics.ts'
+import { startWebVitals } from './lib/web-vitals.ts'
 import { preloadInitialRoute } from './routePreload.ts'
 import { renderRoot } from './rootRender.tsx'
 
@@ -45,7 +46,13 @@ startApp()
 // Analytics is not load-bearing for anything on screen, so keep it off the
 // critical path: fetch the SDK once the browser is idle after first paint.
 // Events fired before it lands are queued and replayed (see lib/analytics.ts).
-const startAnalytics = () => void loadAnalytics()
+// Web vitals ride along on the same idle tick, for the same reason; it reports
+// through the queueing stub rather than waiting for the SDK, so metrics that
+// settle early (LCP, FCP) are still recorded.
+const startAnalytics = () => {
+  void loadAnalytics()
+  startWebVitals()
+}
 if ('requestIdleCallback' in window) {
   requestIdleCallback(startAnalytics, { timeout: 3000 })
 } else {

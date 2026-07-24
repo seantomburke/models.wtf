@@ -5,6 +5,7 @@ import {
   isWithinBudget,
   formatMetricValue,
   getMetricRating,
+  type WebVitalReporters,
 } from './web-vitals.ts'
 
 // Mock web-vitals functions
@@ -27,6 +28,14 @@ vi.mock('./posthog-events.ts', () => ({
   },
   captureWebVital: vi.fn(),
 }))
+
+const mockReporters = (): WebVitalReporters => ({
+  onLCP: vi.fn(),
+  onINP: vi.fn(),
+  onCLS: vi.fn(),
+  onTTFB: vi.fn(),
+  onFCP: vi.fn(),
+})
 
 describe('PERFORMANCE_BUDGETS', () => {
   it('should have all required budgets defined', () => {
@@ -63,26 +72,83 @@ describe('initWebVitals', () => {
 
   it('should handle null posthog gracefully', () => {
     expect(() => {
-      initWebVitals(null)
+      initWebVitals(null, mockReporters())
     }).not.toThrow()
   })
 
   it('should handle undefined posthog gracefully', () => {
     expect(() => {
-      initWebVitals(undefined as any)
+      initWebVitals(undefined as any, mockReporters())
     }).not.toThrow()
   })
 
-  it('should register callbacks for all web vitals', async () => {
-    const { onLCP, onINP, onCLS, onTTFB, onFCP } = await import('web-vitals')
+  it('should register callbacks for all web vitals', () => {
+    const reporters = mockReporters()
 
-    initWebVitals(mockPostHog)
+    initWebVitals(mockPostHog, reporters)
 
-    expect(onLCP).toHaveBeenCalled()
-    expect(onINP).toHaveBeenCalled()
-    expect(onCLS).toHaveBeenCalled()
-    expect(onTTFB).toHaveBeenCalled()
-    expect(onFCP).toHaveBeenCalled()
+    expect(reporters.onLCP).toHaveBeenCalled()
+    expect(reporters.onINP).toHaveBeenCalled()
+    expect(reporters.onCLS).toHaveBeenCalled()
+    expect(reporters.onTTFB).toHaveBeenCalled()
+    expect(reporters.onFCP).toHaveBeenCalled()
+  })
+
+  it('reports a metric to PostHog when the browser measures one', async () => {
+    const { captureWebVital } = await import('./posthog-events.ts')
+    const reporters = mockReporters()
+
+    initWebVitals(mockPostHog, reporters)
+
+    // Fire the callback web-vitals would invoke once LCP settles.
+    const report = vi.mocked(reporters.onLCP).mock.calls[0][0]
+    report({ value: 1234, rating: 'good', delta: 1234 } as any)
+
+    expect(captureWebVital).toHaveBeenCalledWith(mockPostHog, 'web_vital_lcp', 1234, 'good', 1234)
+  })
+
+  it('falls back to "unknown" when a metric arrives without a rating', async () => {
+    const { captureWebVital } = await import('./posthog-events.ts')
+    const reporters = mockReporters()
+
+    initWebVitals(mockPostHog, reporters)
+
+    const report = vi.mocked(reporters.onCLS).mock.calls[0][0]
+    report({ value: 0.05, rating: undefined, delta: 0.05 } as any)
+
+    expect(captureWebVital).toHaveBeenCalledWith(mockPostHog, 'web_vital_cls', 0.05, 'unknown', 0.05)
+  })
+})
+
+describe('startWebVitals', () => {
+  // Regression guard: web-vitals.ts was fully implemented and tested but never
+  // called from anywhere in the app, so the site reported no performance data
+  // at all. These assert the wiring, not just the helper.
+  it('subscribes to the real web-vitals reporters', async () => {
+    vi.resetModules()
+    const { startWebVitals: start } = await import('./web-vitals.ts')
+
+    start()
+    // Let the dynamic import settle.
+    await vi.waitFor(async () => {
+      const { onLCP } = await import('web-vitals')
+      expect(onLCP).toHaveBeenCalled()
+    })
+  })
+
+  it('only subscribes once even if called repeatedly', async () => {
+    vi.resetModules()
+    vi.clearAllMocks()
+    const { startWebVitals: start } = await import('./web-vitals.ts')
+
+    start()
+    start()
+    start()
+
+    await vi.waitFor(async () => {
+      const { onLCP } = await import('web-vitals')
+      expect(onLCP).toHaveBeenCalledTimes(1)
+    })
   })
 })
 
