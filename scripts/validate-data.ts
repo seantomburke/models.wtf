@@ -10,6 +10,16 @@ import { benchmarks, models, providers, releases, dataSourcedAt } from '../src/d
 const errors: string[] = []
 const fail = (msg: string) => errors.push(msg)
 
+/**
+ * Most benchmarks are percentages, so a value outside 0-100 means a typo or a
+ * misread column. Rating-style benchmarks (`unit: 'points'`, such as GDPval-AA,
+ * an Elo with a human expert anchored at 1000) are not percentages, so they get
+ * a range wide enough to catch nonsense without rejecting a legitimate rating.
+ */
+const unitByBenchmark = new Map(benchmarks.map((b) => [b.id as string, b.unit]))
+const scoreRange = (bench: string): [number, number] =>
+  unitByBenchmark.get(bench) === 'points' ? [0, 3000] : [0, 100]
+
 // ─── Referential integrity ─────────────────────────────────────
 const providerIds = new Set(providers.map((p) => p.id))
 const benchmarkIds = new Set(benchmarks.map((b) => b.id))
@@ -34,8 +44,9 @@ for (const m of models) {
       }
     }
     if (prov.independentScore !== undefined) {
-      if (prov.independentScore < 0 || prov.independentScore > 100) {
-        fail(`${m.id}: ${bench} independentScore ${prov.independentScore} out of 0-100 range`)
+      const [lo, hi] = scoreRange(bench)
+      if (prov.independentScore < lo || prov.independentScore > hi) {
+        fail(`${m.id}: ${bench} independentScore ${prov.independentScore} out of ${lo}-${hi} range`)
       }
       if (!prov.independentRunner) {
         fail(`${m.id}: ${bench} independentScore missing independentRunner`)
@@ -77,7 +88,8 @@ for (const [label, ids] of [
 // ─── Value sanity ──────────────────────────────────────────────
 for (const m of models) {
   for (const [bench, score] of Object.entries(m.scores)) {
-    if (score < 0 || score > 100) fail(`${m.id}: ${bench} score ${score} out of 0-100 range`)
+    const [lo, hi] = scoreRange(bench)
+    if (score < lo || score > hi) fail(`${m.id}: ${bench} score ${score} out of ${lo}-${hi} range`)
   }
   if (m.inputPricePerMTok !== null && m.inputPricePerMTok <= 0) {
     fail(`${m.id}: non-positive input price`)

@@ -25,7 +25,10 @@ export const axisOptions: AxisOption[] = [
     label: b.name,
     axisTitle: `${b.name} (${b.unit})`,
     getValue: (m: Model) => m.scores[b.id],
-    domainCap: 100,
+    // Percentage benchmarks stop at 100. Rating-style ones (GDPval-AA is an
+    // Elo anchored at 1000 for a human expert) have no such ceiling, so they
+    // let the domain follow the data instead.
+    domainCap: b.unit === '%' ? 100 : undefined,
   })),
   {
     id: 'price-input',

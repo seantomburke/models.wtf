@@ -178,6 +178,15 @@ const tierRank: Record<Model['tier'], number> = { flagship: 3, balanced: 2, fast
  */
 const rankingPrice = (m: Model): number => m.inputPricePerMTok ?? 3
 
+/**
+ * GDPval-AA is an Elo rating with a human expert anchored at 1000, so it
+ * needs mapping onto the 0-100 range the other branches return. 1000 lands
+ * at 50, and each 400 Elo (the ratio a rating system treats as roughly ten
+ * to one odds) moves the result by 20 points.
+ */
+const gdpvalAsPercent = (elo: number): number =>
+  Math.max(0, Math.min(100, 50 + ((elo - 1000) / 400) * 20))
+
 function capabilityScore(m: Model, needs: TaskNeeds): number {
   if (needs.coding) {
     return m.scores['swe-bench-pro'] ?? m.scores['swe-bench-verified'] ?? tierRank[m.tier] * 20
@@ -188,6 +197,11 @@ function capabilityScore(m: Model, needs: TaskNeeds): number {
   if (needs.agentic) {
     return m.scores['terminal-bench'] ?? tierRank[m.tier] * 20
   }
+  // Everything else is professional knowledge work: writing, summarising,
+  // planning, reviewing documents. GDPval-AA measures exactly that, across
+  // 44 occupations, so prefer it when the model has been rated.
+  const gdpval = m.scores['gdpval-aa']
+  if (gdpval !== undefined) return gdpvalAsPercent(gdpval)
   // Re-centre the delta on 60 (a mid-field model) so this branch returns a
   // positive 0-100-ish figure like the others, and so capability-per-dollar
   // stays meaningful.
@@ -299,6 +313,11 @@ export function recommend(role: Role, task: Task, budget: Budget, pref: CompanyP
   }
   if (needs.science && pick.scores['gpqa-diamond']) {
     why.push(`${pick.name} scores ${pick.scores['gpqa-diamond']}% on PhD-level science questions.`)
+  }
+  if (!needs.coding && !needs.science && !needs.agentic && pick.scores['gdpval-aa']) {
+    why.push(
+      `On GDPval, which scores real work from 44 professions, ${pick.name} rates ${pick.scores['gdpval-aa']} against 1000 for a human expert.`,
+    )
   }
   if (needs.simple) {
     why.push(
