@@ -22,6 +22,16 @@ The canonical style rules live in `.agents/rules/writing-style.md`. Read that fi
 - Math goes through the `MathBlock` KaTeX component with a plain-text fallback.
 - Page titles use the pipe separator: `Page name | Models.wtf`.
 
+## Word and punctuation bans
+
+These apply to the copy you write, not to this skill file's own examples.
+
+- Avoid the words "real", "actually", and "honest". They add emphasis without meaning. When you want to contrast a small model with a frontier one, name the frontier model or say "frontier", rather than calling it the "real" one.
+- Do not state the obvious. If a sentence tells the reader something they already know from the previous sentence or from the visual beside it, cut the sentence.
+- Do not use a colon unless a list follows it. For an elaboration or an example, end the sentence and start a new one. A colon before a single clause is a splice, and it reads as compression.
+- Do not stack adjectives that mean the same thing on one noun. "a small, tiny model" and "a clear, simple picture" each say one idea twice. Keep the stronger adjective and drop the rest.
+- Be concise. If a paragraph can be a sentence, make it a sentence. If a sentence can drop three words and keep its meaning, drop them.
+
 ## Preserve
 
 - Factual accuracy, caveats, meaning, and implications. Removing a negation-contrast frame is the easiest place to accidentally assert a NEW fact: restate the original claim, never substitute a different one. If the original claim looks factually wrong, flag it instead of silently "fixing" it in the rewrite.

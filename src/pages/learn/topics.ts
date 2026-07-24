@@ -49,7 +49,7 @@ export const levels: Array<{ id: TopicLevel; title: string; blurb: string }> = [
   {
     id: 'lab',
     title: 'The model lab',
-    blurb: 'Real models small enough to see through, running in your browser. Meet Doodle-64, Doodle-525, Doodle-918, Parrot-43, and Parrot-2D, then scale the same ideas up to billion-parameter LLMs.',
+    blurb: 'Tiny models small enough to see through, running in your browser. Meet Doodle-64, Doodle-525, Doodle-918, Parrot-43, and Parrot-2D, then scale the same ideas up to billion-parameter LLMs.',
   },
 ]
 
@@ -780,7 +780,7 @@ const authored: Topic[] = [
       layers: '1 embedding map, where each word becomes a point on a two-axis grid',
       inputs: '1 word: the last word of the sentence so far, looked up as its two numbers',
       outputs: 'A probability for every word that could come next, summing to 100%',
-      scale: 'Real transformers give every word thousands of numbers instead of two, and nobody labels what each one means. Parrot-2D uses two numbers you can name, so you can watch the meaning drive the prediction.',
+      scale: 'Frontier transformers give every word thousands of numbers instead of two, and nobody labels what each one means. Parrot-2D uses two numbers you can name, so you can watch the meaning drive the prediction.',
     },
     sections: [
       {
@@ -796,7 +796,7 @@ const authored: Topic[] = [
         heading: 'Filling in the middle of the map',
       },
       {
-        heading: 'This is what real embeddings do',
+        heading: 'This is what frontier embeddings do',
       },
     ],
   },

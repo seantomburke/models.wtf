@@ -2,7 +2,7 @@
  * Parrot-2D: a next-word predictor that thinks in two meanings.
  *
  * Parrot-43 (the bigram model) is a lookup table. It memorizes which word
- * followed which. Parrot-2D does something a real transformer does: it gives
+ * followed which. Parrot-2D does something a frontier transformer does. It gives
  * every word a small list of numbers (an embedding) and the meaning of those
  * numbers is what drives the prediction.
  *
@@ -13,7 +13,7 @@
  *
  * So "Bob" sits at (-1, -1): a person, and unfriendly. "greets" sits at
  * (+1, +1): a verb, and friendly. Every word lands on a corner (or, for the
- * neutral words, the middle) of a two-by-two map you can actually look at.
+ * neutral words, the middle) of a two-by-two map you can look at.
  *
  * Prediction works by counting, then reading the meaning off the counts. For
  * the word you are standing on, the model looks at every word that followed it
