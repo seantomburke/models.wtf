@@ -47,7 +47,7 @@ function makeLayout(inputCount: number, outputCount: number): Layout {
  *
  * The left column is one node per word, and the word you pick lights up. Its
  * one-hot signal flows into the two hidden nodes, which hold the word's two
- * numbers: friendliness on top, role on the bottom. From there the signal
+ * numbers: friendliness on top, verb on the bottom. From there the signal
  * reaches the output column, one node per possible next word plus the period,
  * and the probability bars on the right show the model's prediction. Those
  * probabilities are the corpus counts, so they match the meaning map above.
@@ -99,7 +99,7 @@ export function SceneNetworkDiagram() {
         viewBox={`0 0 ${SVG_W} ${SVG_H}`}
         className="mt-4 w-full"
         role="img"
-        aria-label={`Neural network with ${network.inputVocab.length} input words, two hidden nodes for friendliness and role, and output words. The current word is ${active}.`}
+        aria-label={`Neural network with ${network.inputVocab.length} input words, two hidden nodes for friendliness and verb, and output words. The current word is ${active}.`}
       >
         {/* input -> hidden edges (the fixed embedding) */}
         {network.inputVocab.map((word, i) =>

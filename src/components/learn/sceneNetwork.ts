@@ -24,8 +24,9 @@
 import { START, END, VOCAB, tokenLabel, nextWords } from './sceneModel'
 import type { Model } from './sceneModel'
 
-/** The two hidden nodes, named so the diagram can label them. */
-export const HIDDEN_LABELS = ['friendliness', 'role'] as const
+/** The two hidden nodes, named so the diagram can label them. The second axis
+ * runs from person to verb; "verb" is the clearer label for its node. */
+export const HIDDEN_LABELS = ['friendliness', 'verb'] as const
 
 export interface OutputProb {
   word: string

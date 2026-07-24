@@ -6,7 +6,7 @@ describe('Parrot-2D forward-pass network', () => {
   const net = buildNetwork(STARTER_MODEL)
 
   it('has exactly two hidden nodes, the two named meanings', () => {
-    expect(HIDDEN_LABELS).toEqual(['friendliness', 'role'])
+    expect(HIDDEN_LABELS).toEqual(['friendliness', 'verb'])
   })
 
   it('the hidden nodes are the current word two numbers from the map', () => {

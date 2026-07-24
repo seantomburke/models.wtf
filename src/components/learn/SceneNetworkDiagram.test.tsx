@@ -6,7 +6,7 @@ test('renders the network with two named hidden nodes', () => {
   render(<SceneNetworkDiagram />)
   const svg = screen.getByRole('img', { name: /neural network/i })
   expect(within(svg).getByText('friendliness')).toBeInTheDocument()
-  expect(within(svg).getByText('role')).toBeInTheDocument()
+  expect(within(svg).getByText('verb')).toBeInTheDocument()
 })
 
 test('picking a current word updates the hidden values', async () => {
