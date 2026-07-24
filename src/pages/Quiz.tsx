@@ -250,7 +250,7 @@ export function Quiz() {
         <p className="mt-3 leading-relaxed text-fg-secondary">
           {mode === 'forward'
             ? 'Four quick questions, one recommendation, with the reasoning spelled out.'
-            : "Pick a model and we'll tell you what it's good at."}
+            : "Pick a model and you'll see what it's good at."}
         </p>
       </div>
 

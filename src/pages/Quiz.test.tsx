@@ -17,7 +17,7 @@ test('the four-questions subtitle only shows in forward mode', async () => {
   expect(screen.getByText(/four quick questions/i)).toBeInTheDocument()
   await user.click(screen.getByRole('button', { name: 'Start from a model' }))
   expect(screen.queryByText(/four quick questions/i)).not.toBeInTheDocument()
-  expect(screen.getByText(/pick a model and we'll tell you/i)).toBeInTheDocument()
+  expect(screen.getByText(/pick a model and you'll see/i)).toBeInTheDocument()
 })
 
 test('completing the quiz shows a result with correct grammar, plain pricing, and scrolls to it', async () => {

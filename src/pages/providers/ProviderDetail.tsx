@@ -128,7 +128,7 @@ function ProviderDetailContent({ provider }: { provider: Provider }) {
 
       <section aria-labelledby="provider-lineup">
         <h2 id="provider-lineup" className="mb-4 text-2xl font-bold text-fg">
-          {provider.name} models we track
+          {provider.name} models tracked here
         </h2>
         {providerModels.length === 0 ? (
           <p className="text-fg-secondary">

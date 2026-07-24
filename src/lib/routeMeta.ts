@@ -133,7 +133,7 @@ export const routeMeta: RouteMeta[] = [
     path: '/models',
     title: 'All AI models: benchmarks, pricing, and specs | Models.wtf',
     description:
-      'Browse every AI model we track, grouped by provider. One page each with benchmark scores, prices, context window, and who the model actually suits.',
+      'Browse every AI model tracked here, grouped by provider. One page each with benchmark scores, prices, context window, and who the model actually suits.',
     type: 'website',
     image: ogImageFor('/models'),
   },

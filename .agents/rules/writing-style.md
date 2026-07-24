@@ -15,7 +15,7 @@ Canonical rules for all user-facing copy on models.wtf. The site explains comple
 The reference for this voice is the Yelp graph-database article (a warm, first-person technical walk-through). Two rules come from it.
 
 - **Never use "I".** The site is not a personal blog and has no single author speaking. Rewrite any "I" into "you" or "we".
-- **"We" means the reader and the guide, together.** Use "we" freely wherever it reads warmer than "you", especially when walking through a live interaction or a result: "Now we can see that the Parrot-2D model picked 'cat'." The "we" is always you (the reader) plus the narrator standing beside you. It is **never** a company "we" ("we built this model", "we at models.wtf"). If a "we" could be read as the company, rewrite it.
+- **"We" means the reader and the guide, together.** Use "we" freely wherever it reads warmer than "you", especially when walking through a live interaction or a result: "Now we can see that the Parrot-2D model picked 'cat'." The "we" is always you (the reader) plus the narrator standing beside you. It is **never** a company "we" ("we built this model", "we at models.wtf", "the models we track"). Rewrite any company "we" into the passive or the site name: "the models tracked here", "Models.wtf compares flagship models". This holds even in copy where the site describes itself, such as the FAQ or the homepage tagline.
 - **"You" stays the default for invitations and instructions.** "You can draw a digit", "you pay for what the model reads". Reach for "we" when you and the reader are observing or discovering something in the same moment.
 
 ## Discovery cadence

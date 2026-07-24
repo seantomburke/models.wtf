@@ -210,7 +210,7 @@ export function recommend(role: Role, task: Task, budget: Budget, pref: CompanyP
     } else {
       pool = models.filter((m) => m.internetAccess)
       why.push(
-        'Heads up: open-source models you run yourself can’t search the web out of the box, and this task needs live information, so we picked an affordable connected model instead.',
+        'Heads up: open-source models you run yourself cannot search the web out of the box, and this task needs live information, so an affordable connected model is a better fit here.',
       )
     }
   }

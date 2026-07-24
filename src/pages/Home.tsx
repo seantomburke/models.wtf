@@ -53,9 +53,9 @@ export function Home() {
           <span className="text-accent-deep">no PhD required.</span>
         </h1>
         <p className="mt-4 text-lg leading-relaxed text-fg-secondary">
-          New AI models launch every month, each claiming to be the best. We track{' '}
+          New AI models launch every month, each claiming to be the best. This site tracks{' '}
           {models.length} models from {providers.length} companies, including {openCount} you
-          can run yourself for free, and explain what the numbers mean.
+          can run yourself for free, and explains what the numbers mean.
         </p>
       </section>
 
@@ -156,7 +156,7 @@ export function Home() {
           </Link>
         </div>
         <p className="max-w-2xl text-sm leading-relaxed text-fg-secondary">
-          These are the newest model launches and updates we track. You can open any model page
+          These are the newest model launches and updates tracked here. You can open any model page
           to see how it compares.
         </p>
         <div className="grid gap-3 sm:grid-cols-2">

@@ -34,7 +34,7 @@ export const topicProse: Record<string, string[]> = {
       'Companies keep training new models because bigger, better-tuned piles of dials keep getting smarter. Each release is a new "brain" with different strengths, speeds, and prices. That is why picking the right one matters, and why this site exists.',
   ],
   "what-is-an-llm::Autocomplete, but enormous": [
-      'LLM stands for Large Language Model. At its heart, it does one deceptively simple thing: given some text, it predicts the next word. "The cat sat on the ___" probably continues with "mat".',
+      'LLM stands for Large Language Model. At its heart, it does one deceptively simple thing. Given some text, it predicts the next word. If you give it "The cat sat on the", it probably continues with "mat".',
       'Your phone\'s keyboard does this too. The difference is scale. An LLM has read a huge slice of the internet and has billions of dials tuned for the job. Predicting the next word this well forces the model to understand grammar, facts, logic, even code.',
   ],
   "what-is-an-llm::One word at a time": [
@@ -42,12 +42,12 @@ export const topicProse: Record<string, string[]> = {
       'This also explains the famous weakness. An LLM says whatever is most likely. Nothing checks whether it is true. When likely and true disagree, you get confident nonsense. People call this a hallucination.',
   ],
   "what-is-an-llm::The models on this site": [
-      'GPT, Claude, Gemini, Grok, Llama, DeepSeek: all LLMs. Same core idea, different training data, sizes, and tuning. That\'s why they have different personalities and different scores on our comparison table.',
+      'GPT, Claude, Gemini, Grok, Llama, and DeepSeek are all LLMs. They share the same core idea, and they differ in their training data, sizes, and tuning. That is why they have different personalities and different scores on the comparison table.',
   ],
   "what-is-gpt::Decode the letters": [
       'G is for Generative. It creates new text rather than picking from canned replies.',
       'P is for Pre-trained. Before you ever talk to it, it spent months learning from a mountain of text. By the time you arrive, the studying is done and you get the finished student.',
-      'T is for Transformer, the 2017 invention that made all this work. It\'s a design that lets the model weigh every word in your message against every other word at once, instead of reading one word at a time and forgetting the start of the sentence.',
+      'T is for Transformer, the 2017 invention that made all this work. It is a design that lets the model weigh every word in your message against every other word at once, so it does not read one word at a time and forget the start of the sentence.',
   ],
   "what-is-gpt::GPT vs ChatGPT": [
       'GPT is the engine. ChatGPT is the car built around it: the chat app, the safety layer, the web search. OpenAI names its engines GPT-something, like GPT-5.6, and the app stays ChatGPT.',
@@ -58,24 +58,24 @@ export const topicProse: Record<string, string[]> = {
       'When the desk is full, the oldest pages fall off the edge. That\'s why a very long chat can suddenly "forget" what you said at the start. It literally can\'t see it anymore.',
   ],
   "what-is-a-context-window::Tokens: word pieces": [
-      'Context windows are measured in tokens, chunks of about three-quarters of a word. "Hamburger" might be three tokens, while "the" is one. A 1M-token window is roughly 750,000 words: the whole Lord of the Rings trilogy with room to spare.',
-      'On our comparison table, context ranges from 200K tokens, about a long novel, to Llama 4 Scout\'s absurd 10M, about a small library. Bigger isn\'t automatically better, since you pay for what the model reads, but for big documents it\'s the number that decides whether the job is possible at all.',
+      'Context windows are measured in tokens, chunks of about three-quarters of a word. "Hamburger" might be three tokens, while "the" is one. A 1M-token window is roughly 750,000 words, which is the whole Lord of the Rings trilogy with room to spare.',
+      'On the comparison table, context ranges from 200K tokens, about a long novel, up to Llama 4 Scout\'s absurd 10M, about a small library. Bigger is not automatically better, since you pay for what the model reads. But for big documents it is the number that decides whether the job is possible at all.',
   ],
   "what-is-a-token::Tokens are how models read": [
       'A token is a small chunk of text. Models don\'t read whole words or sentences at once. They read tokens: single characters, word pieces, or whole small words, depending on what\'s common.',
-      '"The" is one token. "Hamburger" is two: "Hamb" + "urger". Even the space before a word is part of its token. Mathematical symbols, punctuation, and newlines also get tokenized. The pattern depends on the model\'s tokenizer, which is tuned during training.',
+      '"The" is one token. "Hamburger" is two tokens, "Hamb" and "urger". Even the space before a word is part of its token. Mathematical symbols, punctuation, and newlines also get tokenized. The pattern depends on the model\'s tokenizer, which is tuned during training.',
   ],
   "what-is-a-token::Why tokens exist": [
-      'Models are trained on numerical patterns, and tokens convert text into chunks manageable for math. Smaller chunks (single characters) give you more precision but make sequences very long. Larger chunks (whole words) are more efficient but miss detail. Tokens strike a balance: usually 1-3 tokens per word, optimized for the language and the model.',
+      'Models are trained on numerical patterns, and tokens convert text into chunks manageable for math. Smaller chunks, like single characters, give you more precision but make sequences very long. Larger chunks, like whole words, are more efficient but miss detail. Tokens strike a balance, usually one to three tokens per word, optimized for the language and the model.',
   ],
   "reasoning-models::Scratch paper": [
-      'Ask someone 7x8 and they answer instantly from memory. Ask them 47x83 and they want scratch paper. Reasoning models, also called "thinking" models, are LLMs that learned to use scratch paper. Before answering, they privately write out steps, check their own work, and only then reply.',
+      'If you ask someone 7x8, they answer instantly from memory. If you ask them 47x83, they want scratch paper. Reasoning models, also called "thinking" models, are LLMs that learned to use scratch paper. Before answering, they privately write out steps, check their own work, and only then reply.',
       'That thinking phase is text the model generates. You usually just see a "thinking..." pause, and sometimes a summary of it.',
   ],
   "reasoning-models::When it matters, and when it doesn't": [
       'For math, tricky code, and multi-step planning, reasoning is a huge upgrade. The model catches its own mistakes mid-way instead of committing to a bad first guess.',
       'For "write a birthday message," it\'s a waste. You pay for thinking time in both money and seconds. That\'s why fast models exist, and why the newest models decide for themselves how hard to think based on the question.',
-      'Almost every current flagship is a reasoning model, marked with the brain badge on our comparison table. The main exceptions are speed-focused and older open models.',
+      'Almost every current flagship is a reasoning model, marked with the brain badge on the comparison table. The main exceptions are speed-focused and older open models.',
   ],
   "which-model-should-i-use::The short answer": [
       'For most people, most of the time, a mid-tier model from any major company, like Claude Sonnet or GPT-5.6 Terra, is fast, cheap, and smarter than you need. Save the premium flagships for hard coding, research, and long autonomous work, and use a fast tier for bulk simple stuff.',
@@ -89,51 +89,51 @@ export const topicProse: Record<string, string[]> = {
   ],
   "claude-vs-gpt::Personality and style": [
       'Claude tends to be thoughtful and explanatory. It works through problems carefully and admits uncertainty. GPT tends to be faster and more direct, with less hedging.',
-      'Neither is objectively better. If you like a reasoning AI that walks you through its thinking, Claude. If you want fast, confident answers, GPT.',
+      'Both are strong, and the right pick depends on your taste. If you like a reasoning AI that walks you through its thinking, choose Claude. If you want fast, confident answers, choose GPT.',
   ],
   "claude-vs-gpt::What they're good at": [
-      'Claude: analysis, writing, coding with clear explanations. GPT: broad knowledge, speed, multimodal (Claude just added this). For math and tricky logic, both have reasoning models that pause to think.',
+      'Claude is strong at analysis, writing, and coding with clear explanations. GPT is strong at broad knowledge, speed, and multimodal work, which Claude just added too. For math and tricky logic, both have reasoning models that pause to think.',
   ],
   "claude-vs-gpt::Price and availability": [
-      'Both offer cheap fast tiers and expensive flagship tiers. GPT is available through ChatGPT (web, app, API). Claude is on Claude.ai, API, and select partners. Neither wins on cost. It depends on your workload.',
+      'Both offer cheap fast tiers and expensive flagship tiers. GPT is available through ChatGPT on the web, in the app, and through the API. Claude is on Claude.ai, through its API, and with select partners. The cheaper option depends on your workload rather than on one provider always winning.',
   ],
   "claude-vs-gemini::Google's breadth vs Anthropic's focus": [
-      'Google Gemini is built into Gmail, Drive, Photos, and Android. If you live in the Google ecosystem, Gemini is already there. Claude is a standalone product, no ecosystem lock-in.',
+      'Google Gemini is built into Gmail, Drive, Photos, and Android. If you live in the Google ecosystem, Gemini is already there. Claude is a standalone product that keeps you free of ecosystem lock-in.',
       'Gemini is a newer brand built on Google\'s existing research, while Claude is Anthropic\'s entire product. Anthropic is smaller and focuses on safety and capabilities; Google is vast and plays longer games.',
   ],
   "claude-vs-gemini::Capabilities": [
-      'Both handle text, image understanding, and coding. Claude has longer context windows (200K to 1M tokens). Gemini is better integrated with web search through Google.',
-      'For pure reasoning, Claude\'s latest is slightly ahead on benchmarks. For search and real-time data, Gemini wins.',
+      'Both handle text, image understanding, and coding. Claude has longer context windows, from 200K to 1M tokens. Gemini is better integrated with web search through Google.',
+      'For pure reasoning, Claude\'s latest is slightly ahead on benchmarks. For search and real-time data, Gemini comes out ahead.',
   ],
   "claude-vs-gemini::Pick Claude if you want:": [
-      'Focused, thoughtful AI that walks you through reasoning. Longer context for whole-document analysis. A company betting on AI safety.',
+      'Pick Claude if you want a focused, thoughtful AI that walks you through its reasoning. It gives you longer context for whole-document analysis, and it comes from a company betting on AI safety.',
   ],
   "claude-vs-gemini::Pick Gemini if you want:": [
-      'Deep integration with Google apps and Android. Search-powered answers with fresh data. Access through your Google account.',
+      'Pick Gemini if you want deep integration with Google apps and Android. It gives you search-powered answers with fresh data, and you reach it through your Google account.',
   ],
   "grok-vs-gpt::The underdog": [
       'Grok is xAI\'s answer to GPT. xAI is Elon Musk\'s AI company, founded in 2023. They built Grok to be faster, cheaper, and more irreverent than competitors. Grok is available through X (formerly Twitter) and an API.',
   ],
   "grok-vs-gpt::What Grok does well": [
-      'Speed. Grok is optimized for quick answers. Real-time data through X integration. Cheaper per token than many flagships. Smaller deployments so lower latency.',
+      'Grok is built for speed and optimized for quick answers. It pulls real-time data through its X integration, and it costs less per token than many flagships. Its deployments are smaller, so its latency is lower.',
   ],
   "grok-vs-gpt::Where GPT still leads": [
-      'GPT has years of refinement and a bigger user base. More third-party integrations. Larger flagship models (GPT-5.6) still beat Grok on complex reasoning.',
+      'GPT has years of refinement and a bigger user base. It has more third-party integrations. Its larger flagship models, like GPT-5.6, still beat Grok on complex reasoning.',
   ],
   "grok-vs-gpt::Try Grok if:": [
-      'You want speed and real-time news. You like Musk or X\'s direction. You need a cheaper fast option. For serious reasoning or long-form work, GPT remains the safer pick.',
+      'Try Grok if you want speed and real-time news, if you like Musk or X\'s direction, or if you need a cheaper fast option. For serious reasoning or long-form work, GPT remains the safer pick.',
   ],
   "best-model-for-coding::What coders need": [
       'Coding needs accuracy, reasoning, and long context. A model must understand syntax, avoid subtle bugs, and handle whole files. It should spot its own mistakes if asked.',
-      'All flagship models can code. Difference is in reliability and speed.',
+      'All flagship models can code. The difference shows up in reliability and speed.',
   ],
   "best-model-for-coding::Claude for coding": [
       'Claude excels at thorough code review and refactoring. It catches edge cases and explains the reasoning. Developers report fewer silent bugs when Claude writes code.',
-      'Best for: complex architectures, security-critical code, teaching junior engineers.',
+      'It fits complex architectures, security-critical code, and teaching junior engineers.',
   ],
   "best-model-for-coding::GPT for coding": [
-      'GPT is fast. GPT-5.6 reasons well. You get quick solutions with reasonable explanations. Slightly less careful than Claude on edge cases.',
-      'Best for: quick scripts, boilerplate, speedy iteration.',
+      'GPT is fast, and GPT-5.6 reasons well. You get quick solutions with reasonable explanations, though GPT is a little less careful than Claude on edge cases.',
+      'It fits quick scripts, boilerplate, and speedy iteration.',
   ],
   "best-model-for-coding::The tier question": [
       'For junior tasks (style fixes, tests, docs), use a mid-tier model and save money. For architecting a new system, use a flagship with reasoning. Speed models are fast but miss subtleties.',
@@ -142,12 +142,12 @@ export const topicProse: Record<string, string[]> = {
       'Writing needs tone, flow, and original voice. A model must adapt to your style, catch repetition, and know when to be formal vs casual. Its job is to finish your thoughts in your voice.',
   ],
   "best-model-for-writing::Claude for writing": [
-      'Claude is thoughtful and clear. It asks clarifying questions before drafting. Produces well-reasoned essays, explanations, and marketing copy.',
-      'Best for: long-form content, essays, everything-from-scratch writing.',
+      'Claude is thoughtful and clear. It asks clarifying questions before drafting. It produces well-reasoned essays, explanations, and marketing copy.',
+      'It fits long-form content, essays, and writing that starts from scratch.',
   ],
   "best-model-for-writing::GPT for writing": [
-      'GPT is faster and more versatile. Good for editing, rewriting, and tight deadlines. Can juggle multiple voices.',
-      'Best for: quick drafts, editing, stylistic variation.',
+      'GPT is faster and more versatile. It is good for editing, rewriting, and tight deadlines, and it can juggle multiple voices.',
+      'It fits quick drafts, editing, and stylistic variation.',
   ],
   "best-model-for-writing::For both: use mid-tier first": [
       'Sonnet and GPT-5.6 Terra (not the flagships) are fast enough and cheap enough for everyday writing. Upgrade to a flagship if you\'re iterating on something that needs to be perfect.',
@@ -156,24 +156,24 @@ export const topicProse: Record<string, string[]> = {
       'Research needs accuracy, citations, and intellectual honesty. A model must synthesize multiple sources, flag gaps, and admit uncertainty. Long context helps for reading whole papers.',
   ],
   "best-model-for-research::Claude for research": [
-      'Claude is the research favorite. It synthesizes clearly, flags assumptions, and admits limits. Can handle 200K-token papers in a single query.',
-      'Best for: literature review, synthesis, academic writing.',
+      'Claude is the research favorite. It synthesizes clearly, flags assumptions, and admits limits. It can handle 200K-token papers in a single query.',
+      'It fits literature review, synthesis, and academic writing.',
   ],
   "best-model-for-research::GPT for research": [
-      'GPT is broader and faster. Less likely to miss context, more likely to confidently state something uncertain.',
-      'Best for: quick literature scans, trend analysis.',
+      'GPT is broader and faster. It is less likely to miss context, and more likely to confidently state something uncertain.',
+      'It fits quick literature scans and trend analysis.',
   ],
   "best-model-for-research::Pro tip": [
       'For research, use a flagship with reasoning (Opus, GPT-5.6 Sol). The cost is worth the accuracy. Always verify claims in the original sources. No model is a substitute for that.',
   ],
   "vision-models::Beyond text": [
-      'A text-only model reads words. A vision model reads words and images. Show it a photo, ask a question about it, and it answers. Same magic as text models, but trained on billions of image-text pairs.',
+      'A text-only model reads words. A vision model reads words and images. You can show it a photo, ask a question about it, and it answers. It uses the same magic as a text model, and it was trained on billions of image-text pairs.',
   ],
   "vision-models::What they can do": [
-      'Read text in images (OCR). Describe what\'s happening. Spot objects and faces. Analyze charts and diagrams. Answer questions about visual content. All of this was learned from examples during training.',
+      'A vision model can read text in images with OCR, describe what is happening, and spot objects and faces. It can analyze charts and diagrams, and answer questions about visual content. All of this was learned from examples during training.',
   ],
   "vision-models::The models that see": [
-      'Claude and GPT-5.6 have vision. So does Gemini and Grok. Vision is now standard in flagships. You usually pay a bit more per query when you include an image.',
+      'Claude and GPT-5.6 have vision, and so do Gemini and Grok. Vision is now standard in flagships. You usually pay a bit more per query when you include an image.',
       'For heavy image work (scanning thousands of documents), specialized vision models exist, but flagship LLMs cover most use cases.',
   ],
   "embedding-models::Converting meaning to numbers": [
@@ -181,7 +181,7 @@ export const topicProse: Record<string, string[]> = {
       'These numbers let computers compare meaning without understanding words.',
   ],
   "embedding-models::Why they matter": [
-      'Embeddings power semantic search: finding documents about "fast cars" when you search "quick vehicles." They power recommendations: "users who liked this also liked that."',
+      'Embeddings power semantic search, so you find documents about "fast cars" even when you search "quick vehicles." They also power recommendations, the kind that tell you "users who liked this also liked that."',
       'They\'re also how RAG systems work. You convert a document library to embeddings, search by meaning, then hand relevant excerpts to a language model to answer.',
   ],
   "embedding-models::When do you need one?": [
@@ -192,32 +192,32 @@ export const topicProse: Record<string, string[]> = {
       'It\'s cheaper than training from scratch but more intensive than a one-off prompt.',
   ],
   "fine-tuning-models::When to fine-tune": [
-      'Your task is highly specialized (legal language, your brand\'s tone, a niche domain). You\'ll run the model thousands of times, so per-call savings add up. You want consistency across many generations.',
+      'Fine-tune when your task is highly specialized, like legal language, your brand\'s tone, or a niche domain. Fine-tune when you will run the model thousands of times, so the per-call savings add up. And fine-tune when you want consistency across many generations.',
       'Start with prompting and RAG first. Fine-tuning is premature if a careful prompt or two examples get you there.',
   ],
   "fine-tuning-models::The trade-off": [
       'Fine-tuning costs money upfront and takes time. But a fine-tuned model becomes cheaper to run than a flagship for high volume. It pays off once you have real volume, so treat it as a scaling play.',
   ],
   "model-pricing-tokens::Tokens: the unit of price": [
-      'A token is about 3/4 of a word. "Hamburger" = 3 tokens. "Hello" = 1 token. Pricing is per 1,000 tokens. So if you\'re charged $2 per 1K tokens, and you send 2,000 tokens, you pay $4.',
+      'A token is about three-quarters of a word. "Hamburger" is three tokens, and "Hello" is one. Pricing is per 1,000 tokens. So if you are charged $2 per 1K tokens, and you send 2,000 tokens, you pay $4.',
   ],
   "model-pricing-tokens::Input vs output: the split": [
-      'Input is what you send: your prompt, your documents, your question. Output is what comes back: the model\'s answer. Most models charge differently for each.',
-      'Input is cheaper because generating new text (output) is harder than reading (input). A 10-token prompt might cost 1 cent. A 100-token answer might cost 2 cents.',
+      'Input is what you send, meaning your prompt, your documents, and your question. Output is what comes back, meaning the model\'s answer. Most models charge differently for each.',
+      'Input is cheaper because generating new text is harder than reading it. A 10-token prompt might cost 1 cent. A 100-token answer might cost 2 cents.',
   ],
   "model-pricing-tokens::How to estimate costs": [
-      'Count tokens with the model\'s tokenizer tool. Multiply input tokens by the input rate, output tokens by the output rate, add them up. For a typical Q&A: ask 500 tokens, get back 200, at standard pricing, costs cents.',
-      'Check our comparison table for current rates. Most flagships are $1-2 per 1M input tokens, $3-5 per 1M output tokens.',
+      'Count tokens with the model\'s tokenizer tool. Multiply your input tokens by the input rate and your output tokens by the output rate, then add them up. A typical question and answer, where you ask 500 tokens and get back 200 at standard pricing, costs cents.',
+      'Check the comparison table for current rates. Most flagships charge $1 to $2 per 1M input tokens, and $3 to $5 per 1M output tokens.',
   ],
   "context-window-strategies::Bigger isn't always better": [
       'A 200K-token window is huge: a whole book. But if you\'re asking a simple question, you pay for all that unused space. Models charge per token read, so a big context means a bigger bill.',
   ],
   "context-window-strategies::When big context helps": [
-      'Analyzing a 50-page codebase: big context wins. Summarizing a book: big context wins. Analyzing multiple PDFs at once: big context wins. Asking "what is X?": small context is fine.',
+      'Big context wins when you analyze a 50-page codebase, summarize a book, or work through multiple PDFs at once. When you are simply asking what something is, a small context is fine.',
   ],
   "context-window-strategies::Smart strategies": [
-      'Cut irrelevant sections. Summarize before dumping. Use RAG (search documents, feed only relevant snippets). Put most important info first so the model sees it if it forgets the end.',
-      'For huge documents, chunk them and process separately, then synthesize. Cheaper than one gigantic query.',
+      'Cut irrelevant sections, and summarize before dumping text in. Use RAG, which searches your documents and feeds the model only the relevant snippets. Put the most important information first, so the model sees it even if it forgets the end.',
+      'For huge documents, chunk them, process each part separately, and then synthesize. That is cheaper than one gigantic query.',
   ],
   "prompt-engineering-basics::Clear beats clever": [
       'Describe the output you want. "Summarize this in three bullet points" beats "You are a concise summarizer, now summarize this." The model doesn\'t have an inner voice you need to talk to.',
@@ -227,8 +227,8 @@ export const topicProse: Record<string, string[]> = {
       'Give examples if you can. "Here\'s a good one: [example]. Now do this: [task]" gets more consistent results.',
   ],
   "prompt-engineering-basics::Common mistakes": [
-      'Being too short: "summarize this" without telling it how. Being too fancy: "engage your inner analyst." Changing your request mid-way: stick to one task per prompt.',
-      'Expecting perfection: iterate. Ask follow-ups. Refine.',
+      'One mistake is being too short, like "summarize this" without telling it how. Another is being too fancy, like "engage your inner analyst." A third is changing your request mid-way, so stick to one task per prompt.',
+      'The last mistake is expecting perfection on the first try. Iterate instead, and ask follow-up questions to refine the answer.',
   ],
   "prompt-engineering-basics::Iterate, don't fight": [
       'If the first answer is close but not quite, ask for a revision instead of a completely new prompt. Models are good at tweaks.',
@@ -238,40 +238,40 @@ export const topicProse: Record<string, string[]> = {
       'A model with web search can look it up and give you today\'s answer.',
   ],
   "web-search-models::What uses web search": [
-      'Anything current: news, stock prices, recent announcements, today\'s weather. Anything niche: obscure research papers, job listings, recent blog posts.',
-      'You don\'t need search for general knowledge: history, math, how things work.',
+      'Use search for anything current, like news, stock prices, recent announcements, and today\'s weather. Use it for anything niche too, like obscure research papers, job listings, and recent blog posts.',
+      'You do not need search for general knowledge like history, math, and how things work.',
   ],
   "web-search-models::The cost": [
-      'Web search adds latency: the model has to query the internet, which takes time. It also adds cost: you pay for the search plus the extra tokens it uses to read results.',
+      'Web search adds latency, because the model has to query the internet, which takes time. It also adds cost, because you pay for the search plus the extra tokens it uses to read the results.',
       'Most models let you toggle search off for simple questions and keep your bill small.',
   ],
   "web-search-models::Which models have it": [
-      'Claude via Claude.ai. ChatGPT with the web-search setting. Gemini with Google search built in. Some API tiers have search available; check the provider.',
+      'Claude has it via Claude.ai. ChatGPT has it with the web-search setting. Gemini has Google search built in. Some API tiers offer search too, so check the provider.',
   ],
   "hallucinations::The fundamental problem": [
-      'A language model predicts the next word based on patterns. "The capital of France is" -> model predicts "Paris." That happens to be true.',
-      '"The capital of Somalia is" -> the model predicts from statistical patterns. There is no fact database inside. If Somalia appears often near "Mogadishu" and "capital" in the training data, it goes with that. But if it predicts something false, it still sounds confident. That\'s a hallucination.',
+      'A language model predicts the next word based on patterns. Give it "The capital of France is" and the model predicts "Paris." That happens to be true.',
+      'Give it "The capital of Somalia is" and the model predicts from statistical patterns. There is no fact database inside. If Somalia appears often near "Mogadishu" and "capital" in the training data, the model goes with that. But when it predicts something false, it still sounds confident. That is a hallucination.',
   ],
   "hallucinations::Common hallucinations": [
-      'Fake citations: "A study by X shows Y" (no such study). Fake quotes: "Einstein said Z" (he didn\'t). Confident wrong facts: "The Earth\'s capital city" (doesn\'t exist). Inventing code that doesn\'t work.',
+      'One kind is a fake citation, like "A study by X shows Y" when no such study exists. Another is a fake quote, like "Einstein said Z" when he did not. A third is a confident wrong fact, like naming "The Earth\'s capital city" when there is no such thing. Models also invent code that does not work.',
   ],
   "hallucinations::How to reduce them": [
-      'Ask for sources. Ask it to cite the training data it\'s using. Use web search for current facts. Feed it documents it can reference. Ask it to admit uncertainty.',
-      'For critical work (medical, legal, financial), verify outputs independently. Models are not authoritative sources.',
+      'Ask for sources, and ask the model to cite the training data it is using. Use web search for current facts, and feed it documents it can reference. You can also ask it to admit uncertainty.',
+      'For critical work in medicine, law, or finance, verify the outputs independently. Models are not authoritative sources.',
   ],
   "open-source-vs-closed-source::The divide": [
       'Closed-source models (ChatGPT, Claude, Gemini) are built and run by the company. You pay for API access or a subscription. You don\'t see the weights or training data.',
       'Open-source models (Llama, Mistral, DeepSeek) publish the weights. You can download, run locally, modify, and fine-tune. You own and operate it.',
   ],
   "open-source-vs-closed-source::Open source wins on:": [
-      'Freedom: modify how you want. Privacy: run on your hardware, no data leaves your server. Cost: once downloaded, free to run. Transparency: see how it works.',
+      'Open source wins on freedom, because you can modify it however you want. It wins on privacy, because you run it on your own hardware and no data leaves your server. It wins on cost, because once you download it, it is free to run. And it wins on transparency, because you can see how it works.',
   ],
   "open-source-vs-closed-source::Closed source wins on:": [
-      'Capability: the best models (for now) are closed. Safety: dedicated teams catch edge cases. Latency: you don\'t operate servers. Updates: the company improves the model, you get the latest.',
+      'Closed source wins on capability, because the best models are closed for now. It wins on safety, because dedicated teams catch edge cases. It wins on latency, because you do not operate the servers. And it wins on updates, because the company improves the model and you get the latest version.',
   ],
   "open-source-vs-closed-source::The practical question": [
-      'For consumer use: closed-source is simpler. For enterprises with privacy needs: open-source wins. For maximum capability: closed. For maximum control: open.',
-      'The gap is closing. Some open models rival closed flagships now. Let the benchmarks decide for you.',
+      'For consumer use, closed-source is simpler. For enterprises with privacy needs, open-source wins. If you want maximum capability, choose closed. If you want maximum control, choose open.',
+      'The gap is closing, and some open models rival closed flagships now. Let the benchmarks decide for you.',
   ],
   "how-do-neural-network-weights-work::What are weights?": [
       'Weights are numbers inside a neural network, like tiny dials on a massive control panel. During training, the network adjusts millions of these dials until it gets good at its job.',
@@ -318,7 +318,7 @@ export const topicProse: Record<string, string[]> = {
       'Below, draw on the pixel grid or use the example buttons. You\'re seeing how a tiny network makes a prediction. The confidence score tells you how sure the classifier is. When you draw something ambiguous, halfway between 3 and E, watch the confidence drop, just like a real model.',
   ],
   "how-neural-networks-recognize-digits::Meet Doodle-525": [
-      'Doodle-525 is the second model in our lab, and its model card shows what one extra layer costs and buys. It reads the same 64-pixel grid as Doodle-64, but instead of mapping pixels straight to an answer, it spends 448 weights (plus 7 biases) turning pixels into 7 stroke detections, then 70 more weights turning strokes into 10 digit scores. Total: 525 parameters for a 10-way choice, where Doodle-64 needed 64 for a 2-way choice.',
+      'Doodle-525 is the second model in our lab, and its model card shows what one extra layer costs and buys. It reads the same 64-pixel grid as Doodle-64, but instead of mapping pixels straight to an answer, it spends 448 weights (plus 7 biases) turning pixels into 7 stroke detections, then 70 more weights turning strokes into 10 digit scores. That comes to 525 parameters for a 10-way choice, where Doodle-64 needed 64 for a 2-way choice.',
       'That budget is the whole story of neural network design: more possible answers and subtler distinctions demand more parameters, and layering lets the parameters share work. The 7 stroke detectors are reused by all 10 digits, the way an LLM\'s early layers are reused by every sentence it will ever read.',
   ],
   "how-neural-networks-recognize-digits::Why one layer stops being enough": [

@@ -15,7 +15,7 @@ export const faqs: FAQItem[] = [
     category: 'Getting Started',
     question: 'What is Models.wtf?',
     answer:
-      'Models.wtf simplifies AI model selection for everyone. We compare flagship models from OpenAI, Anthropic, Google, xAI, and others across benchmarks, cost, and capability. Our goal: help you pick the right model for your task without needing a PhD in machine learning.',
+      'Models.wtf simplifies AI model selection for everyone. Flagship models from OpenAI, Anthropic, Google, xAI, and others are compared here across benchmarks, cost, and capability. The goal is to help you pick the right model for your task without needing a PhD in machine learning.',
   },
   {
     category: 'Getting Started',
@@ -41,7 +41,7 @@ export const faqs: FAQItem[] = [
     category: 'Model Selection',
     question: 'Which model is the best?',
     answer:
-      '"Best" depends on your task. A top-performing reasoning model might be too slow and expensive for a chatbot. A cheap, fast model might struggle with complex logic. That\'s why this site exists: to help you match the model to your needs instead of chasing the highest benchmark score.',
+      '"Best" depends on your task. A top-performing reasoning model might be too slow and expensive for a chatbot. A cheap, fast model might struggle with complex logic. This site exists to help you match the model to your needs instead of chasing the highest benchmark score.',
   },
   {
     category: 'Model Selection',
@@ -79,7 +79,7 @@ export const faqs: FAQItem[] = [
     category: 'Pricing',
     question: 'How do I calculate the cost of using a model?',
     answer:
-      'Models are priced per token (roughly a word). Input tokens (your prompt) and output tokens (the model\'s answer) are often priced differently. Use the Calculator tool on this site: paste your text, pick your model, and it shows total cost. Providers add up the tokens across your API calls and bill the total.',
+      'Models are priced per token, which is roughly a word. Input tokens are your prompt, output tokens are the model\'s answer, and the two are often priced differently. Use the Calculator tool on this site. You paste your text, pick your model, and it shows the total cost. Providers add up the tokens across your API calls and bill the total.',
   },
   {
     category: 'Pricing',
@@ -111,7 +111,7 @@ export const faqs: FAQItem[] = [
     category: 'Technical',
     question: 'What is a token?',
     answer:
-      'A token is a chunk of text, roughly a word, but sometimes shorter since punctuation is often its own token. Models process and generate text one token at a time. Pricing is based on tokens: more tokens = more cost. The Calculator tool shows how many tokens your text contains.',
+      'A token is a chunk of text, roughly a word, but sometimes shorter since punctuation is often its own token. Models process and generate text one token at a time. Pricing is based on tokens, so more tokens mean more cost. The Calculator tool shows how many tokens your text contains.',
   },
   {
     category: 'Technical',
@@ -131,13 +131,13 @@ export const faqs: FAQItem[] = [
     category: 'Benchmarks',
     question: 'What are benchmarks?',
     answer:
-      'Benchmarks are standardized tests that measure how well models perform on specific tasks: math, coding, reading comprehension, logic puzzles, etc. Companies publish benchmark scores to show their model\'s strengths. A high score means good performance on that task.',
+      'Benchmarks are standardized tests that measure how well models perform on specific tasks, like math, coding, reading comprehension, and logic puzzles. Companies publish benchmark scores to show their model\'s strengths. A high score means good performance on that task.',
   },
   {
     category: 'Benchmarks',
     question: 'Can I trust benchmark scores?',
     answer:
-      'Mostly, but with healthy skepticism. Benchmarks measure narrow tasks (e.g., "solve this math problem in one shot"). Real-world tasks are messier and require human judgment. A model with a 90% benchmark score might not always work best for your actual use case. Test it with your own data.',
+      'Mostly, but keep a healthy skepticism. Benchmarks measure narrow tasks, like solving one math problem in a single shot. Real-world tasks are messier and require human judgment. A model with a 90% benchmark score might not always work best for your actual use case. Test it with your own data.',
   },
   {
     category: 'Benchmarks',
@@ -149,7 +149,7 @@ export const faqs: FAQItem[] = [
     category: 'Benchmarks',
     question: 'Why do models have different scores on the same benchmark?',
     answer:
-      'Different companies use slightly different versions of benchmarks, test at different times, and may tweak parameters. Also, benchmark results vary slightly each run due to randomness in the model. Small differences (1-3%) are usually noise; bigger gaps are real.',
+      'Different companies use slightly different versions of benchmarks, test at different times, and may tweak parameters. Benchmark results also vary slightly each run because of randomness in the model. Small differences of one to three percent are usually noise, while bigger gaps are real.',
   },
   {
     category: 'Benchmarks',
