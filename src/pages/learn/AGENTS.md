@@ -11,12 +11,15 @@ Extends the root `AGENTS.md` and `src/AGENTS.md`. The Learn section teaches AI c
 
 ## Lab models
 
-- The lab lineup (Doodle-64/525/918, Parrot-43, Parrot-2D) is named in the hardcoded lab level blurb in `topics.ts`. Adding a lab model means updating that blurb.
+- The lab lineup (Doodle-64, Doodle-64R, Doodle-525, Doodle-918, Parrot-43, Parrot-2D, Finch-4) is named in the hardcoded lab level blurb in `topics.ts`. Adding a lab model means updating that blurb.
+- Doodle-64R (`pixelGeneratorModel.ts` + `PixelGenerator.tsx`) is the generative inverse of Doodle-64: it reads the same `RAW_WEIGHTS` from `pixelClassifierModel.ts` backward to draw a 3 or an E. Keep the two models sharing one weight source so the read-back panel stays honest.
 - Changing Parrot-43's training corpus means renaming it (the 43 counts its word pairs). Parrot-2D is named for its two readable embedding dimensions, not a parameter count, so its corpus can grow (it does, four words to six, inside the demo).
 - `embeddingModel.ts` is the advanced embedding-search demo (the meaning-space map for `embedding-models`). The Parrot-2D next-word model lives in `sceneModel.ts` + `SceneNextWord.tsx`. Do not conflate the two.
 
 ## Adding a topic
 
-- New topics need the sitemap rebuilt (and copied to `public/`) plus prerender coverage. `routeMeta.ts` drives both.
+- New topics need the sitemap rebuilt (and copied to `public/`) plus prerender coverage. `routeMeta.ts` drives both. `npm run build` writes `dist/sitemap.xml`; copy it to `public/sitemap.xml` or the `routeMeta.test.ts` guard fails.
+- Every topic needs a `topicMotifs.ts` entry (a `TopicCardAnimation` guard enforces it) and prose for every section heading (a `Learn.test` guard enforces both directions).
+- A lab topic's `topics.ts` metadata (model card, section headings, meta strings) ships in the shared `meta` chunk via `routeMeta.ts`. That chunk runs near its budget, so one new lab topic can push it over. When it does, raise the budget in `scripts/check-bundle-budget.mjs` with a dated comment (the prose itself stays lazy in `topicProse.ts` and does not count).
 - Give the topic card a motif animation (`topicMotifs.ts` + `TopicCardAnimation.tsx`) and respect `prefers-reduced-motion`.
 - Heavy interactive components gate their chunks on IntersectionObserver visibility with an always-load fallback.
