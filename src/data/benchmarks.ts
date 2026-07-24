@@ -58,6 +58,16 @@ export const benchmarks: Benchmark[] = [
     sourceOrganization: 'Scale AI',
   },
   {
+    id: 'gdpval-aa',
+    name: 'GDPval-AA v2',
+    shortName: 'GDPval',
+    eli5: 'Real paid work from 44 different jobs, such as law, nursing, and software. Judges compare two answers side by side without knowing which model wrote them, and the winner gains rating points. A typical human expert scores 1000, so a higher number means the work was picked over a human more often.',
+    unit: 'points',
+    category: 'Specialized Skills',
+    sourceUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
+    sourceOrganization: 'Artificial Analysis',
+  },
+  {
     id: 'aa-intelligence-index',
     name: 'Artificial Analysis Intelligence Index',
     shortName: 'AA Index',

@@ -12,6 +12,16 @@ export interface Release {
 
 export const releases: Release[] = [
   {
+    id: 'claude-opus-5-launch',
+    modelId: 'claude-opus-5',
+    type: 'new',
+    title: 'Claude Opus 5 released',
+    description:
+      'Anthropic ships a flagship built for agentic coding and business workflows at $5/$25 per million tokens, which is half the price of Fable 5. It has a 1M token context window, and it now leads the SWE-Bench Verified leaderboard at 97%.',
+    date: '2026-07-24',
+    link: 'https://www.anthropic.com/news/claude-opus-5',
+  },
+  {
     id: 'gemini-3-6-flash-family-launch',
     modelId: 'gemini-3-6-flash',
     type: 'new',

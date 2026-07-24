@@ -35,9 +35,63 @@ rules; the short version:
 3. Bump `dataSourcedAt` in `index.ts`.
 4. Run `npm run validate` (schema + sanity checks; also runs in CI).
 
-Last refreshed: **2026-07-23, seventh pass** (four independently measured
-Artificial Analysis Intelligence Index results added for exact model and
-effort configurations).
+Last refreshed: **2026-07-24, eighth pass** (Claude Opus 5 added on launch day).
+
+2026-07-24 refresh notes (Claude Opus 5):
+
+- **Claude Opus 5 added**, released 2026-07-24 per
+  [Anthropic's launch announcement](https://www.anthropic.com/news/claude-opus-5).
+  Specs come from the
+  [Anthropic model overview](https://platform.claude.com/docs/en/docs/about-claude/models/overview):
+  `claude-opus-5`, $5/$25 per MTok, 1M context, 128k max output, adaptive
+  thinking yes, vision yes, text output only. Listed as flagship; the docs
+  now move Opus 4.8 into the legacy table.
+- **Scores filled (four of six), all independent runs.** The announcement
+  publishes no numbers for the six benchmarks tracked here. It leads with
+  Frontier-Bench v0.1, CursorBench 3.2, ARC-AGI 3, Zapier AutomationBench,
+  and OSWorld 2.0, and mostly as relative claims ("three times as high as
+  the next-best model") rather than absolute scores, so none of it is
+  usable in these columns.
+  - SWE-bench Verified **97.00** and GPQA Diamond **93.43**, both
+    [vals.ai](https://www.vals.ai/benchmarks/swebench).
+  - Terminal-Bench 2.1 **84.64**,
+    [vals.ai](https://www.vals.ai/benchmarks/terminal-bench-2-1).
+  - HLE **52.6** (Adaptive Reasoning, Max Effort) and AA Intelligence Index
+    v4.1 **61**, both
+    [Artificial Analysis](https://artificialanalysis.ai/models/claude-opus-5).
+    AA's HLE is the closed-book text-only subset (2,158 questions), which is
+    the column this dataset uses.
+- **The vals.ai fallback caveat.** vals.ai ran Opus 5 with Claude Opus 4.8
+  as a server-side fallback for refusals. Counting the nine fallback-assisted
+  passes as failures moves Terminal-Bench 2.1 from 84.64 to **81.27** (and
+  the Vals Index from 74.82 to 74.47). SWE-bench Verified and GPQA Diamond
+  are unaffected. The displayed 84.64 is the headline number, and the caveat
+  is recorded in the `scoreProvenance` comment in `models.ts`. Worth
+  revisiting if vals.ai republishes without the fallback. Note the same
+  pattern already applies to Fable 5, whose AA entry reads "Opus 4.8
+  Fallback".
+- **SWE-bench Pro deliberately left empty.** Only
+  [BenchLM](https://benchlm.ai/benchmarks/swePro) carries an Opus 5 number
+  (79.2, third behind Mythos 5 at 80.3 and Fable 5 at 80.0), and BenchLM
+  mixes evidenced rows with estimated ones without marking which is which
+  ("Estimated positions remain ranked with wider uncertainty"). Neither
+  [Scale's public leaderboard](https://labs.scale.com/leaderboard/swe_bench_pro_public)
+  nor [llm-stats](https://llm-stats.com/benchmarks/swe-bench-pro) lists
+  Opus 5 yet. Estimates are not publishable here, so the cell stays empty.
+  Re-check Scale and llm-stats next pass.
+- **Rejected leads.** A search snippet put Opus 5 on the llm-stats
+  SWE-bench Verified leaderboard; the page itself does not list the model
+  (it tops out at Fable 5, 0.950). vals.ai's SWE-bench page header reads
+  "Updated: 7/22/2026", which predates the July 24 launch; that is a
+  site-wide timestamp, and the model rows themselves include Opus 5, so the
+  date is not evidence of a pre-launch run.
+- **Downstream checked.** Full 6,528-row quiz matrix diffed before and
+  after: 544 rows changed, all of them Opus 5 replacing Opus 4.8 or Kimi K3
+  as *runner-up* on premium budgets. Opus 5 is never the top pick, because
+  Fable 5 still leads on `avgScore` with six scored benchmarks against Opus
+  5's four. No row lost its recommendation. Fable 5's `relatedModelIds` now
+  points at Opus 5 instead of Opus 4.8, and `public/sitemap.xml` was
+  regenerated for the new `/models/claude-opus-5/` route.
 
 2026-07-23 release-date backfill notes:
 

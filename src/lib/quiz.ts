@@ -125,15 +125,48 @@ const benchmarkAverages: ReadonlyMap<BenchmarkId, number> = (() => {
 })()
 
 /**
- * How far above or below the field a model sits, averaged over the
- * benchmarks it has been measured on. Returns a percentage-point delta, so 0
- * means "average model" and +5 means "five points better than typical".
+ * Spread of each benchmark across the field, used to put every benchmark on
+ * one comparable scale before averaging.
+ *
+ * Most benchmarks here are percentages, so a raw delta is already roughly
+ * comparable between them. GDPval-AA is not: it is an Elo rating that runs
+ * from 7 to 1861 in this dataset, so a single Elo delta of +300 would swamp
+ * every percentage-point delta and decide the pick on its own. Dividing each
+ * delta by its benchmark's standard deviation converts all of them to
+ * "standard deviations above the field", which is unit-free.
  */
+const benchmarkDeviations: ReadonlyMap<BenchmarkId, number> = (() => {
+  const sums = new Map<BenchmarkId, { sq: number; n: number }>()
+  for (const m of models) {
+    for (const [id, score] of Object.entries(m.scores) as Array<[BenchmarkId, number]>) {
+      const mean = benchmarkAverages.get(id) ?? score
+      const t = sums.get(id) ?? { sq: 0, n: 0 }
+      sums.set(id, { sq: t.sq + (score - mean) ** 2, n: t.n + 1 })
+    }
+  }
+  return new Map(
+    [...sums].map(([id, t]) => [id, t.n > 1 ? Math.sqrt(t.sq / t.n) || 1 : 1]),
+  )
+})()
+
+/**
+ * How far above or below the field a model sits, averaged over the
+ * benchmarks it has been measured on. Returns a spread-normalised figure
+ * scaled back onto percentage-point-like units, so 0 means "average model"
+ * and +5 still means "clearly better than typical". Scaling by the mean
+ * percentage benchmark's spread keeps this on the same footing as the
+ * 0-100 branches of capabilityScore.
+ */
+const AVG_SCORE_SCALE = 10
+
 const avgScore = (m: Model): number => {
   const deltas = (Object.entries(m.scores) as Array<[BenchmarkId, number]>).map(
-    ([id, score]) => score - (benchmarkAverages.get(id) ?? score),
+    ([id, score]) =>
+      (score - (benchmarkAverages.get(id) ?? score)) / (benchmarkDeviations.get(id) ?? 1),
   )
-  return deltas.length > 0 ? deltas.reduce((a, b) => a + b, 0) / deltas.length : 0
+  return deltas.length > 0
+    ? (deltas.reduce((a, b) => a + b, 0) / deltas.length) * AVG_SCORE_SCALE
+    : 0
 }
 
 const tierRank: Record<Model['tier'], number> = { flagship: 3, balanced: 2, fast: 1 }

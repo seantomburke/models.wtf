@@ -34,6 +34,7 @@ export type BenchmarkId =
   | 'terminal-bench'
   | 'hle'
   | 'aa-intelligence-index'
+  | 'gdpval-aa'
 
 export type BenchmarkCategory =
   | 'Software Engineering'

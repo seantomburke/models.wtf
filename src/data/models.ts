@@ -14,6 +14,69 @@ import type { Model } from './types.ts'
 export const models: Model[] = [
   // ─── Anthropic ───────────────────────────────────────────────
   {
+    id: 'claude-opus-5',
+    name: 'Claude Opus 5',
+    providerId: 'anthropic',
+    apiId: 'claude-opus-5',
+    tier: 'flagship',
+    openSource: false,
+    inputPricePerMTok: 5,
+    outputPricePerMTok: 25,
+    contextWindowTokens: 1_000_000,
+    maxOutputTokens: 128_000,
+    reasoning: true, // Anthropic model overview: adaptive thinking "Yes"
+    internetAccess: true,
+    vision: true, // Anthropic model overview: all current Claude models support text and image input
+    imageGeneration: false, // same doc: text output only
+    releaseDate: '2026-07-24', // Anthropic launch announcement
+    scores: {
+      // SWE-bench Pro is deliberately absent: only BenchLM carries an Opus 5
+      // number (79.2), and it does not separate evidenced rows from estimates.
+      'swe-bench-verified': 97.0, // vals.ai independent run (July 2026)
+      'gpqa-diamond': 93.43, // vals.ai independent run (July 2026)
+      'terminal-bench': 84.64, // vals.ai independent run, Terminal-Bench 2.1
+      'hle': 52.6, // Artificial Analysis independent run, closed-book text-only subset
+      'aa-intelligence-index': 61.0, // Artificial Analysis v4.1, adaptive reasoning / max effort
+      'gdpval-aa': 1861, // Artificial Analysis GDPval-AA v2 Elo, adaptive reasoning / max effort
+    },
+    scoreProvenance: {
+      'swe-bench-verified': {
+        source: 'independent',
+        runner: 'vals.ai',
+        sourceUrl: 'https://www.vals.ai/benchmarks/swebench',
+      },
+      'gpqa-diamond': { source: 'independent', runner: 'vals.ai' },
+      // vals.ai ran Opus 5 with Opus 4.8 as a server-side refusal fallback.
+      // Counting the nine fallback-assisted passes as failures gives 81.27.
+      'terminal-bench': {
+        source: 'independent',
+        runner: 'vals.ai',
+        sourceUrl: 'https://www.vals.ai/benchmarks/terminal-bench-2-1',
+      },
+      'hle': { source: 'independent', runner: 'Artificial Analysis' },
+      'aa-intelligence-index': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/models/claude-opus-5',
+      },
+      'gdpval-aa': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
+      },
+    },
+    blurb:
+      'Anthropic\'s flagship for agentic coding and long business workflows. It comes close to Fable 5 at half the price.',
+    useCases: ['coding', 'analysis', 'research'],
+    whyChooseThis:
+      'Opus 5 is the strongest coding model tracked here, and it tops the SWE-Bench Verified leaderboard. It costs half of what Fable 5 costs, so it is the better default for everyday engineering work. The 1M token context lets you hand it a whole codebase at once.',
+    prosVsCompetitors: {
+      'Claude Fable 5': 'Opus 5 scores higher on coding benchmarks at half the price. Fable 5 still leads on the hardest reasoning tasks.',
+      'GPT-5.6 Sol': 'Opus 5 leads on SWE-Bench Verified. Sol edges ahead on Terminal-Bench.',
+    },
+    relatedModelIds: ['claude-fable-5', 'claude-sonnet-5'],
+  },
+  {
     id: 'claude-fable-5',
     name: 'Claude Fable 5',
     providerId: 'anthropic',
@@ -36,6 +99,7 @@ export const models: Model[] = [
       'terminal-bench': 88.0, // vals.ai independent run (July 16, 2026)
       'hle': 53.3, // Artificial Analysis independent run (July 2026)
       'aa-intelligence-index': 60.0, // Artificial Analysis v4.1, max effort with fallback
+      'gdpval-aa': 1747, // Artificial Analysis GDPval-AA v2 Elo, adaptive reasoning / max effort, Opus 4.8 fallback
     },
     scoreProvenance: {
       'terminal-bench': { source: 'independent', runner: 'vals.ai' },
@@ -44,6 +108,11 @@ export const models: Model[] = [
         source: 'independent',
         runner: 'Artificial Analysis',
         sourceUrl: 'https://artificialanalysis.ai/models/claude-fable-5/',
+      },
+      'gdpval-aa': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
       },
     },
     blurb:
@@ -55,7 +124,7 @@ export const models: Model[] = [
       'GPT-5.6 Sol': 'Fable 5 excels at complex multi-step reasoning and debugging. Sol is faster for immediate responses.',
       'Gemini 3.1 Pro': 'Fable 5 edges out on reasoning-heavy tasks; Gemini wins on long-context retrieval and speed.',
     },
-    relatedModelIds: ['claude-opus-4-8', 'gpt-5-6-sol'],
+    relatedModelIds: ['claude-opus-5', 'gpt-5-6-sol'],
   },
   {
     id: 'claude-opus-4-8',
@@ -79,6 +148,7 @@ export const models: Model[] = [
       'gpqa-diamond': 93.6,
       'terminal-bench': 74.6, // Anthropic-published (Terminus 2); tbench.ai independent run (Claude Code) lands higher at 78.9
       'hle': 45.7, // Artificial Analysis independent run (July 2026)
+      'gdpval-aa': 1593, // Artificial Analysis GDPval-AA v2 Elo, adaptive reasoning / max effort
     },
     scoreProvenance: {
       'terminal-bench': {
@@ -87,6 +157,11 @@ export const models: Model[] = [
         independentRunner: 'tbench.ai (Claude Code)',
       },
       'hle': { source: 'independent', runner: 'Artificial Analysis' },
+      'gdpval-aa': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
+      },
     },
     blurb:
       'A coding workhorse. Near the top of the toughest coding benchmarks at half the price of Fable 5.',
@@ -122,6 +197,7 @@ export const models: Model[] = [
       'terminal-bench': 80.4, // Anthropic-published; tbench.ai independent run (Claude Code) lands 74.6
       'hle': 57.4, // BenchLM independent run (July 2026)
       'aa-intelligence-index': 53.0, // Artificial Analysis v4.1, adaptive reasoning / max effort
+      'gdpval-aa': 1603, // Artificial Analysis GDPval-AA v2 Elo, adaptive reasoning / max effort
     },
     scoreProvenance: {
       'gpqa-diamond': { source: 'independent', runner: 'Artificial Analysis' },
@@ -135,6 +211,11 @@ export const models: Model[] = [
         source: 'independent',
         runner: 'Artificial Analysis',
         sourceUrl: 'https://artificialanalysis.ai/models/claude-sonnet-5/',
+      },
+      'gdpval-aa': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
       },
     },
     blurb:
@@ -166,6 +247,14 @@ export const models: Model[] = [
     releaseDate: '2025-10-15', // Anthropic launch announcement
     scores: {
       'swe-bench-verified': 73.3,
+      'gdpval-aa': 911, // Artificial Analysis GDPval-AA v2 Elo, reasoning
+    },
+    scoreProvenance: {
+      'gdpval-aa': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
+      },
     },
     blurb:
       "Anthropic's fastest and cheapest model. Great for quick answers and simple tasks in high volume.",
@@ -202,6 +291,7 @@ export const models: Model[] = [
       'gpqa-diamond': 94.6, // OpenAI-published (July 2026)
       'hle': 47.2, // Artificial Analysis independent run (July 2026; max effort)
       'aa-intelligence-index': 59.0, // Artificial Analysis v4.1, max effort
+      'gdpval-aa': 1736, // Artificial Analysis GDPval-AA v2 Elo, max effort
     },
     scoreProvenance: {
       'swe-bench-verified': { source: 'independent', runner: 'Vals AI (mini-swe-agent)' },
@@ -215,6 +305,11 @@ export const models: Model[] = [
         source: 'independent',
         runner: 'Artificial Analysis',
         sourceUrl: 'https://artificialanalysis.ai/models/gpt-5-6-sol/',
+      },
+      'gdpval-aa': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
       },
     },
     blurb:
@@ -249,6 +344,7 @@ export const models: Model[] = [
       'terminal-bench': 87.4, // OpenAI-published; tbench.ai independent run (Codex) lands 78.4
       'hle': 41.8, // Artificial Analysis independent run (max effort, closed-book)
       'aa-intelligence-index': 55.0, // Artificial Analysis v4.1, max effort
+      'gdpval-aa': 1583, // Artificial Analysis GDPval-AA v2 Elo, max effort
     },
     scoreProvenance: {
       'terminal-bench': {
@@ -261,6 +357,11 @@ export const models: Model[] = [
         source: 'independent',
         runner: 'Artificial Analysis',
         sourceUrl: 'https://artificialanalysis.ai/models/gpt-5-6-terra/',
+      },
+      'gdpval-aa': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
       },
     },
     blurb:
@@ -296,6 +397,7 @@ export const models: Model[] = [
       'terminal-bench': 84.7, // OpenAI-published; tbench.ai independent run (Codex) lands 75.7
       'hle': 37.2, // Artificial Analysis independent run (medium effort, closed-book)
       'aa-intelligence-index': 46.0, // Artificial Analysis v4.1, high effort
+      'gdpval-aa': 1582, // Artificial Analysis GDPval-AA v2 Elo, max effort
     },
     scoreProvenance: {
       'swe-bench-verified': { source: 'independent', runner: 'Vals AI (mini-swe-agent)' },
@@ -309,6 +411,11 @@ export const models: Model[] = [
         source: 'independent',
         runner: 'Artificial Analysis',
         sourceUrl: 'https://artificialanalysis.ai/models/gpt-5-6-luna-high/',
+      },
+      'gdpval-aa': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
       },
     },
     blurb:
@@ -347,10 +454,16 @@ export const models: Model[] = [
       // row publishes 51.4 under "Search (blocklist) + Code"; the column is
       // closed-book across the dataset, so the 44.4 run is the comparable one.
       'hle': 44.4,
+      'gdpval-aa': 965, // Artificial Analysis GDPval-AA v2 Elo
     },
     scoreProvenance: {
       'swe-bench-pro': { source: 'independent', runner: "Anthropic's comparison table" },
       'gpqa-diamond': { source: 'independent', runner: 'Artificial Analysis' },
+      'gdpval-aa': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
+      },
     },
     blurb:
       "Google's flagship. A top-tier reasoner with strong long-context skills at an aggressive price.",
@@ -382,12 +495,18 @@ export const models: Model[] = [
       'swe-bench-pro': 58.7, // Google-published (public subset)
       'terminal-bench': 78.0, // Google-published (Terminus-2 harness)
       'aa-intelligence-index': 50.0, // Artificial Analysis v4.1, high effort
+      'gdpval-aa': 1423, // Artificial Analysis GDPval-AA v2 Elo, high effort
     },
     scoreProvenance: {
       'aa-intelligence-index': {
         source: 'independent',
         runner: 'Artificial Analysis',
         sourceUrl: 'https://artificialanalysis.ai/models/gemini-3-6-flash/',
+      },
+      'gdpval-aa': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
       },
     },
     blurb:
@@ -419,6 +538,14 @@ export const models: Model[] = [
     scores: {
       'swe-bench-pro': 54.2, // Google-published (public subset)
       'terminal-bench': 54.0, // Google-published (Terminus-2 harness)
+      'gdpval-aa': 1139, // Artificial Analysis GDPval-AA v2 Elo
+    },
+    scoreProvenance: {
+      'gdpval-aa': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
+      },
     },
     blurb:
       "Google's fastest, lowest-cost 3.5 model. Built for high-volume extraction, analysis, and autonomous subagent work.",
@@ -452,6 +579,7 @@ export const models: Model[] = [
       'gpqa-diamond': 92.2, // Artificial Analysis independent run (the model card publishes no GPQA)
       'terminal-bench': 76.2, // Google-published (Terminus-2 harness); Vals independent run lands 74.16
       'hle': 40.2, // Google-published (model card, full set text + multimodal)
+      'gdpval-aa': 1344, // Artificial Analysis GDPval-AA v2 Elo, high effort
     },
     scoreProvenance: {
       'gpqa-diamond': { source: 'independent', runner: 'Artificial Analysis' },
@@ -459,6 +587,11 @@ export const models: Model[] = [
         source: 'provider',
         independentScore: 74.16,
         independentRunner: 'Vals AI (Terminus 2)',
+      },
+      'gdpval-aa': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
       },
     },
     blurb:
@@ -497,6 +630,7 @@ export const models: Model[] = [
       // Independent closed-book run. xAI's tool-assisted headline result is higher.
       'hle': 52.2,
       'aa-intelligence-index': 54.0, // Artificial Analysis v4.1, high effort
+      'gdpval-aa': 1527, // Artificial Analysis GDPval-AA v2 Elo, high effort
     },
     scoreProvenance: {
       'swe-bench-verified': { source: 'independent', runner: 'Vals AI (mini-swe-agent)' },
@@ -515,6 +649,11 @@ export const models: Model[] = [
         source: 'provider',
         independentScore: 79.3,
         independentRunner: 'tbench.ai (Cursor CLI)',
+      },
+      'gdpval-aa': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
       },
     },
     blurb:
@@ -588,6 +727,7 @@ export const models: Model[] = [
       'gpqa-diamond': 88.4, // Artificial Analysis independent run (Meta published none)
       'terminal-bench': 76.2, // tbench.ai independent run (mini-SWE-agent); Meta itself published only a 2.0 number
       'hle': 62.1, // BenchLM independent run (July 2026)
+      'gdpval-aa': 1375, // Artificial Analysis GDPval-AA v2 Elo, xhigh effort
     },
     scoreProvenance: {
       'swe-bench-verified': {
@@ -598,6 +738,11 @@ export const models: Model[] = [
       'gpqa-diamond': { source: 'independent', runner: 'Artificial Analysis' },
       'terminal-bench': { source: 'independent', runner: 'tbench.ai (mini-SWE-agent)' },
       'hle': { source: 'independent', runner: 'BenchLM' },
+      'gdpval-aa': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
+      },
     },
     blurb:
       "Meta's new flagship and its first paid, closed-weights model after the open Llama era. Built for agent work at an aggressive price.",
@@ -632,6 +777,7 @@ export const models: Model[] = [
       'terminal-bench': 88.3, // Moonshot-published; Vals independent run lands 80.90
       'hle': 56.0, // Moonshot-published (with tools) (July 2026)
       'aa-intelligence-index': 57.0, // Artificial Analysis v4.1
+      'gdpval-aa': 1686, // Artificial Analysis GDPval-AA v2 Elo
     },
     scoreProvenance: {
       'swe-bench-verified': { source: 'independent', runner: 'Vals AI (mini-swe-agent)' },
@@ -644,6 +790,11 @@ export const models: Model[] = [
         source: 'independent',
         runner: 'Artificial Analysis',
         sourceUrl: 'https://artificialanalysis.ai/models/kimi-k3/',
+      },
+      'gdpval-aa': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
       },
     },
     blurb:
@@ -681,12 +832,18 @@ export const models: Model[] = [
       'gpqa-diamond': 87.2,
       'terminal-bench': 63.8, // Vals independent run lands 47.57
       'hle': 46.0, // with tools
+      'gdpval-aa': 1237, // Artificial Analysis GDPval-AA v2 Elo, xhigh effort
     },
     scoreProvenance: {
       'terminal-bench': {
         source: 'provider',
         independentScore: 47.57,
         independentRunner: 'Vals AI (Terminus 2)',
+      },
+      'gdpval-aa': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
       },
     },
     blurb:
@@ -723,12 +880,18 @@ export const models: Model[] = [
       // column is closed-book across the dataset, so the 40.5 run is the
       // comparable one.
       'hle': 40.5,
+      'gdpval-aa': 1510, // Artificial Analysis GDPval-AA v2 Elo, max effort
     },
     scoreProvenance: {
       'terminal-bench': {
         source: 'provider',
         independentScore: 67.79,
         independentRunner: 'Vals AI (Terminus 2)',
+      },
+      'gdpval-aa': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
       },
     },
     blurb:
@@ -767,6 +930,7 @@ export const models: Model[] = [
       // closed-book across the dataset.
       'hle': 37.7,
       'aa-intelligence-index': 44.0, // Artificial Analysis v4.1, max reasoning effort
+      'gdpval-aa': 1306, // Artificial Analysis GDPval-AA v2 Elo, reasoning / max effort
     },
     scoreProvenance: {
       'gpqa-diamond': {
@@ -783,6 +947,11 @@ export const models: Model[] = [
         source: 'independent',
         runner: 'Artificial Analysis',
         sourceUrl: 'https://artificialanalysis.ai/models/deepseek-v4-pro/',
+      },
+      'gdpval-aa': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
       },
     },
     blurb:
@@ -818,9 +987,15 @@ export const models: Model[] = [
       'gpqa-diamond': 86.0,
       'terminal-bench': 61.6, // Alibaba-published (Qwen 3.6 Plus) (July 2026)
       'hle': 21.4, // BenchLM independent run for Qwen3.6-35B-A3B (July 2026)
+      'gdpval-aa': 1139, // Artificial Analysis GDPval-AA v2 Elo, Qwen 3.6 Plus
     },
     scoreProvenance: {
       'hle': { source: 'independent', runner: 'BenchLM' },
+      'gdpval-aa': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
+      },
     },
     blurb:
       'The leading open model for multilingual work, under the business-friendly Apache 2.0 license.',
@@ -850,6 +1025,14 @@ export const models: Model[] = [
     releaseDate: '2025-04-05', // Meta 'Llama 4 herd' launch announcement
     scores: {
       'gpqa-diamond': 69.8, // Meta-published (April 2026)
+      'gdpval-aa': 7, // Artificial Analysis GDPval-AA v2 Elo
+    },
+    scoreProvenance: {
+      'gdpval-aa': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
+      },
     },
     blurb:
       "Meta's general-purpose open model. Easy to run and widely supported, though newer open models beat it on hard reasoning.",
@@ -879,6 +1062,14 @@ export const models: Model[] = [
     releaseDate: '2025-04-05', // Meta 'Llama 4 herd' launch announcement
     scores: {
       'gpqa-diamond': 57.2, // Meta-published (April 2026)
+      'gdpval-aa': 111, // Artificial Analysis GDPval-AA v2 Elo
+    },
+    scoreProvenance: {
+      'gdpval-aa': {
+        source: 'independent',
+        runner: 'Artificial Analysis',
+        sourceUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
+      },
     },
     blurb:
       'The long-context champion. A 10-million-token window, enough to read hundreds of books at once.',

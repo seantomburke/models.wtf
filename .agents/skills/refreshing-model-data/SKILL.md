@@ -79,7 +79,7 @@ Trust order within a tier is top to bottom. Provider primaries always beat aggre
 
 | Source | What for | Last verified | Reliability note |
 |---|---|---|---|
-| anthropic.com/news + model docs | Claude releases, eval tables, system cards | 2026-07-23 | System cards carry the authoritative numbers; announcement pages can lag. |
+| anthropic.com/news + model docs | Claude releases, eval tables, system cards | 2026-07-24 | System cards carry the authoritative numbers; announcement pages can lag. The Opus 5 announcement published only relative claims ("three times the next-best model") on non-tracked benchmarks, so launch posts alone may fill zero cells. docs.anthropic.com 301s to platform.claude.com. |
 | openai.com/index + platform docs | GPT releases, eval tables, pricing | 2026-07-23 | openai.com intermittently returns HTTP 403 to automated fetches; retry or use a browser tool. |
 | blog.google + deepmind.google + ai.google.dev | Gemini releases, model cards, API pricing | 2026-07-23 | Model cards distinguish "No tools" HLE from tool-assisted; read the exact column. |
 | docs.x.ai + x.ai news | Grok releases, pricing, model table | 2026-07-23 | Retired models vanish from the docs table entirely; their slugs redirect to newer models. |
@@ -90,16 +90,21 @@ Trust order within a tier is top to bottom. Provider primaries always beat aggre
 
 | Source | What for | Last verified | Reliability note |
 |---|---|---|---|
-| artificialanalysis.ai | Intelligence Index, HLE, GPQA independent runs | 2026-07-23 | Names exact model + effort config; labels estimates as estimates (estimates are not publishable here). |
-| vals.ai | SWE-bench Verified, Terminal-Bench 2.1 uniform runs | 2026-07-23 | Uniform-harness runs (mini-swe-agent, Terminus 2) make cross-model comparison honest. Index subsets are different harnesses. |
-| tbench.ai | Official Terminal-Bench 2.1 leaderboard | 2026-07-23 | Small roster; absence of a model means no run yet, never a zero. |
-| llm-stats.com | Release feed, spec cross-check | 2026-07-23 | Good release radar; its search snippets have surfaced phantom model names, so confirm on provider sites. |
+| artificialanalysis.ai | Intelligence Index, HLE, GPQA independent runs | 2026-07-24 | Names exact model + effort config; labels estimates as estimates (estimates are not publishable here). Its HLE is the closed-book text-only subset (2,158 questions), which is the column this dataset uses. Model-page URLs are `/models/<slug>` with no trailing slash. |
+| vals.ai | SWE-bench Verified, Terminal-Bench 2.1 uniform runs | 2026-07-24 | Uniform-harness runs (mini-swe-agent, Terminus 2) make cross-model comparison honest. Index subsets are different harnesses. **Check the per-benchmark footnotes for refusal fallbacks:** Opus 5 was run with Opus 4.8 as a server-side fallback, which moves Terminal-Bench 2.1 from 84.64 to 81.27 if fallback-assisted passes count as failures. Page headers carry a site-wide "Updated" date that can predate a model's launch; it is not the run date. `/models/<slug>` pages 404, so use the benchmark pages. |
+| tbench.ai | Official Terminal-Bench 2.1 leaderboard | 2026-07-23 | Small roster; absence of a model means no run yet, never a zero. `/leaderboard` renders no data to fetchers; the real table is at `/leaderboard/terminal-bench/2.1`. |
+| llm-stats.com | Release feed, spec cross-check | 2026-07-24 | Good release radar; its search snippets have surfaced phantom model names and phantom leaderboard rows, so confirm on the page itself, not the snippet. Marks results self-reported vs verified. |
 | benchmarklist.com | Per-model benchmark result pages with links | 2026-07-22 | Links score-level sources; useful for provenance URLs. |
 | labs.scale.com | SWE-bench Pro public subset, Scale HLE leaderboard | 2026-07-20 | Scale's HLE set is multimodal, a different protocol from the closed-book column here. |
 
 ### Tier 3: secondary coverage (leads only, never sole source)
 
-benchlm.ai, openrouter.ai, vellum.ai, marktechpost.com, and similar outlets quoting provider eval tables. Use them to find leads and cross-check, then land every number on a Tier 1 or Tier 2 source. Last swept 2026-07-23.
+benchlm.ai, openrouter.ai, vellum.ai, marktechpost.com, morphllm.com, and similar outlets quoting provider eval tables. Use them to find leads and cross-check, then land every number on a Tier 1 or Tier 2 source. Last swept 2026-07-24.
+
+Two Tier 3 notes worth carrying forward:
+
+- **benchlm.ai mixes evidenced and estimated rows** without marking which is which ("Estimated positions remain ranked with wider uncertainty while evidence is incomplete"). A BenchLM-only number cannot be published here. This cost the Opus 5 SWE-bench Pro cell on the 2026-07-24 pass: BenchLM had 79.2, and no Tier 1 or Tier 2 source carried the run.
+- **vellum.ai runs no evals of its own.** Its "benchmarks explained" posts republish provider system-card numbers and third-party partner results. Treat it as commentary, never as a run.
 
 ### Demoted sources
 
@@ -111,7 +116,9 @@ benchlm.ai, openrouter.ai, vellum.ai, marktechpost.com, and similar outlets quot
 
 | Candidate | Date | Verdict |
 |---|---|---|
-| (seed the first entry on the next run) | | |
+| vellum.ai (per-model "benchmarks explained" posts) | 2026-07-24 | **Rejected as a source of runs.** Names no harness and runs no evals; republishes Anthropic system-card numbers plus partner results (Cursor, Cognition, Databricks). Stays Tier 3 commentary. |
+| pricepertoken.com (HLE leaderboard) | 2026-07-24 | **Unevaluated, blocked.** Returns HTTP 403 to automated fetches. Retry with a browser tool next pass before forming a verdict. |
+| labs.scale.com SWE-bench Pro public leaderboard | 2026-07-24 | **Confirmed Tier 2, narrow.** Publishes error bars (e.g. 45.89±3.60) and exact model snapshots, but its roster lags badly: no Opus 5, no Fable 5 at launch. Good for confirming absence, weak as a release radar. |
 
 ## Reporting
 

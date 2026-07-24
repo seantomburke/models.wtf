@@ -2,362 +2,367 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://seantomburke.github.io/models.wtf/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/compare/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/graph/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/calculator/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/quiz/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/search/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/faq/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/glossary/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/whats-new/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/models/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/what-is-an-ai-model/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/what-is-an-llm/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/what-is-gpt/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/what-is-a-context-window/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/what-is-a-token/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/which-model-should-i-use/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/reasoning-models/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/claude-vs-gpt/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/claude-vs-gemini/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/grok-vs-gpt/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/best-model-for-coding/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/best-model-for-writing/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/best-model-for-research/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/vision-models/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/model-pricing-tokens/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/prompt-engineering-basics/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/web-search-models/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/hallucinations/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/open-source-vs-closed-source/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/embedding-models/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/fine-tuning-models/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/context-window-strategies/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/bayesian-statistics/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/how-do-neural-network-weights-work/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/understand-image-classification/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/how-neural-networks-recognize-digits/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/what-is-gradient-descent/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/train-a-neural-network/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/how-llms-predict-the-next-word/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/why-neural-networks-need-more-layers/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://seantomburke.github.io/models.wtf/models/claude-opus-5/</loc>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/models/claude-fable-5/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/models/claude-opus-4-8/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/models/claude-sonnet-5/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/models/claude-haiku-4-5/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/models/gpt-5-6-sol/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/models/gpt-5-6-terra/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/models/gpt-5-6-luna/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/models/gemini-3-1-pro/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/models/gemini-3-6-flash/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/models/gemini-3-5-flash-lite/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/models/gemini-3-5-flash/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/models/grok-4-5/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/models/grok-4-1-fast/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/models/muse-spark-1-1/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/models/kimi-k3/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/models/inkling/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/models/glm-5-2/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/models/deepseek-v4-pro/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/models/qwen-3-6/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/models/llama-4-maverick/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/models/llama-4-scout/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/providers/anthropic/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/providers/openai/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/providers/google/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/providers/xai/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/providers/meta/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/providers/moonshot/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/providers/thinking-machines/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/providers/deepseek/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/providers/alibaba/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/providers/zhipu/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
 </urlset>
