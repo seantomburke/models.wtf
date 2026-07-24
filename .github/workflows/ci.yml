@@ -26,6 +26,10 @@ jobs:
       - run: npm run validate
       - run: npm test -- --run
       - run: npm run build
+      # Keep the Node 24 bundle measurement visible in CI output. The build
+      # already runs this check; this explicit command documents the gate and
+      # makes it easy to compare local `npm run build:node24` output.
+      - run: npm run check:bundle-budget
       # Agent guidance files must never ship with the site
       - run: |
           if find dist \( -name 'AGENTS.md' -o -name 'CLAUDE.md' \) | grep -q .; then

@@ -5,11 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-server && node scripts/prerender.mjs && node scripts/generate-og-images.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-feed.mjs && node scripts/check-links.mjs && node scripts/check-bundle-budget.mjs",
+    "build": "tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-server && node scripts/prerender.mjs && node scripts/generate-og-images.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-feed.mjs && node scripts/check-links.mjs && npm run check:bundle-budget",
+    "build:node24": "node scripts/run-node24.mjs run build",
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest",
     "check:agents": "node scripts/check-agent-config.mjs",
+    "check:bundle-budget": "node scripts/check-bundle-budget.mjs",
     "validate": "node scripts/validate-data.ts",
     "check:links": "node scripts/check-links.mjs",
     "test:coverage": "vitest run --coverage"

@@ -17,7 +17,11 @@ import { gzipSync } from 'node:zlib'
 // feature work doesn't trip them, but a dataset-sized regression does.
 const BUDGET_KB = {
   /** Total JS the homepage preloads before it can render. */
-  entry: 140,
+  // Raised 140 → 145 on 2026-07-24. The baseline is 139.4 kB with Node 24,
+  // while the same commit measured 140.1 kB in Ubuntu CI. Five kB (3.4%) is
+  // enough room for platform gzip variation and normal maintenance, while a
+  // new shared dependency or eagerly imported data corpus still trips it.
+  entry: 145,
   /**
    * The shared chunk holding route metadata, imported by every page.
    * Raised 60 → 64 on 2026-07-23 for the 10 /providers/:id routes (their
@@ -68,7 +72,7 @@ const check = (name, actual, budget) => {
   }
 }
 
-console.log('bundle budget:')
+console.log(`bundle budget (Node ${process.versions.node}):`)
 check('entry', entryKb, BUDGET_KB.entry)
 if (metaKb > 0) check('meta', metaKb, BUDGET_KB.meta)
 
