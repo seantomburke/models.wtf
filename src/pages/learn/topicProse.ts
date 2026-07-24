@@ -454,7 +454,8 @@ export const topicProse: Record<string, string[]> = {
       'In the small head above, “Bob” receives the larger weight because it is the subject. A frontier transformer uses many heads and many dimensions, yet this one visible set of weights shows the key move.',
   ],
   "how-position-and-attention-make-language-models-grammatical::Generate a grammatical sentence": [
-      'Generation is still a loop. The model predicts a subject, then a verb, then an object, and finally a period. Position and attention keep those choices in their sentence roles.',
+      'Generation is still a loop, and you can watch it run one word at a time. The model predicts a subject, then feeds that word back in to predict a verb, then feeds that in to predict an object, and finally a period. Every step reads the word that came just before it, so each choice depends on the ones already made. Position and attention keep those choices in their sentence roles.',
+      'Bob, Alice, greets, and ignores are the friendly and unfriendly words. Charlie and sees are the two words in the middle. Charlie is a person who leans neither way, so his sentence can go anywhere, and sees is a calm verb that anyone can use. Adding them lets the model build far more sentences than the four corners alone.',
       'Greedy generation takes the largest chance every time. Sampling draws from the chances. A higher temperature spreads the choices out, so you can see a less common sentence while the subject, verb, object shape stays in place.',
   ],
   "bayesian-statistics::Beliefs as numbers": [

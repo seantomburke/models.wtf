@@ -15,6 +15,7 @@ Extends the root `AGENTS.md` and `src/AGENTS.md`. The Learn section teaches AI c
 - Doodle-64R (`pixelGeneratorModel.ts` + `PixelGenerator.tsx`) is the generative inverse of Doodle-64: it reads the same `RAW_WEIGHTS` from `pixelClassifierModel.ts` backward to draw a 3 or an E. Keep the two models sharing one weight source so the read-back panel stays honest.
 - Changing Parrot-43's training corpus means renaming it (the 43 counts its word pairs). Parrot-2D is named for its two readable embedding dimensions, not a parameter count, so its corpus can grow (it does, four words to six, inside the demo).
 - `embeddingModel.ts` is the advanced embedding-search demo (the meaning-space map for `embedding-models`). The Parrot-2D next-word model lives in `sceneModel.ts` + `SceneNextWord.tsx`. Do not conflate the two.
+- Finch-4 (`positionAttentionModel.ts` + `PositionAttentionLab.tsx`) reuses the `'subject'` slot for its first TWO predictions: step 0 (`<start>`→subject) picks the subject word, step 1 (that word→subject) picks the verb. So the internal `Slot` names do not map 1:1 to sentence roles; the UI derives the displayed role from step index (`PRODUCED_ROLES`), not from `slot`. Its corpus mirrors `sceneModel.ts` (Charlie is the neutral person, "sees" the neutral verb, lowercase like the other verbs). Greedy `generateSentence` must stay `['Bob','ignores','Alice']`, so Bob stays the top subject bar; a model test guards this.
 
 ## Adding a topic
 
