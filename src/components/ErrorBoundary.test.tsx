@@ -59,10 +59,49 @@ describe('ErrorBoundary', () => {
     expect(
       screen.getByText('We encountered an unexpected error. Please try again.'),
     ).toBeInTheDocument()
-    expect(capture).toHaveBeenCalledWith('error_boundary_caught', {
-      error_name: 'Error',
-      has_component_stack: true,
-    })
+    expect(capture).toHaveBeenCalledWith(
+      'error_boundary_caught',
+      expect.objectContaining({
+        error_name: 'Error',
+        has_component_stack: true,
+        error_message: 'Test error message',
+        component_stack: expect.stringContaining('ThrowError'),
+        route: '/',
+      }),
+    )
+  })
+
+  test('reports a stack so a production crash can be located', () => {
+    render(
+      <BrowserRouter>
+        <ErrorBoundary>
+          <ThrowError />
+        </ErrorBoundary>
+      </BrowserRouter>,
+    )
+
+    const [, properties] = capture.mock.calls[0]
+    expect(properties.error_stack).toEqual(expect.stringContaining('Error'))
+  })
+
+  test('redacts quoted values that an error message echoed from user input', () => {
+    class ThrowUserText extends React.Component {
+      render(): React.ReactNode {
+        throw new Error('Unexpected token in JSON at "a private note"')
+      }
+    }
+
+    render(
+      <BrowserRouter>
+        <ErrorBoundary>
+          <ThrowUserText />
+        </ErrorBoundary>
+      </BrowserRouter>,
+    )
+
+    const [, properties] = capture.mock.calls[0]
+    expect(properties.error_message).toBe('Unexpected token in JSON at <redacted>')
+    expect(properties.error_message).not.toContain('private note')
   })
 
   test('displays "Try again" button', () => {
