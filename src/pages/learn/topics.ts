@@ -16,6 +16,7 @@ import { DigitClassifier } from '../../components/learn/DigitClassifier'
 import { DeepDigitClassifier } from '../../components/learn/DeepDigitClassifier'
 import { MultiLayerNetwork } from '../../components/learn/MultiLayerNetwork'
 import { NextWordPredictor } from '../../components/learn/NextWordPredictor'
+import { SceneNextWord } from '../../components/learn/SceneNextWord'
 import { GradientDescentDemo } from '../../components/learn/GradientDescentDemo'
 import { TrainingLab } from '../../components/learn/TrainingLab'
 
@@ -48,7 +49,7 @@ export const levels: Array<{ id: TopicLevel; title: string; blurb: string }> = [
   {
     id: 'lab',
     title: 'The model lab',
-    blurb: 'Real models small enough to see through, running in your browser. Meet Doodle-64, Doodle-525, Doodle-918, and Parrot-43, then scale the same ideas up to billion-parameter LLMs.',
+    blurb: 'Real models small enough to see through, running in your browser. Meet Doodle-64, Doodle-525, Doodle-918, Parrot-43, and Parrot-2D, then scale the same ideas up to billion-parameter LLMs.',
   },
 ]
 
@@ -760,6 +761,42 @@ const authored: Topic[] = [
       },
       {
         heading: 'Where the hallucinations come from',
+      },
+    ],
+  },
+  {
+    slug: 'how-word-embeddings-predict-the-next-word',
+    level: 'lab',
+    question: 'How do word embeddings predict the next word?',
+    metaTitle: 'How word embeddings predict the next word - Interactive demo | Models.wtf',
+    metaDescription:
+      'Meet Parrot-2D, a next-word predictor that gives every word two readable numbers: how friendly it is and whether it is a person or a verb. Watch predictions land on a two-axis meaning map, then scale the idea to ChatGPT.',
+    hook: 'Meet Parrot-2D. This is a model that gives every word two numbers you can read, one for how friendly it is and one for whether it is a person or a verb. You can watch it predict the next word right on a map of those two meanings.',
+    interactive: SceneNextWord,
+    modelSpec: {
+      name: 'Parrot-2D',
+      type: 'Embedding next-word predictor, a first step from a lookup table toward a transformer',
+      parameters: '8: two learned numbers for each of the four words (friendliness and role)',
+      layers: '1 embedding map, where each word becomes a point on a two-axis grid',
+      inputs: '1 word: the last word of the sentence so far, looked up as its two numbers',
+      outputs: 'A probability for every word that could come next, summing to 100%',
+      scale: 'Real transformers give every word thousands of numbers instead of two, and nobody labels what each one means. Parrot-2D uses two numbers you can name, so you can watch the meaning drive the prediction.',
+    },
+    sections: [
+      {
+        heading: 'From a lookup table to a meaning map',
+      },
+      {
+        heading: 'Two numbers that mean something',
+      },
+      {
+        heading: 'Meaning drives the prediction',
+      },
+      {
+        heading: 'Filling in the middle of the map',
+      },
+      {
+        heading: 'This is what real embeddings do',
       },
     ],
   },

@@ -50,6 +50,7 @@ export const TOPIC_MOTIFS: Record<string, Motif> = {
   'what-is-gradient-descent': 'descent',
   'train-a-neural-network': 'training',
   'how-llms-predict-the-next-word': 'nextWord',
+  'how-word-embeddings-predict-the-next-word': 'embedding',
   'why-neural-networks-need-more-layers': 'layers',
 }
 

@@ -392,6 +392,26 @@ export const topicProse: Record<string, string[]> = {
   "how-llms-predict-the-next-word::Where the hallucinations come from": [
       'Parrot-43 also demonstrates the famous LLM failure mode in miniature. Ask it to continue "my" and it says "cat" or "homework". Neither is true. They\'re just the likeliest continuations of its training data. Likely and true are different things. An LLM with billions of parameters blurs that line much more convincingly, but the gap never fully closes. That\'s a hallucination, and now you\'ve watched one get built.',
   ],
+  "how-word-embeddings-predict-the-next-word::From a lookup table to a meaning map": [
+      'Parrot-43 is a lookup table. It only remembers which word followed which. Show it a word from outside its training and it has nothing to say. Real language models work differently, and Parrot-2D shows you the first upgrade: every word gets its own small list of numbers, called an embedding, and the model predicts from those numbers.',
+      'Parrot-2D gives every word just two numbers, and both numbers mean something you can read. The map above the demo places each word by those two numbers. Once a word is a point on a map, "what comes next" becomes a question about meaning, and you can watch the answer light up.',
+  ],
+  "how-word-embeddings-predict-the-next-word::Two numbers that mean something": [
+      'The first number is friendliness. Alice is friendly, so she sits on the right. Bob is unfriendly, so he sits on the left. The second number is role. Alice and Bob are people, so they sit low. "greets" and "ignores" are verbs, so they sit high. Two numbers put every word in its own corner of the map.',
+      'A real embedding gives a word thousands of numbers, and nobody labels what each one means. Parrot-2D shrinks that down to two numbers you can name. That is the trade the whole lesson rests on. You give up the scale of a real model and you get a picture you can actually look at.',
+  ],
+  "how-word-embeddings-predict-the-next-word::Meaning drives the prediction": [
+      'Now build a sentence and watch the map. When you land on Bob, the model rings him with gold and lights up the words it expects next. The bright one is "ignores", the unfriendly verb, because the training sentences taught the model that an unfriendly person is usually followed by an unfriendly verb. The friendly verb "greets" still glows a little, because a couple of training sentences broke the pattern on purpose.',
+      'This is why the model needs meaning and not just memory. The words that light up after Bob are the words that sit near where an unfriendly verb should sit. You can read the prediction straight off the map, which is something a plain lookup table can never let you do.',
+  ],
+  "how-word-embeddings-predict-the-next-word::Filling in the middle of the map": [
+      'The four starter words sit in the four corners, which makes friendly and unfriendly look like the only two choices. Press "Add Charlie and sees" and two new words appear in the middle. Charlie is a person who is neither friendly nor unfriendly, so he sits between Alice and Bob. "sees" is a verb that is neither, so it sits between "greets" and "ignores".',
+      'The middle of the map is where meaning stops being a light switch and becomes a dial. Charlie can be followed by a friendly verb or an unfriendly one, because his sentences went both ways. Real embeddings are dials all the way down, which is how a model can tell "warm" from "hot" from "scalding" using nothing but numbers.',
+  ],
+  "how-word-embeddings-predict-the-next-word::This is what real embeddings do": [
+      'Every large language model starts by turning each word into an embedding, a long list of numbers that places the word in a space of meaning. Words that behave alike end up near each other, the same way Alice and Charlie sit near each other here. The model never sees the word "king". It sees the point where "king" lives, and it predicts from the neighborhood.',
+      'Parrot-2D has two dimensions you can read. A frontier model has thousands you cannot. The job is the same in both. Look up the current word as a point, find the points that tend to come next, and turn how close they are into probabilities. If you can read the prediction off this little map, you have seen the first thing every real model does with your words.',
+  ],
   "bayesian-statistics::Beliefs as numbers": [
       'Bayesian statistics starts from one idea: a probability is a degree of belief, and evidence should move it. You begin with a prior (what you believed before the new evidence) and end with a posterior (what you believe after). The rule for getting from one to the other is Bayes\' theorem, published in Thomas Bayes\' posthumous 1763 essay and in use ever since, from spam filters to medical screening to language models.',
       'The classic setup is a medical test. Suppose 1% of people have an illness, the test catches 90% of the people who have it, and it also flags 10% of the people who don\'t. You test positive. How worried should you be? Most people guess "about 90%". The real answer is 1 in 12, and the tree below shows exactly why.',
