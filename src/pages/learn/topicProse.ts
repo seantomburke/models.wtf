@@ -317,6 +317,29 @@ export const topicProse: Record<string, string[]> = {
   "understand-image-classification::Try it yourself": [
       'Below, draw on the pixel grid or use the example buttons. You\'re seeing how a tiny network makes a prediction. The confidence score tells you how sure the classifier is. When you draw something ambiguous, halfway between 3 and E, watch the confidence drop, just like a real model.',
   ],
+  "how-ai-models-generate-images::Meet Doodle-64R": [
+      'Doodle-64R is the classifier from the last lab turned around. Doodle-64 reads a drawing and names the letter. Doodle-64R takes the letter and produces a drawing. The R stands for reverse, because it runs the very same 64 weights the other direction.',
+      'This is the first model in our lab that generates instead of recognizing, which makes it the vision cousin of Parrot-43. A classifier answers a question about an image you gave it. A generator answers with an image it made. Below you can pick a target and watch the model build one for you.',
+  ],
+  "how-ai-models-generate-images::A generator is a classifier in reverse": [
+      'Here is the whole idea. A classifier takes 64 pixels and produces one answer. A generator takes one answer and produces 64 pixels. Both readings use the same weights, so you can walk them in either direction.',
+      'Doodle-64 learned that a pixel on the right curve votes for a 3 and a pixel on the left edge votes for an E. Doodle-64R reads those same votes as instructions. If you ask for a 3, every pixel that votes for a 3 fills in, and every pixel that votes for an E stays blank. The bars both letters share fill in either way, which is why a generated 3 and a generated E have the same top, middle, and bottom.',
+  ],
+  "how-ai-models-generate-images::Every pixel is a coin flip": [
+      'The model never stored a picture of a 3 to copy. It holds one probability of ink for each of the 64 pixels, and it flips a weighted coin for every one. A pixel that belongs to the shape you asked for comes up ink almost every time. A pixel that belongs to the other letter comes up blank almost every time.',
+      'The probability grid in the demo shows those 64 coins before they are flipped. Bright pixels are nearly certain to fill in. Faint pixels are nearly certain to stay empty. The drawing above it is one roll of all 64 at once.',
+  ],
+  "how-ai-models-generate-images::Why the same drawing is never quite the same": [
+      'Because each pixel is a separate coin flip, the same request gives a slightly different drawing every time. You can press generate again and watch the shape shift while staying a clear 3. That variety is the point of a generator. One prompt can produce many pictures.',
+      'The creativity slider is the dial behind that variety. At low creativity the coins are heavily loaded, so the model draws the same clean shape again and again. As you raise it, every coin drifts toward a fair 50/50, the drawing picks up noise, and the letter gets harder to read. Real image generators call this same dial the temperature.',
+  ],
+  "how-ai-models-generate-images::This is how real image models work": [
+      'A tool like DALL-E, Midjourney, or Stable Diffusion is this demo grown enormous. It turns your prompt into a probability for millions of pixels, then samples them into a picture nobody has drawn before. The weights are learned from billions of images instead of set by two reference shapes, and the sampling runs in many careful steps instead of one. The core move is the same: a probability per pixel, then a roll of the dice.',
+      'You can prove the two directions share one brain right in the demo. Whatever Doodle-64R draws, feed it back and Doodle-64 reads it as the same letter. The model that writes and the model that reads are one set of weights, pointed two ways.',
+  ],
+  "how-ai-models-generate-images::Try it yourself": [
+      'Choose a 3 or an E and press generate again a few times to see how much one letter can vary. Then push the creativity slider up and watch the drawing dissolve into noise as every pixel loses its certainty. Keep an eye on the read-back panel, where the classifier names each drawing the generator makes.',
+  ],
   "how-neural-networks-recognize-digits::Meet Doodle-525": [
       'Doodle-525 is the second model in our lab, and its model card shows what one extra layer costs and buys. It reads the same 64-pixel grid as Doodle-64, but instead of mapping pixels straight to an answer, it spends 448 weights (plus 7 biases) turning pixels into 7 stroke detections, then 70 more weights turning strokes into 10 digit scores. That comes to 525 parameters for a 10-way choice, where Doodle-64 needed 64 for a 2-way choice.',
       'That budget is the whole story of neural network design: more possible answers and subtler distinctions demand more parameters, and layering lets the parameters share work. The 7 stroke detectors are reused by all 10 digits, the way an LLM\'s early layers are reused by every sentence it will ever read.',
@@ -391,6 +414,49 @@ export const topicProse: Record<string, string[]> = {
   ],
   "how-llms-predict-the-next-word::Where the hallucinations come from": [
       'Parrot-43 also demonstrates the famous LLM failure mode in miniature. Ask it to continue "my" and it says "cat" or "homework". Neither is true. They\'re just the likeliest continuations of its training data. Likely and true are different things. An LLM with billions of parameters blurs that line much more convincingly, but the gap never fully closes. That\'s a hallucination, and now you\'ve watched one get built.',
+  ],
+  "how-word-embeddings-predict-the-next-word::From a lookup table to a meaning map": [
+      'Parrot-43 is a lookup table. It only remembers which word followed which. Show it a word from outside its training and it has nothing to say. Frontier language models work differently, and Parrot-2D shows you the first upgrade. Every word gets its own small list of numbers, called an embedding, and the model predicts from those numbers.',
+      'Parrot-2D gives every word just two numbers, and both numbers mean something you can read. The map above the demo places each word by those two numbers. Once a word is a point on a map, "what comes next" becomes a question about meaning, and you can watch the answer light up.',
+  ],
+  "how-word-embeddings-predict-the-next-word::Two numbers that mean something": [
+      'The first number is friendliness. Alice is friendly, so she sits on the right. Bob is unfriendly, so he sits on the left. The second number is role. Alice and Bob are people, so they sit low. "greets" and "ignores" are verbs, so they sit high. Two numbers put every word in its own corner of the map.',
+      'A frontier embedding gives a word thousands of numbers, and nobody labels what each one means. Parrot-2D shrinks that down to two numbers you can name. That is the trade the whole lesson rests on. You give up the scale of a frontier model and you get a picture you can look at.',
+  ],
+  "how-word-embeddings-predict-the-next-word::Meaning drives the prediction": [
+      'Now build a sentence and watch the map. When you land on Bob, the model rings him with gold and lights up the words it expects next. The bright one is "ignores". That is the unfriendly verb, and the training sentences taught the model that an unfriendly person is usually followed by an unfriendly verb. The friendly verb "greets" still glows a little, because a couple of training sentences broke the pattern on purpose.',
+      'This is why the model needs meaning. The words that light up after Bob are the words that sit near where an unfriendly verb should sit. You can read the prediction straight off the map, which is something a plain lookup table can never let you do.',
+  ],
+  "how-word-embeddings-predict-the-next-word::The network behind the map": [
+      'The map is a picture. Underneath it runs a small neural network, and now you can watch it work. It has three layers. On the left is one node for every word, and the current word switches on. In the middle sit two hidden nodes, and those two nodes are the two meanings you already know. The top node holds the friendliness of the current word, and the bottom node holds whether it is a verb. On the right is one node for every word that could come next, plus a period for ending the sentence.',
+      'Pick a word on the left and follow the signal. The left wires copy the current word\'s two numbers into the two hidden nodes, so choosing Bob lights both hidden nodes at minus one, unfriendly and a person. From there the signal spreads to the outputs, and the brightest bar is the word most likely to come next. Choose Bob and the top bar is "ignores", the same answer the map gives.',
+      'This is the shape of every model on this site, shrunk until you can see it. A word comes in, a hidden layer turns it into a handful of numbers about its meaning, and an output layer turns those numbers into a next-word guess. A frontier model has thousands of hidden numbers and billions of wires. Parrot-2D has two hidden numbers you can name, so the whole path fits on one screen.',
+  ],
+  "how-word-embeddings-predict-the-next-word::Filling in the middle of the map": [
+      'The four starter words sit in the four corners, which makes friendly and unfriendly look like the only two choices. Press "Add Charlie and sees" and two new words appear in the middle. Charlie is a person who is neither friendly nor unfriendly, so he sits between Alice and Bob. "sees" is a verb that is neither, so it sits between "greets" and "ignores".',
+      'The middle of the map is where meaning stops being a light switch and becomes a dial. Charlie can be followed by a friendly verb or an unfriendly one, because his sentences went both ways. Frontier embeddings are dials all the way down, which is how a model can tell "warm" from "hot" from "scalding" using nothing but numbers.',
+  ],
+  "how-word-embeddings-predict-the-next-word::This is what frontier embeddings do": [
+      'Every large language model starts by turning each word into an embedding, a long list of numbers that places the word in a space of meaning. Words that behave alike end up near each other, the same way Alice and Charlie sit near each other here. The model never sees the word "king". It sees the point where "king" lives, and it predicts from the neighborhood.',
+      'Parrot-2D has two dimensions you can read. A frontier model has thousands you cannot. The job is the same in both. Look up the current word as a point, find the points that tend to come next, and turn how close they are into probabilities. If you can read the prediction off this little map, you have seen the first thing every frontier model does with your words.',
+      'There is one thing two numbers cannot do. Parrot-2D sees only the single word in front of it, so it cannot tell "Bob" the speaker from "Bob" the one being spoken to. Fixing that needs a sense of where a word sits in the sentence, and a way to look back at the words before it. That idea is called attention, and it is the subject of the next lab model.',
+  ],
+  "how-position-and-attention-make-language-models-grammatical::Parrot-2D needs a place for each word": [
+      'Parrot-2D gives Bob the same two numbers every time. That works when Bob begins a sentence. It loses an important clue when Bob comes after a verb, because the model cannot see whether Bob is the subject or the object.',
+      'Finch-4 starts from the same friendly and role meanings. It adds one small number for the word\'s place in the sentence. This is enough to let the model treat Bob at the start differently from Bob near the end.',
+  ],
+  "how-position-and-attention-make-language-models-grammatical::Position changes the input": [
+      'The position signal is a label for the slot. A subject gets minus one, a verb gets zero, and an object gets plus one. The word and its slot travel into the model together.',
+      'Choose Bob in the visual. As a subject, Bob leads toward “ignores”. As an object, Bob leads toward the period. The same spelling now carries a different job in the sentence.',
+  ],
+  "how-position-and-attention-make-language-models-grammatical::Attention carries context forward": [
+      'Position says where each word sits. Attention lets the object slot look back at the earlier words. The object query gives each earlier word a weight, then carries the useful pieces forward.',
+      'In the small head above, “Bob” receives the larger weight because it is the subject. A frontier transformer uses many heads and many dimensions, yet this one visible set of weights shows the key move.',
+  ],
+  "how-position-and-attention-make-language-models-grammatical::Generate a grammatical sentence": [
+      'Generation is still a loop, and you can watch it run one word at a time. The model predicts a subject, then feeds that word back in to predict a verb, then feeds that in to predict an object, and finally a period. Every step reads the word that came just before it, so each choice depends on the ones already made. Position and attention keep those choices in their sentence roles.',
+      'Bob, Alice, greets, and ignores are the friendly and unfriendly words. Charlie and sees are the two words in the middle. Charlie is a person who leans neither way, so his sentence can go anywhere, and sees is a calm verb that anyone can use. Adding them lets the model build far more sentences than the four corners alone.',
+      'Greedy generation takes the largest chance every time. Sampling draws from the chances. A higher temperature spreads the choices out, so you can see a less common sentence while the subject, verb, object shape stays in place.',
   ],
   "bayesian-statistics::Beliefs as numbers": [
       'Bayesian statistics starts from one idea: a probability is a degree of belief, and evidence should move it. You begin with a prior (what you believed before the new evidence) and end with a posterior (what you believe after). The rule for getting from one to the other is Bayes\' theorem, published in Thomas Bayes\' posthumous 1763 essay and in use ever since, from spam filters to medical screening to language models.',

@@ -181,6 +181,11 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://seantomburke.github.io/models.wtf/learn/how-ai-models-generate-images/</loc>
+    <lastmod>2026-07-24</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/how-neural-networks-recognize-digits/</loc>
     <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
@@ -197,6 +202,16 @@
   </url>
   <url>
     <loc>https://seantomburke.github.io/models.wtf/learn/how-llms-predict-the-next-word/</loc>
+    <lastmod>2026-07-24</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://seantomburke.github.io/models.wtf/learn/how-word-embeddings-predict-the-next-word/</loc>
+    <lastmod>2026-07-24</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://seantomburke.github.io/models.wtf/learn/how-position-and-attention-make-language-models-grammatical/</loc>
     <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>

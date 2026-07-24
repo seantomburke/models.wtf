@@ -23,10 +23,19 @@ import {
 } from '../../components/learn/ModelFaceOff'
 import { TokenCostVisualizer } from '../../components/learn/TokenCostVisualizer'
 import { CodingModelPicker } from './components/CodingModelPicker'
+import { WritingModelPicker, ResearchModelPicker } from './components/TaskModelPicker'
 import { EmbeddingExplorer } from '../../components/learn/EmbeddingExplorer'
 import { VisionCapabilityDemo } from '../../components/learn/VisionCapabilityDemo'
+import { FineTuningDemo } from '../../components/learn/FineTuningDemo'
+import { OpenClosedTradeoffGuide } from './components/OpenClosedTradeoffGuide'
+import { WebSearchTradeoffGuide } from './components/WebSearchTradeoffGuide'
+import { PromptRewriteDemo } from './components/PromptRewriteDemo'
+import { SceneNetworkDiagram } from '../../components/learn/SceneNetworkDiagram'
+import { PositionAttentionLab } from '../../components/learn/PositionAttentionLab'
 
 export const sectionComponents: Record<string, ComponentType> = {
+  'how-word-embeddings-predict-the-next-word::The network behind the map': SceneNetworkDiagram,
+  'how-position-and-attention-make-language-models-grammatical::Position changes the input': PositionAttentionLab,
   'bayesian-statistics::Walk the tree': BayesTreeExplorer,
   'bayesian-statistics::The same math predicts the next word': BayesNextWord,
   'how-do-neural-network-weights-work::How they work: the multiplication': WeightedSumEquation,
@@ -37,6 +46,12 @@ export const sectionComponents: Record<string, ComponentType> = {
   'claude-vs-gemini::Capabilities': ClaudeVsGeminiFaceOff,
   'grok-vs-gpt::What Grok does well': GrokVsGptFaceOff,
   'best-model-for-coding::What coders need': CodingModelPicker,
+  'best-model-for-writing::What writers need': WritingModelPicker,
+  'best-model-for-research::What research needs': ResearchModelPicker,
   'embedding-models::Converting meaning to numbers': EmbeddingExplorer,
   'vision-models::What they can do': VisionCapabilityDemo,
+  'fine-tuning-models::When to fine-tune': FineTuningDemo,
+  'open-source-vs-closed-source::The practical question': OpenClosedTradeoffGuide,
+  'web-search-models::What uses web search': WebSearchTradeoffGuide,
+  'prompt-engineering-basics::Context and examples': PromptRewriteDemo,
 }

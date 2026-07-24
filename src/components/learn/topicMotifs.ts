@@ -46,10 +46,13 @@ export const TOPIC_MOTIFS: Record<string, Motif> = {
   // The model lab: each card mirrors its own interactive pane.
   'how-do-neural-network-weights-work': 'weights',
   'understand-image-classification': 'pixels',
+  'how-ai-models-generate-images': 'pixels',
   'how-neural-networks-recognize-digits': 'digits',
   'what-is-gradient-descent': 'descent',
   'train-a-neural-network': 'training',
   'how-llms-predict-the-next-word': 'nextWord',
+  'how-word-embeddings-predict-the-next-word': 'embedding',
+  'how-position-and-attention-make-language-models-grammatical': 'attention',
   'why-neural-networks-need-more-layers': 'layers',
 }
 
@@ -67,6 +70,7 @@ export const MOTIF_LABELS: Record<Motif, string> = {
   pricing: 'Stacks of cost rising and falling',
   vision: 'A frame scanning across an image',
   embedding: 'Points drifting together into clusters of meaning',
+  attention: 'A sentence position looking back at earlier word signals',
   reasoning: 'A chain of reasoning steps connecting to an answer',
   search: 'A magnifier sweeping across search results',
   tuning: 'A general model narrowing onto one specialty',

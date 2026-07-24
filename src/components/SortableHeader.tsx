@@ -69,15 +69,13 @@ export function SortableHeader({
       aria-sort={isActive ? (isAscending ? 'ascending' : 'descending') : 'none'}
       className={`${alignRight ? 'text-right' : 'text-left'} whitespace-nowrap px-2 sm:px-3 py-3 font-medium text-fg-muted ${className}`}
     >
-      <span
-        className={`inline-flex items-center gap-1 ${alignRight ? 'w-full justify-end' : 'justify-start'}`}
-      >
+      <span className="flex w-full items-center gap-1">
         <button
           type="button"
           onClick={() => onSort(column)}
           title={title ? `${label}: ${title}` : undefined}
           aria-label={`${label}${title ? `. ${title}` : ''}. Sort ${nextDirection}`}
-          className="inline-flex cursor-pointer items-center whitespace-nowrap rounded transition-colors hover:text-fg focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-deep"
+          className={`flex min-w-0 flex-1 cursor-pointer items-center whitespace-nowrap rounded transition-colors hover:text-fg focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-deep ${alignRight ? 'justify-end' : 'justify-start'}`}
         >
           <span className={title ? 'underline decoration-dotted underline-offset-2' : ''}>
             {label}

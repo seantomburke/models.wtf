@@ -40,7 +40,7 @@ Work through these in order; `src/data/types.ts` is the schema reference.
 1. **`providers.ts`**: add any new provider. Every provider entry requires a `blurb` (used by `/providers/:id` pages).
 2. **`benchmarks.ts`**: add a benchmark only when at least one model has a score for it. Keep the ELI5 description in the site voice (`.agents/rules/writing-style.md`).
 3. **`models.ts`**: add or update models. Set `releaseDate` (ISO date) when reliably known. Fill `scores` only from this run's sources. Add `scoreProvenance` entries for every independent score and every provider score with a known diverging independent run. Set capability flags (`vision`, `imageGeneration`, `reasoning`) from first-party modality tables; explicit `false` needs a provider card that positively establishes the absence. Every capability filter must match at least one real model (a guard test enforces this).
-4. **`releases.ts`**: every new model needs a What's New entry (`type: 'new'`, with `modelId`, a dated entry, and a `link` to the announcement when one exists). Notable price changes and feature updates get entries too. Copy here is user-facing: follow the copywriter role and writing-style rule.
+4. **`releases.ts`**: every new model needs a What's New entry (`type: 'new'`, with `modelId`, a dated entry, and a `link` to the announcement when one exists). Notable price changes and feature updates get entries too. Copy here is user-facing: follow the copywriter skill and writing-style rule.
 5. **`index.ts`**: bump `dataSourcedAt` to today.
 
 ### 4. Record the pass
@@ -80,10 +80,10 @@ Trust order within a tier is top to bottom. Provider primaries always beat aggre
 | Source | What for | Last verified | Reliability note |
 |---|---|---|---|
 | anthropic.com/news + model docs | Claude releases, eval tables, system cards | 2026-07-24 | System cards carry the authoritative numbers; announcement pages can lag. The Opus 5 announcement published only relative claims ("three times the next-best model") on non-tracked benchmarks, so launch posts alone may fill zero cells. docs.anthropic.com 301s to platform.claude.com. |
-| openai.com/index + platform docs | GPT releases, eval tables, pricing | 2026-07-23 | openai.com intermittently returns HTTP 403 to automated fetches; retry or use a browser tool. |
-| blog.google + deepmind.google + ai.google.dev | Gemini releases, model cards, API pricing | 2026-07-23 | Model cards distinguish "No tools" HLE from tool-assisted; read the exact column. |
-| docs.x.ai + x.ai news | Grok releases, pricing, model table | 2026-07-23 | Retired models vanish from the docs table entirely; their slugs redirect to newer models. |
-| meta llama-models MODEL_CARD.md + Meta AI blog | Llama and Muse releases | 2026-07-23 | Muse Spark is closed-weights on the Meta Model API; Llama cards top out below the tracked benchmarks. |
+| openai.com/index + platform docs | GPT releases, eval tables, pricing | 2026-07-24 | openai.com intermittently returns HTTP 403 to automated fetches; retry or use a browser tool. |
+| blog.google + deepmind.google + ai.google.dev | Gemini releases, model cards, API pricing | 2026-07-24 | Model cards distinguish "No tools" HLE from tool-assisted; read the exact column. |
+| docs.x.ai + x.ai news | Grok releases, pricing, model table | 2026-07-24 | Retired models vanish from the docs table entirely; their slugs redirect to newer models. |
+| meta llama-models MODEL_CARD.md + Meta AI blog | Llama and Muse releases | 2026-07-24 | Muse Spark is closed-weights on the Meta Model API; Llama cards top out below the tracked benchmarks. |
 | docs.z.ai, api-docs.deepseek.com + tech reports, moonshot.ai, qwen docs, thinkingmachines.ai | Open-model and challenger releases | 2026-07-23 | Tech reports (arXiv) carry the closed-book numbers aggregators misquote. |
 
 ### Tier 2: trusted independent leaderboards (scores, cross-checks)
@@ -119,6 +119,7 @@ Two Tier 3 notes worth carrying forward:
 | vellum.ai (per-model "benchmarks explained" posts) | 2026-07-24 | **Rejected as a source of runs.** Names no harness and runs no evals; republishes Anthropic system-card numbers plus partner results (Cursor, Cognition, Databricks). Stays Tier 3 commentary. |
 | pricepertoken.com (HLE leaderboard) | 2026-07-24 | **Unevaluated, blocked.** Returns HTTP 403 to automated fetches. Retry with a browser tool next pass before forming a verdict. |
 | labs.scale.com SWE-bench Pro public leaderboard | 2026-07-24 | **Confirmed Tier 2, narrow.** Publishes error bars (e.g. 45.89±3.60) and exact model snapshots, but its roster lags badly: no Opus 5, no Fable 5 at launch. Good for confirming absence, weak as a release radar. |
+| Hugging Face Open LLM Leaderboard | 2026-07-24 | Rejected for the tracked score grid: it is useful for open-weight discovery, but does not publish exact-variant results for the six benchmark protocols here. |
 
 ## Reporting
 

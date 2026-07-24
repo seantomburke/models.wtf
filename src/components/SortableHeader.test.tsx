@@ -99,4 +99,19 @@ describe('SortableHeader', () => {
     await user.click(link)
     expect(onSort).not.toHaveBeenCalled()
   })
+
+  it('sorts from the full available header area in a right-aligned column', async () => {
+    const user = userEvent.setup()
+    const { onSort } = renderHeader({
+      column: 'terminal',
+      label: 'Terminal',
+      textAlign: 'right',
+      trailing: <a href="https://example.com">source</a>,
+    })
+
+    const button = screen.getByRole('button', { name: /terminal.*sort ascending/i })
+    await user.click(button)
+
+    expect(onSort).toHaveBeenCalledWith('terminal')
+  })
 })

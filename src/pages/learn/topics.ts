@@ -12,10 +12,12 @@
 import type { ComponentType } from 'react'
 import { WeightsExplainer } from './components/WeightsExplainer'
 import { PixelClassifier } from '../../components/learn/PixelClassifier'
+import { PixelGenerator } from '../../components/learn/PixelGenerator'
 import { DigitClassifier } from '../../components/learn/DigitClassifier'
 import { DeepDigitClassifier } from '../../components/learn/DeepDigitClassifier'
 import { MultiLayerNetwork } from '../../components/learn/MultiLayerNetwork'
 import { NextWordPredictor } from '../../components/learn/NextWordPredictor'
+import { SceneNextWord } from '../../components/learn/SceneNextWord'
 import { GradientDescentDemo } from '../../components/learn/GradientDescentDemo'
 import { TrainingLab } from '../../components/learn/TrainingLab'
 
@@ -48,7 +50,7 @@ export const levels: Array<{ id: TopicLevel; title: string; blurb: string }> = [
   {
     id: 'lab',
     title: 'The model lab',
-    blurb: 'Real models small enough to see through, running in your browser. Meet Doodle-64, Doodle-525, Doodle-918, and Parrot-43, then scale the same ideas up to billion-parameter LLMs.',
+    blurb: 'Tiny models small enough to see through, running in your browser. Meet Doodle-64, Doodle-64R, Doodle-525, Doodle-918, Parrot-43, Parrot-2D, and Finch-4, then scale the same ideas up to billion-parameter LLMs.',
   },
 ]
 
@@ -641,6 +643,45 @@ const authored: Topic[] = [
     ],
   },
   {
+    slug: 'how-ai-models-generate-images',
+    level: 'lab',
+    question: 'How do AI models generate images?',
+    metaTitle: 'How AI models generate images - Interactive generator demo | Models.wtf',
+    metaDescription:
+      'See how an image generator works by running a classifier backward. Ask a 64-weight model to draw a 3 or an E and watch it build the picture pixel by pixel.',
+    hook: 'Meet Doodle-64R. You can ask it to draw a 3 or an E, and it builds the picture by running the classifier backward.',
+    interactive: PixelGenerator,
+    modelSpec: {
+      name: 'Doodle-64R',
+      type: 'Single-layer image generator (the Doodle-64 classifier run in reverse)',
+      parameters: '64: the same one weight per pixel that Doodle-64 learned',
+      layers: '1 (1 target choice → 64 pixel probabilities)',
+      inputs: '1 choice: draw a "3" or draw an "E"',
+      outputs: '64 pixels, each sampled from its own ink probability',
+      scale: 'Frontier image generators turn a prompt into a probability for millions of pixels and sample a picture. Doodle-64R does the same trick with 64 pixels and two prompts.',
+    },
+    sections: [
+      {
+        heading: 'Meet Doodle-64R',
+      },
+      {
+        heading: 'A generator is a classifier in reverse',
+      },
+      {
+        heading: 'Every pixel is a coin flip',
+      },
+      {
+        heading: 'Why the same drawing is never quite the same',
+      },
+      {
+        heading: 'This is how real image models work',
+      },
+      {
+        heading: 'Try it yourself',
+      },
+    ],
+  },
+  {
     slug: 'how-neural-networks-recognize-digits',
     level: 'lab',
     question: 'How do neural networks recognize digits?',
@@ -761,6 +802,69 @@ const authored: Topic[] = [
       {
         heading: 'Where the hallucinations come from',
       },
+    ],
+  },
+  {
+    slug: 'how-word-embeddings-predict-the-next-word',
+    level: 'lab',
+    question: 'How do word embeddings predict the next word?',
+    metaTitle: 'How word embeddings predict the next word - Interactive demo | Models.wtf',
+    metaDescription:
+      'Meet Parrot-2D, a next-word predictor that gives every word two readable numbers: how friendly it is and whether it is a person or a verb. Watch predictions land on a two-axis meaning map, then scale the idea to ChatGPT.',
+    hook: 'Meet Parrot-2D. This is a model that gives every word two numbers you can read, one for how friendly it is and one for whether it is a person or a verb. You can watch it predict the next word right on a map of those two meanings.',
+    interactive: SceneNextWord,
+    modelSpec: {
+      name: 'Parrot-2D',
+      type: 'Three-layer neural network, a first step from a lookup table toward a transformer',
+      parameters: 'Two numbers per word: friendliness and role. Those two numbers are the whole model.',
+      layers: '3 (one input node per word, 2 hidden nodes for the two meanings, one output node per next word)',
+      inputs: '1 word: the last word of the sentence so far, switched on as a single input node',
+      outputs: 'A probability for every word that could come next, plus a period to end the sentence, summing to 100%',
+      scale: 'Frontier transformers give every word thousands of numbers instead of two, and nobody labels what each one means. Parrot-2D uses two numbers you can name, so you can watch the meaning drive the prediction.',
+    },
+    sections: [
+      {
+        heading: 'From a lookup table to a meaning map',
+      },
+      {
+        heading: 'Two numbers that mean something',
+      },
+      {
+        heading: 'Meaning drives the prediction',
+      },
+      {
+        heading: 'The network behind the map',
+      },
+      {
+        heading: 'Filling in the middle of the map',
+      },
+      {
+        heading: 'This is what frontier embeddings do',
+      },
+    ],
+  },
+  {
+    slug: 'how-position-and-attention-make-language-models-grammatical',
+    level: 'lab',
+    question: 'How do position and attention make language models grammatical?',
+    metaTitle: 'Position and attention in language models - Interactive lab | Models.wtf',
+    metaDescription:
+      'Meet Finch-4, a tiny language model with word position and attention. See why Bob means something different as a subject or object, then generate grammatical sentences.',
+    hook: 'Meet Finch-4. This is a model that adds a position signal and a small attention head to Parrot-2D, so it can build a subject, verb, object sentence.',
+    modelSpec: {
+      name: 'Finch-4',
+      type: 'Tiny position-aware language model with one attention head',
+      parameters: 'Four readable signals per step: friendliness, role, position, and a small attention weight',
+      layers: 'A word map, a position input, one attention head, and a next-word output',
+      inputs: 'The words so far plus each word\'s position in the sentence',
+      outputs: 'A probability for the next word or the period that ends the sentence',
+      scale: 'Frontier transformers repeat this pattern across many layers and heads. Finch-4 keeps one small head visible so you can follow its choice.',
+    },
+    sections: [
+      { heading: 'Parrot-2D needs a place for each word' },
+      { heading: 'Position changes the input' },
+      { heading: 'Attention carries context forward' },
+      { heading: 'Generate a grammatical sentence' },
     ],
   },
   {

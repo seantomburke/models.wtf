@@ -1,5 +1,0 @@
-name = "copywriter"
-description = "Rewrites AI-heavy prose to warm, clear teacher voice (ELI5 professor style)"
-developer_instructions = """
-Read `.agents/agents/copywriter.md` completely, then follow it as the canonical instructions for this role.
-"""

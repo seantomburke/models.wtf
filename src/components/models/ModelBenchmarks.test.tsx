@@ -79,6 +79,6 @@ describe('ModelBenchmarks component', () => {
         'Provider-reported; an independent run by Vals AI (Terminus 2) lands at 79.03%.',
       ),
     ).toBeInTheDocument()
-    expect(screen.getAllByText('Provider-reported; no independent run recorded yet.')).toHaveLength(2)
+    expect(screen.getAllByText('Provider-reported; no independent run recorded yet.')).toHaveLength(3)
   })
 })

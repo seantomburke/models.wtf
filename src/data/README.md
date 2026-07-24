@@ -35,7 +35,9 @@ rules; the short version:
 3. Bump `dataSourcedAt` in `index.ts`.
 4. Run `npm run validate` (schema + sanity checks; also runs in CI).
 
-Last refreshed: **2026-07-24, eighth pass** (Claude Opus 5 added on launch day).
+Last refreshed: **2026-07-24, eighth pass** (Claude Opus 5 added on launch
+day; GPT-5.6 Luna's current provider-published Artificial Analysis
+Intelligence Index result adopted).
 
 2026-07-24 refresh notes (Claude Opus 5):
 
@@ -92,6 +94,38 @@ Last refreshed: **2026-07-24, eighth pass** (Claude Opus 5 added on launch day).
   5's four. No row lost its recommendation. Fable 5's `relatedModelIds` now
   points at Opus 5 instead of Opus 4.8, and `public/sitemap.xml` was
   regenerated for the new `/models/claude-opus-5/` route.
+
+2026-07-24 refresh notes (GPT-5.6 Luna index and current-model sweep):
+
+- **GPT-5.6 Luna's Artificial Analysis Intelligence Index is now 51.2.**
+  OpenAI's July 9 evaluation table publishes this v4.1 result for Luna at
+  maximum reasoning effort. It replaces the older independent 46-point
+  high-effort run. The displayed cell now follows the provider-published
+  result, and its independent-only provenance entry was removed.
+- **The current model and score check found no eligible new language model.**
+  OpenAI's table confirms Sol 58.9 and Terra 55 on the same index. Artificial
+  Analysis confirms Claude Fable 5 at 60 and Gemini 3.6 Flash at 50. Google's
+  July 21 releases remain the latest general-purpose Gemini additions. xAI's
+  July 17 release notes still list Grok 4.5 as the current API model. Meta's
+  Muse Image is a separate image-generation product, so it does not belong in
+  this language-model comparison or its benchmark grid.
+- **Quiz audit:** graph, table, and quiz rankings read the canonical
+  `models` array. The Luna correction therefore reaches all three surfaces;
+  the quiz has no copied score values or model-answer options to change.
+- **Leaderboard check:** the Hugging Face Open LLM Leaderboard remains useful
+  for open-weight discovery, but its results do not provide exact-variant
+  scores for this site's six tracked benchmark columns. LMSYS Chatbot Arena
+  measures preference, rather than these benchmark protocols. Neither source
+  supplied a publishable replacement score.
+
+Sources checked 2026-07-24: [OpenAI's GPT-5.6 evaluation
+table](https://openai.com/index/gpt-5-6/), [Artificial Analysis on Claude
+Fable 5](https://artificialanalysis.ai/models/claude-fable-5/), [Artificial
+Analysis on Gemini 3.6 Flash](https://artificialanalysis.ai/models/gemini-3-6-flash/),
+[Google's Gemini 3.6 Flash launch](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-6-flash-3-5-flash-lite-3-5-flash-cyber/),
+[xAI's July release notes](https://docs.x.ai/developers/release-notes),
+[Meta's Muse Image announcement](https://about.fb.com/news/2026/07/introducing-muse-image-meta-ai/),
+and the [Hugging Face Open LLM Leaderboard](https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard).
 
 2026-07-23 release-date backfill notes:
 
