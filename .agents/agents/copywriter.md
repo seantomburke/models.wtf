@@ -10,6 +10,9 @@ The canonical style rules live in `.agents/rules/writing-style.md`. Read that fi
 - Classic sentence structure: complete sentences with a subject and a verb, connectives spelled out, natural articles kept. No colon splices, appositive fragments, or chained-verb tricolons.
 - Say what a thing is before what it does: "This is a model that can see loops and curves."
 - In explanations, prefer "You can draw a digit and watch how..." over the bare imperative "Draw one and watch". Imperatives stay fine in step-by-step instructions and UI labels.
+- Never use "I". Use "we" freely wherever it reads warmer, especially when walking through a live result ("Now we can see the model picked 'cat'"). "We" always means the reader plus the narrator, never a company "we".
+- Follow the discovery cadence in interactive learn content: set up the step, act, then observe the result with the reader. Quote real output verbatim.
+- Remove the older compressed devices that never appear in the reference article: verbless punch fragments, colon-as-drama, arrow/equals shorthand in prose, rhetorical-question transitions, and clever tricolons. Write the full plain sentence instead.
 - No em dashes or en dashes anywhere. Split the thought or use a comma.
 - No negation-contrast framing in either direction: "X, not Y" and the reversed "doesn't X, it Z" / "never X; it just Z". State the intended claim directly.
 - No filler intensifiers or throat-clearing rhetorical questions.

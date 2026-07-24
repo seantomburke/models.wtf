@@ -10,6 +10,24 @@ Canonical rules for all user-facing copy on models.wtf. The site explains comple
 - Remove filler so every word earns its place.
 - Avoid being verbose. If a paragraph can be a sentence, make it a sentence.
 
+## Pronouns: you, we, never I
+
+The reference for this voice is the Yelp graph-database article (a warm, first-person technical walk-through). Two rules come from it.
+
+- **Never use "I".** The site is not a personal blog and has no single author speaking. Rewrite any "I" into "you" or "we".
+- **"We" means the reader and the guide, together.** Use "we" freely wherever it reads warmer than "you", especially when walking through a live interaction or a result: "Now we can see that the Parrot-2D model picked 'cat'." The "we" is always you (the reader) plus the narrator standing beside you. It is **never** a company "we" ("we built this model", "we at models.wtf"). If a "we" could be read as the company, rewrite it.
+- **"You" stays the default for invitations and instructions.** "You can draw a digit", "you pay for what the model reads". Reach for "we" when you and the reader are observing or discovering something in the same moment.
+
+## Discovery cadence
+
+The article teaches by walking through the work in order: set up the question, act, then observe the result together. Follow that arc in interactive learn content.
+
+- **Set up, then act, then observe.** "Now let's run this on the whole dataset." → "We end up with three results." → "One of them looks suspicious." Narrate the step, take it, then read the outcome with the reader.
+- **Use plain forward connectives to move between steps:** "Now", "Now let's", "So", "Then". These carry the reader from one step to the next the way the article does.
+- **Show the reasoning, including honest uncertainty.** The article says "This looks promising, however, I believe there must be more" and then adjusts. In a learn module you can say "This works, but we can probably do better", then change the demo and watch what happens.
+- **Quote real output verbatim.** The article pastes the actual reviews rather than paraphrasing. When a demo produces a concrete result, show the real thing (the real prediction, the real number) instead of describing it in the abstract.
+- This cadence is for interactive, walk-through learn content. Static reference copy (FAQs, model descriptions, UI labels) stays direct and does not need the narration.
+
 ## Sentence structure
 
 The register is a patient teacher, and a teacher uses classic sentence structure. Compressed copywriting reads clever and explains nothing. The worked example:
@@ -30,6 +48,18 @@ The rules the After version follows:
 8. **Follow the explainer arc.** What it is, then what it does, then what you can do with it.
 
 These are style rules applied with judgment. There is no regex guard for them, because colons, imperatives, and short sentences all have legitimate uses.
+
+## Patterns to remove
+
+These devices show up in older site copy but never in the reference article. They read as clever compression, and the article proves you can explain the same ideas without them. Prefer the plain full-sentence version.
+
+1. **Verbless punch fragments.** "Speed." / "Same magic as text models." / "Difference is in reliability and speed." Give every sentence a subject and a verb: "Grok is built for speed." / "It uses the same math as a text model." / "The difference shows up in reliability and speed."
+2. **Colon-as-drama and colon-then-fragment.** "The catch: you cannot see the landscape." / "Best for: quick scripts." Reserve the colon for a real list or a quotation, the way the article uses it for its data counts and its quoted reviews. Otherwise write the full sentence: "The catch is that you cannot see the landscape."
+3. **Arrow notation and equals-shorthand in prose.** Do not write "the cat sat on the ___", "Hamburger = 3 tokens", or "P(sick | positive)" inside a sentence. Spell it out in words and numbers ("Hamburger is three tokens"), and put real formulas in `MathBlock`. A plainly labeled count like "Businesses: 42,153" is fine, that is a list, not an operator.
+4. **Rhetorical-question transitions.** "How worried should you be?" / "Why does one layer stop being enough?" as a lead-in to the next paragraph. The article states the point and then acts on it. Turn the question into the statement it was hiding: "The honest answer is smaller than most people guess."
+5. **Clever tricolons and compressed triples.** "Condition on evidence, update, predict." / "guess, measure how wrong you are, repeat." One or two of these across a long topic is a flourish; a habit of them is the compressed register we are avoiding. When in doubt, write the steps as ordinary sentences.
+
+None of these has a regex guard. Apply them with judgment, and preserve a device when it genuinely carries meaning that the plain version would lose.
 
 ## Hard bans
 
