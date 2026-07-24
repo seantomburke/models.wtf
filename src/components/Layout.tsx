@@ -8,6 +8,7 @@ import { ReturnToTop } from './ReturnToTop.tsx'
 import { ScrollToTop } from './ScrollToTop.tsx'
 
 const navItems = [
+  { to: '/search', label: 'Search' },
   { to: '/compare', label: 'Compare' },
   { to: '/graph', label: 'Graph' },
   { to: '/calculator', label: 'Calculator' },
@@ -72,7 +73,7 @@ export function Layout() {
             to="/"
             data-attr="site-logo-link"
             className="mr-4 text-base font-semibold tracking-tight text-fg transition-colors duration-150 hover:text-accent-deep focus:outline-none focus:ring-2 focus:ring-accent rounded-lg"
-            title="Home (go to compare)"
+            title="Home"
           >
             models<span className="text-accent-deep">.wtf</span>
           </Link>
@@ -82,6 +83,7 @@ export function Layout() {
           <div className="hidden gap-1 sm:flex">
             {navItems.map(({ to, label }) => {
               const keyHints: Record<string, string> = {
+                '/search': 'g s',
                 '/compare': 'g c',
                 '/graph': 'g g',
                 '/calculator': 'g k',
